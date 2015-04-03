@@ -1,7 +1,12 @@
 source('Dependencies/dep.R', chdir=T)
 
+options(shiny.maxRequestSize = 20*1024^2)
+
 shinyServer(function(input, output) {
   
+  #Functions for the "Upload / Start" Page
+  #--------------------------------------
+  #--------------------------------------
   uploadShpfile <- reactive({
     if (!is.null(input$shpFile)){
       shpDF <- input$shpFile
@@ -21,7 +26,10 @@ shinyServer(function(input, output) {
     }
   })
   
-  
+
+  #Functions for the "Map" Tab
+  #------------------------------
+  #------------------------------
   output$map <- renderPlot({
     if (!is.null(uploadShpfile())){
       shpFile <- uploadShpfile()
@@ -29,6 +37,9 @@ shinyServer(function(input, output) {
     }
   })
   
+  #Functions for the "Data" Tab
+  #------------------------------
+  #------------------------------
   output$mapT <- renderDataTable({
     if (!is.null(uploadShpfile())){
       shpFile <- uploadShpfile()
@@ -37,6 +48,9 @@ shinyServer(function(input, output) {
     
   })
   
+  #Functions for the "Describe" Tab
+  #-------------------------------
+  #-------------------------------
   output$DescDD<- renderUI({
     if (!is.null(uploadShpfile())){
       shpFile <- uploadShpfile()
@@ -60,8 +74,6 @@ shinyServer(function(input, output) {
       bins <- seq(min(Treatment),max(Treatment),length.out=input$bins + 1)
       #clr <- ifelse((Treatment < max(input$rng_Trt)) & (Treatment > min(input$rng_Trt)), "grey", "red")
       clr <- "skyblue"
-      warning(min(input$rng_Trt))
-      warning(max(input$rng_Trt))
       hist(Treatment,breaks = bins, col=clr, border="white")
       #Add two vertical lines to show max and min values.
       abline(v=max(input$rng_Trt), col="red")

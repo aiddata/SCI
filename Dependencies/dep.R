@@ -2,3 +2,4 @@
 require(sp)
 require(GISTools)
 require(shiny)
+require(DT)

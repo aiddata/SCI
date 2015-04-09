@@ -1,24 +1,68 @@
-#Initialization Script
-#To test sub-modules of C-SAT
+#Date Started: 4/4/2015
+#Contact: dan@danrunfola.com
+#Description:
+#This script runs a number of functions designed to support a *cross-sectional* spatial impact evaluation.
+#Specifically, it seeks to examine the impact of a treatment that is applied spatially to some units, but not others.
+#It is heavily limited in functionality at this stage.
+#Steps this and related functions support:
+#(1) Fitting a model for a propensity score match.
+#(2) Conductnig a matching of pairs based on these matches.
+#(3) Checking the balance of these pairs
+#(4) Automated iteration on pairwise-balance to achieve the optimal balance given data and parameters.
+#(5) Analysis of the final model and treatment effect, given matched data.
+
+#The roadmap for this script includes better diagnostics for assumptions,
+#Handling spatial relationships in data (i.e., spillovers),
+#and more options for matching approaches.
+
+#It requires as inputs:
+#(A) A spatial data frame object (library sp), i.e. one generated from a shapefile.
+#(B) A column identified as a binary treatment
+#(C) A column identified as a continious outcome
+#(D) A list of columns identifying covariates to include in the matching procedure
+#(E) A list of columns identifying covariates to include in the analysis procedure
+
 
 #Load required libraries from our dependencies script.
 source('Dependencies/dep.R', chdir=T)
 
-#Load user input settings
-source('user_inputs.R', chdir=T)
-
 #Load descriptive tools
 source('Tools/descriptives.R', chdir=T)
+
+source('Tools/SpatialCausalPSM.R', chdir=T)
 
 #Custom Functions
 source('functions.R', chdir=T)
 
-#Later tool loads will go here - closeness, matching, balancing, modeling.
-
 #--------------------------------
 #Tool runs
-#runApp(".")
+#Load the Shapefile
+user_shape <- "/home/aiddata/Desktop/R_Repo/C-SAT/Input_Data/User_Dan/KFW_poly.shp"
+src_Shp = readShapePoly(user_shape)
 
-descTrtCont(shp=user_shape, flds=(c("Accepted_Y","NDVI_","UF","pop_FUNAI2"),c("con","time","factor","con")), method=c("thresh","manual",2002,"<"))
+#----------------------
+#----------------------
+#Data pre-processing.  This will be different for each script, and is here only as an illustrative example.
+#Here, we create a binary for the treatment, as well as create a few baseline measurements for cross-sectional analysis.
 
-#psmAsumTests()
+#Pre-trend for NDVI
+src_Shp@data["NDVI_trend"] <- src_Shp@data["NDVI_1995"] - src_Shp@data["NDVI_1981"]
+
+#Binary for the Treatment
+src_Shp@data["TrtBin"] <- 0
+src_Shp@data["TrtBin"][src_Shp@data["Accepted_Y"] > 1998] <- 1
+
+#----------------------------
+#----------------------------
+#Function takes in an equation for the PSM, options on the type of PSM to return values for, and returns a new vector
+#of PSM estimates.  data is the datset, method can only be "logit" at this time, equ is the PSM equation to estimate, 
+#"rem" removes PSMs that do not have value overlap between the treatment / control groups based on min/max values.
+#Returns a shapefile with a new column - PSM_trtProb.
+psm_Res <- SpatialCausalPSM(dta = src_Shp, mtd = "logit", "TrtBin ~ NDVI_trend + NDVI_1995 + CommunityA + factor(State)", drop="overlap")
+
+#Here, we conduct the matching based on the PSM.
+#An optimization algorithm is used to select optimal nearest neighbors.
+#This function returns a shapefile with matched neighbors, contained in a new column - PSM_pairs.
+psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "optNN")
+
+

@@ -54,15 +54,16 @@ src_Shp@data["TrtBin"][src_Shp@data["Accepted_Y"] > 1998] <- 1
 
 #----------------------------
 #----------------------------
+#Define the PSM equation, used in many modules below:
+PSM_eq = "TrtBin ~ NDVI_trend + NDVI_1995 + CommunityA + factor(State)"
+
 #Function takes in an equation for the PSM, options on the type of PSM to return values for, and returns a new vector
 #of PSM estimates.  data is the datset, method can only be "logit" at this time, equ is the PSM equation to estimate, 
 #"rem" removes PSMs that do not have value overlap between the treatment / control groups based on min/max values.
 #Returns a shapefile with a new column - PSM_trtProb.
-psm_Res <- SpatialCausalPSM(dta = src_Shp, mtd = "logit", "TrtBin ~ NDVI_trend + NDVI_1995 + CommunityA + factor(State)", drop="overlap")
+psm_Res <- SpatialCausalPSM(dta = src_Shp, mtd = "logit", PSM_eq, drop="overlap")
 
 #Here, we conduct the matching based on the PSM.
 #An optimization algorithm is used to select optimal nearest neighbors.
 #This function returns a shapefile with matched neighbors, contained in a new column - PSM_pairs.
-psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "optNN")
-
-
+psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "reu_id", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=2.0)

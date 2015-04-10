@@ -49,19 +49,17 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     treated <- sorted_dta[sorted_dta$TrtBin == 1,]
     untreated <- sorted_dta[sorted_dta$TrtBin == 0,]
     
-    it_cnt = min(length(treated), length(untreated))
+    it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
     dta@data$match <- -1
     dta@data$PSM_distance <- -1
     dta@data$PSM_match_ID <- -1
-
+    it_cnt = it_cnt - 1
     for (j in 1:it_cnt)
     {
       treated <- sorted_dta[sorted_dta$TrtBin == 1,]
       untreated <- sorted_dta[sorted_dta$TrtBin == 0,]
       
-      print(length(treated))
-      print(length(untreated))
-      
+    
       #Run the KNN for all neighbors. 
       k <- get.knnx(treated$PSM_trtProb, untreated$PSM_trtProb, 2)
 
@@ -105,7 +103,6 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
       did_a_2 = paste("sorted_dta <- sorted_dta[sorted_dta$",ids,"!= Control_ID ,]",sep="")
       eval(parse(text=did_a_1))
       eval(parse(text=did_a_2))
-      View(sorted_dta)
 
      
     }
@@ -118,12 +115,12 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
 
   if (drop_unmatched == TRUE)
   {
-    View(dta)
     dta <- dta[dta@data$PSM_match_ID != -1,]    
   }
   
   anc_v_int <- strsplit(vars, "~")[[1]][2]
   anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
+  anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
   
   #Drop observations according to the selected method
  
@@ -134,14 +131,14 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     print(psm_sd_thresh)
     dta <- dta[dta@data$PSM_distance < psm_sd_thresh,]
   }
-  
-  #Plot the pre and post-dropping balance on controls used for PSM model...
-  for (i in 1:length(anc_vars[[1]]))
+
+  #Plot the pre and post-dropping balance for PSM model...
+  for (i in 1:length(anc_vars))
   {
-    GroupCompHist(init_dta, anc_vars[[1]][i],"Pre-Balancing: ")
-    GroupCompHist(dta, anc_vars[[1]][i],"Post-Balancing: ")  
+    GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ")
+    GroupCompHist(dta, anc_vars[i],"Post-Balancing: ")  
     #gsub to remove any factors()
-    ed_v = sub("factor\\(","",anc_vars[[1]][i])
+    ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
     db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$TrtBin))")  
     db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$TrtBin))") 

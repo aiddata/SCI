@@ -48,6 +48,9 @@ src_Shp = readShapePoly(user_shape)
 #Pre-trend for NDVI
 src_Shp@data["NDVI_trend"] <- src_Shp@data["NDVI_1995"] - src_Shp@data["NDVI_1981"]
 
+#Final NDVI Change Value
+src_Shp@data["NDVI_outcome"] <- src_Shp@data["NDVI_2013"] - src_Shp@data["NDVI_1995"]
+
 #Binary for the Treatment
 src_Shp@data["TrtBin"] <- 0
 src_Shp@data["TrtBin"][src_Shp@data["Accepted_Y"] > 1998] <- 1
@@ -66,4 +69,7 @@ psm_Res <- SpatialCausalPSM(dta = src_Shp, mtd = "logit", PSM_eq, drop="overlap"
 #Here, we conduct the matching based on the PSM.
 #An optimization algorithm is used to select optimal nearest neighbors.
 #This function returns a shapefile with matched neighbors, contained in a new column - PSM_pairs.
-psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "reu_id", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=2.0)
+psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "reu_id", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.25)
+
+#Run the model of your choice on the returned psm_Pairs dataset.
+lm(NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + CommunityA + factor(State), data=psm_Pairs)

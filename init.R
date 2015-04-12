@@ -57,8 +57,11 @@ src_Shp@data["TrtBin"][src_Shp@data["Accepted_Y"] > 1998] <- 1
 
 #----------------------------
 #----------------------------
-#Define the PSM equation, used in many modules below:
+#Define the PSM equation, used in the modules below:
 PSM_eq = "TrtBin ~ NDVI_trend + NDVI_1995 + CommunityA + factor(State)"
+
+#Define the analysis equation, used in the final step:
+Final_eq = "NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + CommunityA + factor(State)"
 
 #Function takes in an equation for the PSM, options on the type of PSM to return values for, and returns a new vector
 #of PSM estimates.  data is the datset, method can only be "logit" at this time, equ is the PSM equation to estimate, 
@@ -71,5 +74,14 @@ psm_Res <- SpatialCausalPSM(dta = src_Shp, mtd = "logit", PSM_eq, drop="overlap"
 #This function returns a shapefile with matched neighbors, contained in a new column - PSM_pairs.
 psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "reu_id", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.25)
 
-#Run the model of your choice on the returned psm_Pairs dataset.
-lm(NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + CommunityA + factor(State), data=psm_Pairs)
+#Run any set of models you are interested in, and save them in a one-dimensional array.
+SpatialCausal_Model = vector()
+SpatialCausal_Model[[1]] = lm("NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + CommunityA + factor(State)", psm_Pairs)
+SpatialCausal_Model[[2]] = lm("NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + log(CommunityA) + factor(State)", psm_Pairs)
+
+#Function to compare any 2 models in terms of their estimation on treatment effect.
+#In our case, these are generally pre-defined models (i.e., models from a DGP)
+#This function returns a Moran's I measurement of spatial autocorrelation in the outcome, treatment, and average of all controls.
+#It also returns the difference in beta coefficients on the treatment for each model.
+
+

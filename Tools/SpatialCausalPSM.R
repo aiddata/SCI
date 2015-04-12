@@ -162,3 +162,5 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
   
   return (dta)
 }
+
+

@@ -15,14 +15,6 @@
 #Handling spatial relationships in data (i.e., spillovers),
 #and more options for matching approaches.
 
-#It requires as inputs:
-#(A) A spatial data frame object (library sp), i.e. one generated from a shapefile.
-#(B) A column identified as a binary treatment
-#(C) A column identified as a continious outcome
-#(D) A list of columns identifying covariates to include in the matching procedure
-#(E) A list of columns identifying covariates to include in the analysis procedure
-
-
 #Load required libraries from our dependencies script.
 source('Dependencies/dep.R', chdir=T)
 
@@ -67,21 +59,13 @@ Final_eq = "NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + CommunityA + factor
 #of PSM estimates.  data is the datset, method can only be "logit" at this time, equ is the PSM equation to estimate, 
 #"rem" removes PSMs that do not have value overlap between the treatment / control groups based on min/max values.
 #Returns a shapefile with a new column - PSM_trtProb.
-psm_Res <- SpatialCausalPSM(dta = src_Shp, mtd = "logit", PSM_eq, drop="overlap")
+psm_Res <- SpatialCausalPSM(dta = src_Shp, mtd = "logit", PSM_eq, drop="overlap", visual="TRUE")
 
 #Here, we conduct the matching based on the PSM.
 #An optimization algorithm is used to select optimal nearest neighbors.
 #This function returns a shapefile with matched neighbors, contained in a new column - PSM_pairs.
-psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "reu_id", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.25)
-
-#Run any set of models you are interested in, and save them in a one-dimensional array.
-SpatialCausal_Model = vector()
-SpatialCausal_Model[[1]] = lm("NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + CommunityA + factor(State)", psm_Pairs)
-SpatialCausal_Model[[2]] = lm("NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + log(CommunityA) + factor(State)", psm_Pairs)
-
-#Function to compare any 2 models in terms of their estimation on treatment effect.
-#In our case, these are generally pre-defined models (i.e., models from a DGP)
-#This function returns a Moran's I measurement of spatial autocorrelation in the outcome, treatment, and average of all controls.
-#It also returns the difference in beta coefficients on the treatment for each model.
+psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "reu_id", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=0.25, visual="TRUE")
 
 
+#lm("NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + CommunityA + factor(State)", psm_Pairs)
+#lm("NDVI_outcome ~ TrtBin + NDVI_trend + NDVI_1995 + log(CommunityA) + factor(State)", psm_Pairs)

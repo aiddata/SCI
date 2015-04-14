@@ -1,15 +1,20 @@
-SpatialCausalPSM <- function(dta, mtd,mdl,drop)
+SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
 {
   #First, we check for methods to fit the PSM.
   if(mtd == "logit")
   {
     PSMfit <- glm(mdl, dta@data, family="binomial")
     retData <- dta
+
     retData$PSM_trtProb <- predict(PSMfit, dta@data, type="response")
   }
   
-  #Show user distributions.
-  GroupCompHist(retData, "PSM_trtProb","Initial")
+  if(visual == "TRUE")
+  {
+    #Show user distributions.
+    GroupCompHist(retData, "PSM_trtProb","Initial")
+  }
+
   
   #Second, if a drop parameter - if set to "overlap", remove observations
   #that don't overlap in the PSM distribution.
@@ -25,14 +30,16 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop)
     retData <- retData[retData@data$PSM_trtProb >= min_cut,]    
     retData <- retData[retData@data$PSM_trtProb <= max_cut,] 
     
+    if(visual == "TRUE")
+    {
     #Post drop histograms
     GroupCompHist(retData, "PSM_trtProb","Post Extrapolation Drops")
+    }
   }
-  
   return (retData)
 }
 
-SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, drop_thresh)
+SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, drop_thresh, visual)
 {
   #Save initial data for later comparison
   init_dta <- dta
@@ -50,10 +57,11 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     untreated <- sorted_dta[sorted_dta$TrtBin == 0,]
     
     it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
-    dta@data$match <- -1
-    dta@data$PSM_distance <- -1
-    dta@data$PSM_match_ID <- -1
+    dta@data$match <- -999
+    dta@data$PSM_distance <- -999
+    dta@data$PSM_match_ID <- -999
     it_cnt = it_cnt - 1
+
     for (j in 1:it_cnt)
     {
       treated <- sorted_dta[sorted_dta$TrtBin == 1,]
@@ -61,27 +69,29 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
       
     
       #Run the KNN for all neighbors. 
-      k <- get.knnx(treated$PSM_trtProb, untreated$PSM_trtProb, 2)
+
+      k <- get.knnx(treated$PSM_trtProb, untreated$PSM_trtProb, 1)
 
       #Add the matched treatment and control values to the recording data frame
-      best_m = as.matrix(apply(k$nn.dist, 2, which.min))[2]
-
-
+      #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.
+      best_m_control = which(k$nn.dist %in% sort(k$nn.dist)[1])
+      
+      #This will give us the matched index in the "treated" dataset.
+      best_m_treated = k$nn.index[best_m_control]
+      
       #Control PSM ID
-      cid_txt = paste("untreated$",ids,"[as.matrix(apply(k$nn.dist, 2, which.min))[2]]",sep="")
-      Control_ID = eval(parse(text=cid_txt))
-
+      cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
+      Control_ID = toString(eval(parse(text=cid_txt)))
+      
       
       
       #Treatment PSM ID
-      k_match_id = k[[1]][best_m,][2]
-      tid_txt = paste("treated$",ids,"[k_match_id]",sep="")
-      Treatment_ID = eval(parse(text=tid_txt))
-
+      tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
+      Treatment_ID = toString(eval(parse(text=tid_txt)))
        
       #Add the Treatment ID to the Control Row 
       tid_a_1 = paste("dta@data$match[which(dta@data$",ids," == Control_ID)] = Treatment_ID", sep="")
-      tid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Control_ID)] = k$nn.dist[,2][k_match_id]",sep="")
+      tid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Control_ID)] = k$nn.dist[,1][best_m_control]",sep="")
       tid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Control_ID)] = j", sep="")
       eval(parse(text=tid_a_1))
       eval(parse(text=tid_a_2))
@@ -91,7 +101,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
        
       #Add the Control ID to the Treatment Row
       cid_a_1 = paste("dta@data$match[which(dta@data$",ids," == Treatment_ID)] = Control_ID", sep="")
-      cid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Treatment_ID)] = k$nn.dist[,2][k_match_id]", sep="")
+      cid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Treatment_ID)] = k$nn.dist[,1][best_m_control]", sep="")
       cid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Treatment_ID)] = j", sep="")
       eval(parse(text=cid_a_1))
       eval(parse(text=cid_a_2))
@@ -107,7 +117,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
      
     }
   }
-  
+
   if (mtd == "optNN")
   {
     print("To contain a nearest-neighbor algorithm...")
@@ -115,35 +125,40 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
 
   if (drop_unmatched == TRUE)
   {
-    dta <- dta[dta@data$PSM_match_ID != -1,]    
+    dta <- dta[dta@data$PSM_match_ID != -999,]    
   }
-  
+    
   anc_v_int <- strsplit(vars, "~")[[1]][2]
   anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
   anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
   
   #Drop observations according to the selected method
- 
   if(drop_method == "SD")
   {
     #Method to drop pairs that are greater than a set threshold apart in terms of PSM Standard Deviations.
     psm_sd_thresh = sd(dta$PSM_trtProb) * drop_thresh
-    print(psm_sd_thresh)
+    if(visual == "TRUE")
+    {
+      print(psm_sd_thresh)
+    }
     dta <- dta[dta@data$PSM_distance < psm_sd_thresh,]
   }
 
   #Plot the pre and post-dropping balance for PSM model...
   for (i in 1:length(anc_vars))
   {
+    if(visual == "TRUE")
+    {
     GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ")
     GroupCompHist(dta, anc_vars[i],"Post-Balancing: ")  
+    }
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
     db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$TrtBin))")  
     db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$TrtBin))") 
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
-    if(c_type == "numeric")
+    if((c_type == "numeric") & (visual == "TRUE"))
     {
      print("")
      print("=====================")
@@ -164,3 +179,35 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
 }
 
 
+SpatialCausalSim_DGP<- function(fld_size)
+{
+  x <- fld_size
+  RFoptions(seed=NA)
+  model <- RMexp()
+  z <- RFsimulate(model, x, x, n=5)
+  f.SPDF <- as(z, 'SpatialPolygonsDataFrame')
+  
+  
+  colnames(f.SPDF@data)[1] <- "ControlA"
+  colnames(f.SPDF@data)[2] <- "RandomFieldA"
+  colnames(f.SPDF@data)[3] <- "ControlB"
+  colnames(f.SPDF@data)[4] <- "RandomFieldB"
+  colnames(f.SPDF@data)[5] <- "TrtBin"
+  
+  f.SPDF@data["TrtBin"] = f.SPDF@data["ControlA"] + f.SPDF@data["RandomFieldA"]
+  
+  #Convert the Treatment to a Binary
+  med_treat = median(f.SPDF@data$TrtBin)
+  f.SPDF@data$TrtBin[which(f.SPDF@data$TrtBin > med_treat )] <- 1 
+  f.SPDF@data$TrtBin[which(f.SPDF@data$TrtBin == med_treat )] <- 1 
+  f.SPDF@data$TrtBin[which(f.SPDF@data$TrtBin < med_treat )] <- 0 
+  
+  #Build outcome variable for testing
+  #y = intercept + (Theta * Treatment) + (Beta * ControlA)
+  yfunc <- function(a, b, c) (0.0+(1.0*a)+(1.0*b)+(1.0*c))
+  f.SPDF@data["y"] = apply(f.SPDF@data[,c('TrtBin','ControlA','RandomFieldB')], 1, function(y) yfunc(y['TrtBin'],y['ControlA'],y['RandomFieldB']))
+
+  f.SPDF@data <- cbind(simIDs = rownames(f.SPDF@data), f.SPDF@data)
+  
+  return(f.SPDF)
+}

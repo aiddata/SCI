@@ -29,7 +29,7 @@ source('functions.R', chdir=T)
 #--------------------------------
 #Tool runs
 #Load the Shapefile
-user_shape <- "/home/aiddata/Desktop/R_Repo/C-SAT/Input_Data/User_Dan/KFW_poly.shp"
+user_shape <- "Input_Data/User_Dan/KFW_poly.shp"
 src_Shp = readShapePoly(user_shape)
 
 #----------------------

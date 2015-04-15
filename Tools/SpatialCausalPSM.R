@@ -179,7 +179,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
 }
 
 
-SpatialCausalSim_DGP<- function(fld_size, rho_opt,rho_mult)
+SpatialCausalSim_DGP<- function(fld_size, SpatialCov_opt,rho_mult)
 {
   x <- fld_size
   RFoptions(seed=NA)
@@ -203,14 +203,17 @@ SpatialCausalSim_DGP<- function(fld_size, rho_opt,rho_mult)
 
   for (i in 1:5)
   {
-    if(grepl(colnames(f.SPDF@data)[i],rho_opt) == 1)
+    if(grepl(colnames(f.SPDF@data)[i],SpatialCov_opt) == 1)
     {
       rho = runif(1,0.1,(1*rho_mult))
       ev_st = paste("eleLag <- lag.listw(f.W, f.SPDF@data[[",i,"]])",sep="")
       eval(parse(text=ev_st))
       f.SPDF@data["tmpLag"]=data.frame(eleLag)
-      ev_stB = paste("f.SPDF@data[",i,"] = (f.SPDF@data['tmpLag']*rho) + f.SPDF@data[",i,"]")
-      eval(parse(text=ev_stB))
+      ev_stB = paste("f.SPDF@data[",i,"] = scale((f.SPDF@data['tmpLag']*rho) + f.SPDF@data[",i,"])",sep="")
+      eval(parse(text=ev_stB)) 
+    } else {
+      ev_stC = paste("f.SPDF@data[",i,"] = rnorm(nrow(f.SPDF))",sep="")
+      eval(parse(text=ev_stC))
     }
     
   }

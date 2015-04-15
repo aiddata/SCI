@@ -7,7 +7,7 @@ source('Tools/SpatialCausalPSM.R', chdir=T)
 source('functions.R', chdir=T)
 
 #Number of Iterations
-its = 2000
+its = 200
 
 #How big the field will be
 x <- seq(1, 35, 1)
@@ -17,7 +17,7 @@ PSM_eq = "TrtBin ~ ControlA"
 Final_eq = "y ~ TrtBin + ControlA"
 
 #-----------------------------------------
-iteration = 1
+iteration = 3
 beta_df <- data.frame(matrix(ncol=7, nrow=0))
 colnames(beta_df)[1] <- "YMorans"
 colnames(beta_df)[2] <- "TMorans"
@@ -30,7 +30,7 @@ colnames(beta_df)[7] <- "BdifBhat"
 while (iteration <= its)
 {
   #rho_opt=c("ControlA,RandomFieldA,ControlB,RandomFieldB,TrtBin")
-  f.SPDF <- SpatialCausalSim_DGP(fld_size = x,rho_opt=c("ControlA,ControlB,TrtBin"),rho_mult=5)
+  f.SPDF <- SpatialCausalSim_DGP(fld_size = x,SpatialCov_opt=c("ControlA,RandomFieldA,ControlB,RandomFieldB,TrtBin"),rho_mult=5)
   
   f.NB = poly2nb(f.SPDF)
   f.W = nb2listw(f.NB, style='W')
@@ -67,4 +67,4 @@ plot(beta_df$YMorans, beta_df$BdifBhat)
 
 beta_df$AvgMorans = (as.numeric(beta_df$TMorans) + as.numeric(beta_df$XMorans) + as.numeric(beta_df$YMorans)) / 3.0
 plot(beta_df$AvgMorans, beta_df$BdifBhat)
- write.csv(beta_df, "init_sims_Apr12.csv")
+ write.csv(beta_df, "init_sims_Apr12_wSC.csv")

@@ -8,3 +8,4 @@ require(psych)
 library(spdep) 
 library(RandomFields)
 library(ggmap) #sudo apt-get install r-cran-rjson
+library(reshape)

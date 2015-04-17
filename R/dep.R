@@ -1,5 +1,5 @@
 #Library loading script, to keep it all in one place...
-loadLibs <- function ()
+loadLibs <- function (x=1)
   {
   require(sp)
   require(GISTools) # sudo apt-get install libgeos-dev

@@ -1,23 +1,24 @@
 #Wrapper for simulation tests of SpatialCausal package.
  #Generating Random Spatial Fields
 
-source('Dependencies/dep.R', chdir=T)
-source('Tools/descriptives.R', chdir=T)
-source('Tools/SpatialCausalPSM.R', chdir=T)
-source('functions.R', chdir=T)
+library(devtools)
+devtools::install_github("itpir/SAT")
+library(SAT)
+
+SAT::loadLibs()
 
 #Number of Iterations
-its = 200
+its = 5
 
 #How big the field will be
-x <- seq(1, 35, 1)
+x <- seq(1, 10, 1)
 
 #Equations to fit
 PSM_eq = "TrtBin ~ ControlA"
 Final_eq = "y ~ TrtBin + ControlA"
 
 #-----------------------------------------
-iteration = 3
+iteration = 1
 beta_df <- data.frame(matrix(ncol=7, nrow=0))
 colnames(beta_df)[1] <- "YMorans"
 colnames(beta_df)[2] <- "TMorans"
@@ -30,14 +31,13 @@ colnames(beta_df)[7] <- "BdifBhat"
 while (iteration <= its)
 {
   #rho_opt=c("ControlA,RandomFieldA,ControlB,RandomFieldB,TrtBin")
-  f.SPDF <- SpatialCausalSim_DGP(fld_size = x,SpatialCov_opt=c("ControlA,RandomFieldA,ControlB,RandomFieldB,TrtBin"),rho_mult=5)
+  f.SPDF <- SAT::SpatialCausalSim_DGP(fld_size = x,SpatialCov_opt=c("ControlA,RandomFieldA,ControlB,RandomFieldB,TrtBin"),rho_mult=5)
   
   f.NB = poly2nb(f.SPDF)
   f.W = nb2listw(f.NB, style='W')
   
-  
-  psm_Res <- SpatialCausalPSM(dta = f.SPDF, mtd = "logit", PSM_eq, drop="overlap", visual="FALE")
-  psm_Pairs <- SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "simIDs", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.5, visual="FALSE")
+  psm_Res <- SAT::SpatialCausalPSM(dta = f.SPDF, mtd = "logit", PSM_eq, drop="overlap", visual="FALE")
+  psm_Pairs <- SAT::SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "simIDs", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.5, visual="FALSE")
   
   #Test various models and record resulst...
   #Linear Model - Simplest OLS
@@ -67,4 +67,3 @@ plot(beta_df$YMorans, beta_df$BdifBhat)
 
 beta_df$AvgMorans = (as.numeric(beta_df$TMorans) + as.numeric(beta_df$XMorans) + as.numeric(beta_df$YMorans)) / 3.0
 plot(beta_df$AvgMorans, beta_df$BdifBhat)
- write.csv(beta_df, "init_sims_Apr12_wSC.csv")

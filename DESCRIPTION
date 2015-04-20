@@ -2,7 +2,7 @@ Package: SAT
 Title: Spatial Analysis Tool
 Version: 0.0.0.1
 Authors@R: person("Dan", "Runfola", , "dan@danrunfola.com", role = c("aut", "cre"))
-Description: A package designed to make using spatial information to guide development practice simpler.  This version is currently focused on spatial impact evaluation.
+Description: A package designed to make using spatial information to guide development practice simpler.  This version is currently focused on spatial impact evaluation, and comes pre-packaged with a number of development-focused datasets.  See http://www.aiddata.org for more information.
 Depends: R (>= 3.0.2)
 License: Creative Commons with Attribution
 LazyData: true

@@ -18,6 +18,8 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     #Show user distributions.
     pltObjs[[1]] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance",simple_out=FALSE)
     print(summary(PSMfit))
+    print("Pseudo R2:")
+    print(pR2(PSMfit))
   }
 
   

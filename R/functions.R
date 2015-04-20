@@ -29,7 +29,7 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
   exec_str <- paste("trtLen$vizTEMP <- as.numeric(trtLen$",compvar,")",sep="")  
   eval(parse(text=exec_str))
   ttl = paste(title_pre," (", compvar,")", sep="")
-  bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl) +xlab('",compvar,"')", sep="")
+  bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..density..))  + ggtitle(ttl) +xlab('",compvar,"')", sep="")
   #geom_bar defaults to stacking.
 
   bld <- eval(parse(text=bldstr))

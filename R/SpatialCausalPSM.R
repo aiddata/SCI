@@ -183,6 +183,8 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     if(visual=="TRUE")
     {
       #Output graphics
+      #Remove the factor rows
+      pltObjs <- pltObjs[pltObjs != -999] 
       nrow_c <- length(pltObjs) / 2.0
       do.call(grid.arrange,c(pltObjs,nrow=nrow_c,ncol=2))
     }

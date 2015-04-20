@@ -20,7 +20,7 @@ GroupCompHist = function (dta, compvar, title_pre)
 
   trtLen <- rbind(treated,untreated)
   
-  exec_str <- paste("trtLen$vizTEMP <- trtLen$",compvar,sep="")
+  exec_str <- paste("trtLen$vizTEMP <- as.numeric(trtLen$",compvar,")",sep="")
   eval(parse(text=exec_str))
   
   View(trtLen)

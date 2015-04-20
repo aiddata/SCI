@@ -15,7 +15,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   if(visual == "TRUE")
   {
     #Show user distributions.
-    pltObjs[1] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance")
+    pltObjs[[1]] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance")
   }
 
   
@@ -36,7 +36,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     if(visual == "TRUE")
     {
     #Post drop histograms
-      pltObjs[2] <- GroupCompHist(retData, "PSM_trtProb","Balance Post Extrapolation Drops")
+      pltObjs[[2]] <- GroupCompHist(retData, "PSM_trtProb","Balance Post Extrapolation Drops")
     }
   }
   return (retData)

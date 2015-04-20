@@ -2,7 +2,8 @@
 loadLibs <- function (x=1)
   {
   require(sp)
-  require(GISTools) # sudo apt-get install libgeos-dev
+  #require(GISTools) # sudo apt-get install libgeos-dev
+  require(maptools)
   #require(DT)
   require(ggplot2)
   require(FNN)

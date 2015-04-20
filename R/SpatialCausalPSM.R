@@ -185,9 +185,9 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
       counter <- 1
       while(counter <= nrow_c)
       {
-      d = counter + 1
+      d = counter + 3
       do.call(grid.arrange,c(pltObjs[counter:d],nrow=2,ncol=2))
-      counter = counter + 2
+      counter = counter + 4
       }
     }
   

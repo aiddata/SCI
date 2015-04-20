@@ -7,6 +7,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   if(mtd == "logit")
   {
     PSMfit <- glm(mdl, dta@data, family="binomial")
+
     retData <- dta
 
     retData$PSM_trtProb <- predict(PSMfit, dta@data, type="response")
@@ -16,6 +17,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   {
     #Show user distributions.
     pltObjs[[1]] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance",simple_out=FALSE)
+    print(summary(PSMfit))
   }
 
   

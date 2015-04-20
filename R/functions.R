@@ -23,7 +23,7 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
   if(grepl("factor",compvar))
   {
     print("This script currently does not support the visualization of factor variables.")
-    return(-999)
+    return(NA)
   } else
   {  
   exec_str <- paste("trtLen$vizTEMP <- as.numeric(trtLen$",compvar,")",sep="")  

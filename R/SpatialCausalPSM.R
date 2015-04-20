@@ -155,11 +155,6 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
   #Plot the pre and post-dropping balance for PSM model...
   for (i in 1:length(anc_vars))
   {
-    if(visual == "TRUE")
-    {
-    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
-    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
-    }
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
@@ -168,6 +163,8 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {
+     pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
+     pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
      print("")
      print("=====================")
      print("=====================")

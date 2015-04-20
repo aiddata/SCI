@@ -183,7 +183,10 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     if(visual=="TRUE")
     {
       #Output graphics
-      do.call(marrangeGrob, c(pltObjs, list(nrow=2, ncol=2)))
+      print("Viz Testing")
+      args.G <- c(pltObjs, 2, 2)
+      do.call(grid.arrange,args.G)
+      #grid.arrange(pltObjs[[1]], pltObjs[[2]],ncol=2,main="PSM Matching Stage 1 (Dropping Observations Requiring Extrapolation)")
     }
   
   

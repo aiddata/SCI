@@ -36,7 +36,10 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     if(visual == "TRUE")
     {
     #Post drop histograms
-      pltObjs[[2]] <- GroupCompHist(retData, "PSM_trtProb","Balance Post Extrapolation Drops")
+    pltObjs[[2]] <- GroupCompHist(retData, "PSM_trtProb","Balance Post Extrapolation Drops")
+      
+    #Output graphics
+    grid.arrange(pltObjs[[1]], pltObjs[[2]],ncol=2,main="PSM Matching Stage 1")
     }
   }
   return (retData)

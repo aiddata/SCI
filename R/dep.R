@@ -11,4 +11,6 @@ loadLibs <- function (x=1)
   library(RandomFields)
   library(ggmap) #sudo apt-get install r-cran-rjson
   library(reshape)
+  library(grid)
+  library(gridExtra)
   }

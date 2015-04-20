@@ -183,6 +183,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     if(visual=="TRUE")
     {
       #Output graphics
+      print(pltObjs)
       print("Viz Testing")
       args.G <- c(pltObjs, 2, 2)
       do.call(grid.arrange,args.G)

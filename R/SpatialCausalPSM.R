@@ -7,9 +7,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   if(mtd == "logit")
   {
     PSMfit <- glm(mdl, dta@data, family="binomial")
-
     retData <- dta
-
     retData$PSM_trtProb <- predict(PSMfit, dta@data, type="response")
   }
   

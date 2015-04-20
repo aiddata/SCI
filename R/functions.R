@@ -21,7 +21,7 @@ GroupCompHist = function (dta, compvar, title_pre)
   ttl = paste(title_pre," (", compvar,")", sep="")
   print(names(trtLen))
   plot(trtLen$ControlA)
-  summary(trtLen$ControlA)
+  print(summary(trtLen$ControlA))
   bldstr = paste("ggplot(data=trtLen, aes(x=",compvar,",fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl)", sep="")
   #geom_bar defaults to stacking.
 

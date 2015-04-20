@@ -21,11 +21,14 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
   trtLen <- rbind(treated,untreated)
   
   exec_str <- paste("trtLen$vizTEMP <- as.numeric(trtLen$",compvar,")",sep="")
+  print(exec_str)
   eval(parse(text=exec_str))
   ttl = paste(title_pre," (", compvar,")", sep="")
   bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl) +xlab('",compvar,"')", sep="")
   #geom_bar defaults to stacking.
+  print(exec_str)
   bld <- eval(parse(text=bldstr))
+  print(----)
   if(simple_out == TRUE)
   {
     print(bld)

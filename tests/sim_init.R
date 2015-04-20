@@ -8,7 +8,7 @@ library(SAT)
 SAT::loadLibs()
 
 #Number of Iterations
-its = 5
+its = 1
 
 #How big the field will be
 x <- seq(1, 10, 1)
@@ -36,7 +36,7 @@ while (iteration <= its)
   f.NB = poly2nb(f.SPDF)
   f.W = nb2listw(f.NB, style='W')
   
-  psm_Res <- SAT::SpatialCausalPSM(dta = f.SPDF, mtd = "logit", PSM_eq, drop="overlap", visual="FALE")
+  psm_Res <- SAT::SpatialCausalPSM(dta = f.SPDF, mtd = "logit", PSM_eq, drop="overlap", visual="TRUE")
   psm_Pairs <- SAT::SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "simIDs", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.5, visual="FALSE")
   
   #Test various models and record resulst...

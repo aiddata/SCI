@@ -19,9 +19,11 @@ GroupCompHist = function (dta, compvar, title_pre)
   untreated$trt = 'untreated'
   trtLen <- rbind(treated,untreated)
   ttl = paste(title_pre, compvar, sep=" ")
-  bldstr = paste("print(ggplot(trtLen, aes(",compvar,",fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl))", sep="")
+  bldstr = paste("ggplot(trtLen, aes(",compvar,",fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl)", sep="")
   #geom_bar defaults to stacking.
-  eval(parse(text=bldstr))
+  bld <- eval(parse(text=bldstr))
+  print(bld)
+  return(bld)
 }
 
 ViewShp = function(dta,field,loc,z)

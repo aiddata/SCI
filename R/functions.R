@@ -20,10 +20,13 @@ GroupCompHist = function (dta, compvar, title_pre)
 
   trtLen <- rbind(treated,untreated)
   
+  exec_str <- paste("trtLen$vizTEMP <- trtLen$",compvar,sep="")
+  eval(parse(text=exec_str))
+  
   View(trtLen)
   
   ttl = paste(title_pre," (", compvar,")", sep="")
-  bldstr = paste("ggplot(data=trtLen, aes(x=",compvar,",fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl)", sep="")
+  bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl)", sep="")
   #geom_bar defaults to stacking.
 
   print("bldstr and bld")

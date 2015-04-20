@@ -157,7 +157,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
   {
     if(visual == "TRUE")
     {
-      print(colnames(init_dta))
+      View(init_dta)
     pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ")
     pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ")  
     }

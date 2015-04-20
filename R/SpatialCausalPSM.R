@@ -10,7 +10,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     retData <- dta
     retData$PSM_trtProb <- predict(PSMfit, dta@data, type="response")
   }
-  if(mtd=="OLS")
+  if(mtd=="lm")
   {
     PSMfit <- lm(mdl, dta@data)
     retData <- dta

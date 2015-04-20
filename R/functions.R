@@ -17,9 +17,7 @@ GroupCompHist = function (dta, compvar, title_pre)
   untreated <- retData@data[retData@data$TrtBin == 0,]
   treated$trt = 'treated'
   untreated$trt = 'untreated'
-  #Drop everything but the variables of interest
-  treated <- treated[c('trt',compvar),]
-  untreated <- untreated[c('trt',compvar),]
+
   trtLen <- rbind(treated,untreated)
   
   View(trtLen)

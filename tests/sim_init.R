@@ -37,7 +37,7 @@ while (iteration <= its)
   f.W = nb2listw(f.NB, style='W')
   
   psm_Res <- SAT::SpatialCausalPSM(dta = f.SPDF, mtd = "logit", PSM_eq, drop="overlap", visual="TRUE")
-  psm_Pairs <- SAT::SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "simIDs", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.5, visual="FALSE")
+  psm_Pairs <- SAT::SpatialCausalDist(dta = psm_Res, mtd = "fastNN", vars = PSM_eq, ids = "simIDs", drop_unmatched = TRUE, drop_method = "SD", drop_thresh=.5, visual="TRUE")
   
   #Test various models and record resulst...
   #Linear Model - Simplest OLS

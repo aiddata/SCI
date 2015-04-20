@@ -28,7 +28,7 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
   #geom_bar defaults to stacking.
   print(exec_str)
   bld <- eval(parse(text=bldstr))
-  print(----)
+  print("----")
   if(simple_out == TRUE)
   {
     print(bld)

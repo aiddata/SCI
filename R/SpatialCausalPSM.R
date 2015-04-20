@@ -1,6 +1,9 @@
 SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
 {
-  #First, we check for methods to fit the PSM.
+  #Initialization
+  pltObjs <- list()
+  
+  #Method
   if(mtd == "logit")
   {
     PSMfit <- glm(mdl, dta@data, family="binomial")
@@ -12,7 +15,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   if(visual == "TRUE")
   {
     #Show user distributions.
-    GroupCompHist(retData, "PSM_trtProb","Initial")
+    pltObjs[1] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance")
   }
 
   
@@ -33,7 +36,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     if(visual == "TRUE")
     {
     #Post drop histograms
-    GroupCompHist(retData, "PSM_trtProb","Post Extrapolation Drops")
+      pltObjs[2] <- GroupCompHist(retData, "PSM_trtProb","Balance Post Extrapolation Drops")
     }
   }
   return (retData)

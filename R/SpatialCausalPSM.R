@@ -8,7 +8,13 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   {
     PSMfit <- glm(mdl, dta@data, family="binomial")
     retData <- dta
-    retData$PSM_trtProb <- predict(PSMfit,  retData@data, type="response")
+    retData$PSM_trtProb <- predict(PSMfit, dta@data, type="response")
+  }
+  if(mtd=="OLS")
+  {
+    PSMfit <- lm(mdl, dta@data)
+    retData <- dta
+    retData$PSM_trtProb <- predict(PSMfit, dta@data, type="response")
   }
   
   if(visual == "TRUE")
@@ -16,8 +22,6 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     #Show user distributions.
     pltObjs[[1]] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance",simple_out=FALSE)
     print(summary(PSMfit))
-    print("Pseudo R2:")
-    print(pR2(PSMfit))
   }
 
   

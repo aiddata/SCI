@@ -181,7 +181,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     {
       #Output graphics
       #Remove the factor rows
-      nrow_c <- length(pltObjs) / 2.0
+      nrow_c <- length(pltObjs)
       counter <- 1
       while(counter <= nrow_c)
       {

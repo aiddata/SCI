@@ -22,11 +22,12 @@ GroupCompHist = function (dta, compvar, title_pre)
   bldstr = paste("ggplot(trtLen, aes(x=",compvar,",fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl)", sep="")
   #geom_bar defaults to stacking.
   View(trtLen)
-  bld <- eval(parse(text=bldstr))
+
   print("bldstr and bld")
   print(bldstr)
   print(bld)
   print("over----")
+  bld <- eval(parse(text=bldstr))
   return(bld)
 }
 

@@ -26,6 +26,8 @@ GroupCompHist = function (dta, compvar, title_pre)
   View(trtLen)
   
   ttl = paste(title_pre," (", compvar,")", sep="")
+  print(summary(trtLen$vizTEMP))
+  hist(trtLen$vizTEMP)
   bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl)", sep="")
   #geom_bar defaults to stacking.
 

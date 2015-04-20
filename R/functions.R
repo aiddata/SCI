@@ -8,7 +8,7 @@ BinCheck = function(b, naVal="NA")
   else "bin"
 }
 
-GroupCompHist = function (dta, compvar, title_pre)
+GroupCompHist = function (dta, compvar, title_pre,simple_out)
 {
   #Note, this function is currently sloppy and assumes the treatment is
   #Binary, and defined in "TrtBin"
@@ -26,7 +26,10 @@ GroupCompHist = function (dta, compvar, title_pre)
   bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl) +xlab('",compvar,"')", sep="")
   #geom_bar defaults to stacking.
   bld <- eval(parse(text=bldstr))
-  print(bld)
+  if(simple_out == TRUE)
+  {
+    print(bld)
+  }
   return(bld)
 }
 

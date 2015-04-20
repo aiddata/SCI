@@ -15,7 +15,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   if(visual == "TRUE")
   {
     #Show user distributions.
-    pltObjs[[1]] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance")
+    pltObjs[[1]] <- GroupCompHist(retData, "PSM_trtProb","Initial PSM Balance",simple_out=FALSE)
   }
 
   
@@ -36,7 +36,7 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     if(visual == "TRUE")
     {
     #Post drop histograms
-    pltObjs[[2]] <- GroupCompHist(retData, "PSM_trtProb","Post-Extrapolation Drops")
+    pltObjs[[2]] <- GroupCompHist(retData, "PSM_trtProb","Post-Extrapolation Drops",simple_out=FALSE)
       
     #Output graphics
     grid.arrange(pltObjs[[1]], pltObjs[[2]],ncol=2,main="PSM Matching Stage 1 (Dropping Observations Requiring Extrapolation)")
@@ -157,10 +157,8 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
   {
     if(visual == "TRUE")
     {
-      View(init_dta)
-      GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ")
-    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ")
-    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ")  
+    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
+    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
     }
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])

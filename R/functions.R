@@ -60,3 +60,13 @@ map <- ggmap(baseMap, extent='device') + geom_polygon(aes(fill=Legend,x=long,y=l
 #map <- ggplot(dta.df) + aes(long,lat,group=group,fill=Legend) + geom_polygon() + scale_fill_brewer(palette="PuRd") + ggtitle(field)
 return(map)
 }
+
+timeRangeAvg <- function(dta,prefix,startyr,endyr)
+{
+  searchS = paste("^",prefix,startyr,sep="")
+  searchE = paste("^",prefix,endyr,sep="")
+  strt_id <- grep(searchS,colnames(dta))
+  end_id <- grep(searchE,colnames(dta))
+  rmean <- rowMeans(dta[strt_id:end_id])
+  return(rmean)
+}

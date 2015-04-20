@@ -22,21 +22,13 @@ GroupCompHist = function (dta, compvar, title_pre)
   
   exec_str <- paste("trtLen$vizTEMP <- as.numeric(trtLen$",compvar,")",sep="")
   eval(parse(text=exec_str))
-  
-  View(trtLen)
-  
   ttl = paste(title_pre," (", compvar,")", sep="")
   print(summary(trtLen$vizTEMP))
   hist(trtLen$vizTEMP)
-  bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl)", sep="")
+  bldstr = paste("ggplot(data=trtLen, aes(x=vizTEMP,fill=trt)) + geom_density(alpha=0.2, aes(y=..count..))  + ggtitle(ttl) +xlab(",compvar,")", sep="")
   #geom_bar defaults to stacking.
-
-  print("bldstr and bld")
-  print(bldstr)
-
   bld <- eval(parse(text=bldstr))
   print(bld)
-  print("over----")
   return(bld)
 }
 

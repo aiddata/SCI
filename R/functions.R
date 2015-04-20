@@ -25,9 +25,10 @@ GroupCompHist = function (dta, compvar, title_pre)
 
   print("bldstr and bld")
   print(bldstr)
+
+  bld <- eval(parse(text=bldstr))
   print(bld)
   print("over----")
-  bld <- eval(parse(text=bldstr))
   return(bld)
 }
 

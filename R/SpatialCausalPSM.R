@@ -48,7 +48,8 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
 
 SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, drop_thresh, visual)
 {
-  #Save initial data for later comparison
+  #Initialization
+  pltObjs <- list()
   init_dta <- dta
   
   if (mtd == "fastNN")
@@ -156,8 +157,8 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
   {
     if(visual == "TRUE")
     {
-    GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ")
-    GroupCompHist(dta, anc_vars[i],"Post-Balancing: ")  
+    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ")
+    pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ")  
     }
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])
@@ -179,6 +180,11 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     }
   }
 
+    if(visual=="TRUE")
+    {
+      #Output graphics
+      do.call(marrangeGrob, c(pltObjs, list(nrow=2, ncol=2)))
+    }
   
   
   

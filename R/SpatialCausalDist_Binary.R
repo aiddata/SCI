@@ -57,7 +57,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual, T
     ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
     db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,"))")  
-    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$,"TrtBinColName,"))") 
+    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,"))") 
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {

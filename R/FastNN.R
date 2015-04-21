@@ -5,7 +5,7 @@
 #and then working through this list in order from highest to lowest.
 #Matches are removed each step.
 
-fastNN_func <- function(dta,trtMntVar,ids)
+fastNN_binary_func <- function(dta,trtMntVar,ids)
 {
   #Fast nearest neighbors search - will not arrive at optimum,
   #but this may not be an issue for many analysis.
@@ -19,9 +19,6 @@ fastNN_func <- function(dta,trtMntVar,ids)
   eval(parse(text=str_trted))
   eval(parse(text=str_untrted))
   
-  #treated <- sorted_dta[sorted_dta$TrtBin == 1,]
-  #untreated <- sorted_dta[sorted_dta$TrtBin == 0,]
-  
   it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
   dta@data$match <- -999
   dta@data$PSM_distance <- -999
@@ -29,8 +26,10 @@ fastNN_func <- function(dta,trtMntVar,ids)
   
   for (j in 1:it_cnt)
   {
-    treated <- sorted_dta[sorted_dta$TrtBin == 1,]
-    untreated <- sorted_dta[sorted_dta$TrtBin == 0,]
+    str_trted <- paste("treated <- sorted_dta[sorted_dta$",trtMntVar, "== 1,]",sep="")
+    str_untrted <- paste("untreated <- sorted_dta[sorted_dta$",trtMntVar,"==0,]",sep="")
+    eval(parse(text=str_trted))
+    eval(parse(text=str_untrted))
     
     
     #Run the KNN for all neighbors. 

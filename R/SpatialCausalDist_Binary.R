@@ -45,6 +45,8 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
       cnt = cnt + 1
+      print(grp)
+      print(cnt)
     }
   }
   

@@ -54,6 +54,7 @@ for(i in 1:cnt)
   {
   cur_grp <- grp_list[[i]]
   print(cur_grp)
+  print(t_dta)
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
 
 

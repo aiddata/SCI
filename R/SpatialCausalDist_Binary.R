@@ -1,4 +1,4 @@
-SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual)
+SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual, TrtBinColName)
 {
   #Initialization
   pltObjs <- list()
@@ -16,7 +16,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual)
   
   if (mtd == "fastNN")
   {
-    dta <- fastNN_binary_func(dta,"TrtBin",ids) 
+    dta <- fastNN_binary_func(dta,TrtBinColName,ids) 
   }
   
   if (mtd == "optNN")
@@ -26,7 +26,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual)
   
   if (mtd == "NN_WithReplacement")
   {
-    dta <- NN_WithReplacement_binary_func(dta,"TrtBin",ids) 
+    dta <- NN_WithReplacement_binary_func(dta,TrtBinColName,ids) 
   }
   
   if (drop_unmatched == TRUE)
@@ -56,8 +56,8 @@ SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual)
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
-    db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$TrtBin))")  
-    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$TrtBin))") 
+    db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,"))")  
+    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$,"TrtBinColName,"))") 
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {

@@ -8,7 +8,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   drop_method = drop_opts["drop_method"]
   drop_thresh = drop_opts["drop_thresh"]
   
-  if(constraints["groups"] != NULL)
+  if(!is.null(constraints))
   {
     exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
     eval(parse(text=exec_stmnt))

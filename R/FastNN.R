@@ -14,8 +14,8 @@ fastNN_func <- function(dta,trtMntVar,ids)
   sorted_dta <- dta@data[order(dta@data$PSM_trtProb),]
   #Conduct the matching
   
-  str_trted <- paste("sorted_dta[sorted_dta$",trtMntVar, "== 1,]",sep="")
-  str_untrted <- paste("sorted_dta[sorted_dta$",trtMntVar,"==0,]",sep="")
+  str_trted <- paste("treated <- sorted_dta[sorted_dta$",trtMntVar, "== 1,]",sep="")
+  str_untrted <- paste("untreated <- sorted_dta[sorted_dta$",trtMntVar,"==0,]",sep="")
   eval(parse(text=str_trted))
   eval(parse(text=str_untrted))
   

@@ -28,7 +28,6 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
     test_test <- dta[dta$TrtBin == 1,]
     t_dta[[grp]] <- dta[dta$TrtBin == 1,]
     u_dta[[grp]] <- dta[dta$TrtBin == 0,]
-    print(class(t_dta[[grp]]))
     treatment_count <- cur_grp %in% t_dta[[grp]]$ConstraintGroupSet_Opt
     untreated_count <- cur_grp %in% u_dta[[grp]]$ConstraintGroupSet_Opt
     if((untreated_count == FALSE) || (treatment_count == FALSE))
@@ -42,7 +41,6 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
     }
-    print(plot(t_dta[[grp]]))
   }
   
   temp_dta <- list()

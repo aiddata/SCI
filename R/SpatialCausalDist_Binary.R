@@ -38,24 +38,23 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       warning(war_statement)
     }
   }
-
-  if (mtd == "fastNN")
+  
+  temp_dta <- list()
+for(i in 1:length(t_dta))
   {
-    for(i in 1:length(group_constraints))
+  it_dta <- rbind(t_dta[i],u_dta[i])
+  if (mtd == "fastNN")
     {
-    dta <- fastNN_binary_func(dta,TrtBinColName,ids) 
+      temp_dta[i] <- fastNN_binary_func(it_dta,TrtBinColName,ids) 
+    }
+  
+  if (mtd == "NN_WithReplacement")
+    {
+      temp_dta[i] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids) 
     }
   }
   
-  if (mtd == "optNN")
-  {
-    print("To contain a nearest-neighbor algorithm...")
-  }
-  
-  if (mtd == "NN_WithReplacement")
-  {
-    dta <- NN_WithReplacement_binary_func(dta,TrtBinColName,ids) 
-  }
+  dta <- do.call("rbind",temp_dta)
   
   if (drop_unmatched == TRUE)
   {

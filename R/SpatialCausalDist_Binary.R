@@ -1,4 +1,4 @@
-SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, drop_thresh, visual)
+SpatialCausalDist_Binary <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, drop_thresh, visual)
 {
   #Initialization
   pltObjs <- list()

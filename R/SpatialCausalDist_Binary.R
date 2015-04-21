@@ -19,26 +19,32 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   #Caclulate the number of groups to constrain by, if any.
   group_constraints <- unique(dta$ConstraintGroupSet_Opt)
   
-  #If there are more than 1 group, make sure they have at least one observation in the treatment and control groups.
+  #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
+  t_dta <- list()
+  u_dta <-list()
   for (grp in 1:length(group_constraints))
   {
     cur_grp <- as.matrix(group_constraints)[grp]
-    t_dta <- dta[dta$TrtBin == 1,]
-    u_dta <- dta[dta$TrtBin == 0,]
-    print(cur_grp)
-    treatment_count <- cur_grp %in% t_dta$ConstraintGroupSet_Opt
-    untreated_count <- cur_grp %in% u_dta$ConstraintGroupSet_Opt
+    t_dta[[grp]] <- dta[dta$TrtBin == 1,]
+    u_dta[[grp]] <- dta[dta$TrtBin == 0,]
+    treatment_count <- cur_grp %in% t_dta[[grp]]$ConstraintGroupSet_Opt
+    untreated_count <- cur_grp %in% u_dta[[grp]]$ConstraintGroupSet_Opt
     if((untreated_count == FALSE) || (treatment_count == FALSE))
     {
       dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
-      war_statement = paste("Dropped group due to a lack of both treatment and control observation: ",cur_grp,sep="")
+      t_dta[[grp]] <- NULL
+      u_dta[[grp]] <- NULL
+      war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
       warning(war_statement)
     }
   }
 
   if (mtd == "fastNN")
   {
+    for(i in 1:length(group_constraints))
+    {
     dta <- fastNN_binary_func(dta,TrtBinColName,ids) 
+    }
   }
   
   if (mtd == "optNN")

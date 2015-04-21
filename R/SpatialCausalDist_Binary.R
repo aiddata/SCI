@@ -43,6 +43,8 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
 for(i in 1:length(t_dta))
   {
   it_dta <- rbind(t_dta[i],u_dta[i])
+  print(i)
+  View(it_dta)
   if (mtd == "fastNN")
     {
       temp_dta[i] <- fastNN_binary_func(it_dta,TrtBinColName,ids) 

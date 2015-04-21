@@ -26,22 +26,22 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   {
     cur_grp <- as.matrix(group_constraints)[grp]
     print(class(dta))
-    t_dta[[grp]] <- dta[dta$TrtBin == 1,]
-    u_dta[[grp]] <- dta[dta$TrtBin == 0,]
+    t_dta[grp] <- dta[dta$TrtBin == 1,]
+    u_dta[grp] <- dta[dta$TrtBin == 0,]
     print(class(t_dta))
     print(class(t_dta[grp]))
-    treatment_count <- cur_grp %in% t_dta[[grp]]$ConstraintGroupSet_Opt
-    untreated_count <- cur_grp %in% u_dta[[grp]]$ConstraintGroupSet_Opt
+    treatment_count <- cur_grp %in% t_dta[grp]$ConstraintGroupSet_Opt
+    untreated_count <- cur_grp %in% u_dta[grp]$ConstraintGroupSet_Opt
     if((untreated_count == FALSE) || (treatment_count == FALSE))
     {
       dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
-      t_dta[[grp]] <- NULL
-      u_dta[[grp]] <- NULL
+      t_dta[grp] <- NULL
+      u_dta[grp] <- NULL
       war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
       warning(war_statement)
     } else {
-      t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGoupSet_Opt == cur_grp,]
-      u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGoupSet_Opt == cur_grp,]
+      t_dta[grp] <- t_dta[grp][t_dta[grp]$ConstraintGoupSet_Opt == cur_grp,]
+      u_dta[grp] <- u_dta[grp][u_dta[grp]$ConstraintGoupSet_Opt == cur_grp,]
     }
     print(plot(t_dta[[grp]]))
   }

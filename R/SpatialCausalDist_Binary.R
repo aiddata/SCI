@@ -52,9 +52,11 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   temp_dta <- list()
 for(i in 1:cnt)
   {
-  it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
   cur_grp <- grp_list[[i]]
   print(cur_grp)
+  it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
+
+
   if (mtd == "fastNN")
     {
       temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp) 

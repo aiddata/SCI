@@ -1,17 +1,21 @@
-SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual, TrtBinColName)
+SpatialCausalDist_Binary <- function(dta, mtd, constraints=NULL, psm_eq, ids, drop_opts, visual, TrtBinColName)
 {
   #Initialization
   pltObjs <- list()
   init_dta <- dta
   
-  #Set defaults
-  drop_unmatched = FALSE
-  drop_method = "None"
-  drop_thresh = 0.25 #Ignored by default
-  
   drop_unmatched = drop_opts["drop_unmatched"]
   drop_method = drop_opts["drop_method"]
   drop_thresh = drop_opts["drop_thresh"]
+  
+  if(constraints != NULL)
+  {
+    exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
+    eval(parse(text=exec_stmnt))
+  } else {
+    dta$ConstraintGroupSet_Opt <- 1
+  }
+
 
   
   if (mtd == "fastNN")

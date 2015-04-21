@@ -51,6 +51,9 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   temp_dta <- list()
 for(i in 1:cnt)
   {
+  print(cnt)
+  print(i)
+  View(t_dta[[i]])
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
   cur_grp <- grp_list[[i]]
   print(cur_grp)

@@ -1,4 +1,4 @@
-#Test
+#Test!
 BinCheck = function(b, naVal="NA")
 {
   bSet = unique(b)

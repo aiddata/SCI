@@ -18,7 +18,25 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   
   #Caclulate the number of groups to constrain by, if any.
   group_constraints <- unique(dta$ConstraintGroupSet_Opt)
-  print(group_constraints)
+  
+  #If there are more than 1 group, make sure they have at least one observation in the treatment and control groups.
+  for (grp in 1:length(group_constraints))
+  {
+    cur_grp <- as.matrix(group_constraints)[grp]
+    t_dta <- dta[dta$TrtBin == 1]
+    u_dta <- dta[dta$TrtBin == 0]
+    treatment_count = length(t_dta[t_dta$ConstraintGroupSet_Opt == cur_grp])
+    untreated_count = length(t_dta[t_dta$ConstraintGroupSet_Opt == cur_grp])
+    print(cur_grp)
+    print(untreated_count)
+    print(treatment_count)
+    if((treatment_count < 1) || (untreated_count < 1))
+    {
+      dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp]
+      war_statement = paste("Dropped group due to a lack of both treatment and control observation: ",cur_grp,sep="")
+      warning(war_statement)
+    }
+  }
 
   if (mtd == "fastNN")
   {

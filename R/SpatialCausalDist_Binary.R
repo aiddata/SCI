@@ -23,6 +23,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   for (grp in 1:length(group_constraints))
   {
     cur_grp <- as.matrix(group_constraints)[grp]
+    View(dta$TrtBin)
     t_dta <- dta[dta$TrtBin == 1]
     u_dta <- dta[dta$TrtBin == 0]
     print(cur_grp)

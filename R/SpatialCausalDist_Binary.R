@@ -47,6 +47,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       cnt = cnt + 1
       print(grp)
       print(cnt)
+      print(grp_list[grp])
     }
   }
   

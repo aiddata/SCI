@@ -22,10 +22,12 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
   t_dta <- list()
   u_dta <-list()
+  grp_list <- list()
   cnt = 0
   for (grp in 1:length(group_constraints))
   {
     cur_grp <- as.matrix(group_constraints)[grp]
+    grp_list[grp] <- as.matrix(group_constraints)[grp]
     test_test <- dta[dta$TrtBin == 1,]
     t_dta[[grp]] <- dta[dta$TrtBin == 1,]
     u_dta[[grp]] <- dta[dta$TrtBin == 0,]
@@ -36,6 +38,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
       t_dta[[grp]] <- NULL
       u_dta[[grp]] <- NULL
+      grp_list[grp] <- NULL
       war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
       warning(war_statement)
     } else {
@@ -49,21 +52,22 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
 for(i in 1:cnt)
   {
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
+  cur_grp <- grp_list[i]
+  print(cur_grp)
   if (mtd == "fastNN")
     {
-      temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids) 
+      temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp) 
     }
   
   if (mtd == "NN_WithReplacement")
     {
-      temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids) 
+      temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp) 
     }
   }
 
 #Build the final datasets from subsets
 if(cnt > 1)
 {
-  View(temp_dta)
   dta <- temp_dta[[1]]
   for(k in 2:cnt)
   {

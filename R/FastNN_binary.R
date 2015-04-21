@@ -5,7 +5,7 @@
 #and then working through this list in order from highest to lowest.
 #Matches are removed each step.
 
-fastNN_binary_func <- function(dta,trtMntVar,ids)
+fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp)
 {
   #Fast nearest neighbors search - will not arrive at optimum,
   #but this may not be an issue for many analysis.
@@ -53,10 +53,13 @@ fastNN_binary_func <- function(dta,trtMntVar,ids)
     tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
     Treatment_ID = toString(eval(parse(text=tid_txt)))
     
+    #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
+    pair_id = paste(curgrp,j,sep="")
+    
     #Add the Treatment ID to the Control Row 
     tid_a_1 = paste("dta@data$match[which(dta@data$",ids," == Control_ID)] = Treatment_ID", sep="")
     tid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Control_ID)] = k$nn.dist[,1][best_m_control]",sep="")
-    tid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Control_ID)] = j", sep="")
+    tid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Control_ID)] = pair_id", sep="")
     eval(parse(text=tid_a_1))
     eval(parse(text=tid_a_2))
     eval(parse(text=tid_a_3))
@@ -66,7 +69,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids)
     #Add the Control ID to the Treatment Row
     cid_a_1 = paste("dta@data$match[which(dta@data$",ids," == Treatment_ID)] = Control_ID", sep="")
     cid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Treatment_ID)] = k$nn.dist[,1][best_m_control]", sep="")
-    cid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Treatment_ID)] = j", sep="")
+    cid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Treatment_ID)] = pair_id", sep="")
     eval(parse(text=cid_a_1))
     eval(parse(text=cid_a_2))
     eval(parse(text=cid_a_3))

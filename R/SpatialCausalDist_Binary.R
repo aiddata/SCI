@@ -6,7 +6,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   
   drop_unmatched = drop_opts["drop_unmatched"]
   drop_method = drop_opts["drop_method"]
-  drop_thresh = drop_opts["drop_thresh"]
+  drop_thresh = as.numeric(drop_opts["drop_thresh"])
   
   if(!is.null(constraints))
   {

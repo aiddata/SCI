@@ -42,8 +42,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   temp_dta <- list()
 for(i in 1:length(t_dta))
   {
-  it_dta <- rbind(t_dta[i],u_dta[i])
-  print(i)
+  it_dta <- spRbind(t_dta[i],u_dta[i])
   View(it_dta)
   if (mtd == "fastNN")
     {
@@ -56,7 +55,7 @@ for(i in 1:length(t_dta))
     }
   }
   
-  dta <- do.call("rbind",temp_dta)
+  dta <- do.call("spRbind",temp_dta)
   
   if (drop_unmatched == TRUE)
   {

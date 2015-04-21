@@ -95,7 +95,12 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     treated <- sorted_dta[sorted_dta$TrtBin == 1,]
     untreated <- sorted_dta[sorted_dta$TrtBin == 0,]
     
-    it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
+    it_cnt = max(length(treated[[1]]), length(untreated[[1]]))
+    max_grp = "untreated"
+    if(it_cnt == length(treated[[1]]))
+    {
+      max_grp = "treated"
+    }
     dta@data$match <- -999
     dta@data$PSM_distance <- -999
     dta@data$PSM_match_ID <- -999
@@ -150,6 +155,20 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
       eval(parse(text=cid_a_2))
       eval(parse(text=cid_a_3))
       eval(parse(text=cid_a_4))  
+  
+      
+      #Drop out the matched unit (but keep the pair in)
+      if(max_grp == "treated")
+      {
+        did_a_1 = paste("sorted_dta <- sorted_dta[sorted_dta$",ids,"!= Treatment_ID ,]",sep="")
+        eval(parse(text=did_a_1))
+      }else{
+        did_a_2 = paste("sorted_dta <- sorted_dta[sorted_dta$",ids,"!= Control_ID ,]",sep="")
+        eval(parse(text=did_a_2)) 
+      }
+      
+
+      
     } 
   }
   

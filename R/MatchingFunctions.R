@@ -81,7 +81,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
   
   if (mtd == "fastNN")
   {
-    fastNN_func(dta,"trtBin",ids) 
+    dta <- fastNN_func(dta,"trtBin",ids) 
   }
   
   if (mtd == "optNN")

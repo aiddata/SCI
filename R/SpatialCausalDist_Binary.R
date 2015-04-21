@@ -26,15 +26,14 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
     t_dta <- dta[dta$TrtBin == 1,]
     u_dta <- dta[dta$TrtBin == 0,]
     print(cur_grp)
-    treatment_count = length(t_dta[t_dta$ConstraintGroupSet_Opt == cur_grp,])
-    untreated_count = length(u_dta[u_dta$ConstraintGroupSet_Opt == cur_grp,])
-    if((treatment_count < 1) || (untreated_count < 1))
+    treatment_count <- cur_grp %in% t_dta[t_dta$ConstraintGroupSet_Opt == cur_grp,]
+    untreated_count <- cur_grp %in% u_dta[u_dta$ConstraintGroupSet_Opt == cur_grp,]
+    if((untreated_count == FALSE) || (treatment_count == FALSE))
     {
       dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
       war_statement = paste("Dropped group due to a lack of both treatment and control observation: ",cur_grp,sep="")
       warning(war_statement)
     }
-    View(dta)
   }
 
   if (mtd == "fastNN")

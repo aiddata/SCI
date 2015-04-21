@@ -43,7 +43,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGoupSet_Opt == cur_grp,]
       u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGoupSet_Opt == cur_grp,]
     }
-    print(plot(t_dta))
+    print(plot(t_dta[[grp]]))
   }
   
   temp_dta <- list()

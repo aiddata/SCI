@@ -39,8 +39,8 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
       warning(war_statement)
     } else {
-      t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGoupSet_Opt == cur_grp,]
-      u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGoupSet_Opt == cur_grp,]
+      t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
+      u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
     }
     print(plot(t_dta[[grp]]))
   }

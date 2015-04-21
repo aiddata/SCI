@@ -93,7 +93,6 @@ if(cnt > 1)
   if(drop_method == "SD")
   {
     #Method to drop pairs that are greater than a set threshold apart in terms of PSM Standard Deviations.
-    View(dta$PSM_trtProb)
     psm_sd_thresh = sd(dta$PSM_trtProb) * drop_thresh
     if(visual == "TRUE")
     {

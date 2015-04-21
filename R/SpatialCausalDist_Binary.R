@@ -15,9 +15,11 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   } else {
     dta$ConstraintGroupSet_Opt <- 1
   }
-
-
   
+  #Caclulate the number of groups to constrain by, if any.
+  group_constraints <- unique(dta$ConstraintGroupSet_Opt)
+  print(group_constraints)
+
   if (mtd == "fastNN")
   {
     dta <- fastNN_binary_func(dta,TrtBinColName,ids) 

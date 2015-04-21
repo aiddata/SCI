@@ -22,6 +22,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
   t_dta <- list()
   u_dta <-list()
+  cnt = 0
   for (grp in 1:length(group_constraints))
   {
     cur_grp <- as.matrix(group_constraints)[grp]
@@ -40,15 +41,15 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
     } else {
       t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
+      cnt = cnt + 1
     }
   }
   
   temp_dta <- list()
-for(i in 1:length(t_dta))
+for(i in 1:cnt)
   {
   View(t_dta[i])
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
-  View(it_dta)
   if (mtd == "fastNN")
     {
       temp_dta[i] <- fastNN_binary_func(it_dta,TrtBinColName,ids) 

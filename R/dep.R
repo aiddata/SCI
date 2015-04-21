@@ -14,4 +14,5 @@ loadLibs <- function (x=1)
   library(reshape)
   library(grid)
   library(gridExtra)
+  library(QuantPsyc)
   }

@@ -105,7 +105,7 @@ SpatialCausalDist <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, 
     dta@data$PSM_distance <- -999
     dta@data$PSM_match_ID <- -999
     dta@data$PSM_match_cnt <- 0
-    it_cnt = it_cnt - 1
+    it_cnt = it_cnt 
     
     for (j in 1:it_cnt)
     {

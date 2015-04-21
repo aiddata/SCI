@@ -45,15 +45,13 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       t_dta[[grp]] <- t_dta[[grp]][t_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[grp]] <- u_dta[[grp]][u_dta[[grp]]$ConstraintGroupSet_Opt == cur_grp,]
       cnt = cnt + 1
+      print(cnt)
     }
   }
-  
+  print(length(t_dta))
   temp_dta <- list()
 for(i in 1:cnt)
   {
-  print(cnt)
-  print(i)
-  View(t_dta[[i]])
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
   cur_grp <- grp_list[[i]]
   print(cur_grp)

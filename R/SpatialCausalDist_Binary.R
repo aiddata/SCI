@@ -43,6 +43,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
 for(i in 1:length(t_dta))
   {
   View(t_dta[i])
+  class(t_dta[i])
   it_dta <- maptools::spRbind(t_dta[i],u_dta[i])
   View(it_dta)
   if (mtd == "fastNN")

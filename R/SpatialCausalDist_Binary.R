@@ -63,6 +63,7 @@ for(i in 1:cnt)
 #Build the final datasets from subsets
 if(cnt > 1)
 {
+  View(temp_dta)
   dta <- temp_dta[[1]]
   for(k in 2:cnt)
   {

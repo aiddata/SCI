@@ -20,8 +20,8 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   group_constraints <- unique(dta$ConstraintGroupSet_Opt)
   
   #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
-  t_dta <- list()
-  u_dta <-list()
+  t_dta <- vector()
+  u_dta <-vector()
   for (grp in 1:length(group_constraints))
   {
     cur_grp <- as.matrix(group_constraints)[grp]

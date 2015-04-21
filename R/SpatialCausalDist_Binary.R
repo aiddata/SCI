@@ -24,8 +24,8 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   {
     cur_grp <- as.matrix(group_constraints)[grp]
     View(dta$TrtBin)
-    t_dta <- dta[dta$TrtBin == 1]
-    u_dta <- dta[dta$TrtBin == 0]
+    t_dta <- dta[dta$TrtBin == 1,]
+    u_dta <- dta[dta$TrtBin == 0,]
     print(cur_grp)
     print(t_dta$ConstraintGroupSet_Opt)
     treatment_count = length(t_dta[t_dta$ConstraintGroupSet_Opt == cur_grp,])

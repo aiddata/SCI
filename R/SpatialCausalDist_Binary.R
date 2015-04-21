@@ -48,22 +48,31 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   temp_dta <- list()
 for(i in 1:cnt)
   {
-  print(cnt)
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
-  print("it done")
   if (mtd == "fastNN")
     {
-      temp_dta[i] <- fastNN_binary_func(it_dta,TrtBinColName,ids) 
+      temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids) 
     }
   
   if (mtd == "NN_WithReplacement")
     {
-      temp_dta[i] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids) 
+      temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids) 
     }
   }
-  
-  dta <- do.call("spRbind",temp_dta)
-  
+
+#Build the final datasets from subsets
+if(cnt > 1)
+{
+  dta <- temp_dta[[1]]
+  for(k in 2:cnt)
+  {
+  dta  <- maptools::spRbind(dta, temp_dta[[k]])
+  } 
+} else {
+  dta <- temp_dta[[1]]
+}
+
+
   if (drop_unmatched == TRUE)
   {
     dta <- dta[dta@data$PSM_match_ID != -999,]    

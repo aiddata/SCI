@@ -47,15 +47,12 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
       cnt = cnt + 1
-      print(cnt)
     }
   }
-  print(length(t_dta))
   temp_dta <- list()
 for(i in 1:cnt)
   {
   cur_grp <- grp_list[[i]]
-  print(cur_grp)
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
 
 
@@ -96,6 +93,7 @@ if(cnt > 1)
   if(drop_method == "SD")
   {
     #Method to drop pairs that are greater than a set threshold apart in terms of PSM Standard Deviations.
+    View(dta$PSM_trtProb)
     psm_sd_thresh = sd(dta$PSM_trtProb) * drop_thresh
     if(visual == "TRUE")
     {

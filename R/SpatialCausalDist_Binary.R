@@ -1,8 +1,18 @@
-SpatialCausalDist_Binary <- function(dta, mtd, vars, ids, drop_unmatched, drop_method, drop_thresh, visual)
+SpatialCausalDist_Binary <- function(dta, mtd, psm_eq, ids, drop_opts, visual)
 {
   #Initialization
   pltObjs <- list()
   init_dta <- dta
+  
+  #Set defaults
+  drop_unmatched = FALSE
+  drop_method = "None"
+  drop_thresh = 0.25 #Ignored by default
+  
+  drop_unmatched = drop_opts["drop_unmatched"]
+  drop_method = drop_opts["drop_method"]
+  drop_thresh = drop_opts["drop_thresh"]
+
   
   if (mtd == "fastNN")
   {
@@ -24,7 +34,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, vars, ids, drop_unmatched, drop_m
     dta <- dta[dta@data$PSM_match_ID != -999,]    
   }
   
-  anc_v_int <- strsplit(vars, "~")[[1]][2]
+  anc_v_int <- strsplit(psm_eq, "~")[[1]][2]
   anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
   anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
   

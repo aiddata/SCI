@@ -15,4 +15,5 @@ loadLibs <- function (x=1)
   library(grid)
   library(gridExtra)
   library(QuantPsyc)
+  library(texreg)
   }

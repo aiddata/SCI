@@ -35,7 +35,8 @@ timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield,newfieldID)
   {
     ID <- as.character(dta@data[IDfield][i,])
     #Fit trend model
-    trend_mod <- lm(value ~ Year,data=analysisDF)
+    ID_dat <- analysisDF[analysisDF[IDfield] == ID,]
+    trend_mod <- lm(value ~ Year,data=ID_dat)
     dta@data[newfieldID][i,] <- summary(trend_mod)$coefficients[2]
   }
   return(dta)

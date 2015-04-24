@@ -28,6 +28,7 @@ timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield,newfieldID)
   new_pre <- sub("[0-9]","",prefix)
   
   analysisDF["Year"] <- lapply(analysisDF["variable"],FUN=function(x) as.numeric(gsub(new_pre,"",x)))
+  View(analysisDF)
   analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]
   analysisDF <- analysisDF[analysisDF["Year"] <= endyr ,]
   dta@data[newfieldID] <- 0

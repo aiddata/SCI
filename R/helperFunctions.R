@@ -22,6 +22,7 @@ timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield,newfieldID)
 {
   grep_str = paste(IDfield,prefix,sep="|")
   tDF <- dta@data[grepl(grep_str,names(dta@data))]
+  View(tDF)
   analysisDF <- melt(tDF,id=c(IDfield))
   analysisDF["Year"] <- lapply(analysisDF["variable"],FUN=function(x) as.numeric(gsub(prefix,"",x)))
   analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]

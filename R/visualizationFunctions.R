@@ -17,9 +17,11 @@ ViewShp = function(dta,field,loc,z)
   return(map)
 }
 
-ViewTimeSeries <- function(dta,IDfield,TrtField)
+ViewTimeSeries <- function(dta,IDfield,TrtField,idPre)
 {
-  vizDF <- melt(dta,id=c(IDfield,TrtField))
+  grep_str = paste(idPre,IDfield,TrtField,"|")
+  tDF <- dta@data[grepl(grep_str,names(dta@data))]
+  vizDF <- melt(tDF,id=c(IDfield,TrtField))
   ggplot_exec <- paste(" 
     ggplot(data = vizDF, aes(x=variable, y=value, group=",IDfield,",colour=factor(",TrtField,"))) + 
     geom_line(size=.5, linetype=3) + 

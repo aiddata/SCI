@@ -23,7 +23,7 @@ ViewTimeSeries <- function(dta,IDfield,TrtField)
   ggplot_exec <- paste(" 
     ggplot(data = vizDF, aes(x=variable, y=value, group=",IDfield,",colour=factor(",TrtField,"))) + 
     geom_line(size=.5, linetype=3) + 
-    stat_summary(fun.y=mean,aes(x=variable, y=value, group=",TrtField,",colour=factor(",TrtField,")),data=dta,geom='line',size=1.5) +
+    stat_summary(fun.y=mean,aes(x=variable, y=value, group=",TrtField,",colour=factor(",TrtField,")),data=vizDF,geom='line',size=1.5) +
     theme(axis.text.x=element_text(angle=90,hjust=1))",sep="")
   print(eval(parse(text=ggplot_exec)))
 }

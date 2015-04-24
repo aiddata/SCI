@@ -16,3 +16,14 @@ ViewShp = function(dta,field,loc,z)
   #map <- ggplot(dta.df) + aes(long,lat,group=group,fill=Legend) + geom_polygon() + scale_fill_brewer(palette="PuRd") + ggtitle(field)
   return(map)
 }
+
+ViewTimeSeries <- function(dta,IDfield,TrtField)
+{
+  vizDF <- melt(dta,id=c(IDfield,TrtField))
+  print(
+  ggplot(data = vizDF, aes(x=variable, y=value, group=IDfield,colour=factor(TrtField))) + 
+    geom_line(size=.5, linetype=3) + 
+    stat_summary(fun.y=mean,aes(x=variable, y=value, group=TrtField,colour=factor(TrtField)),data=dta,geom="line",size=1.5) +
+    theme(axis.text.x=element_text(angle=90,hjust=1))
+  )
+}

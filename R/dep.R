@@ -1,10 +1,9 @@
-#Library loading script, to keep it all in one place...
+#Library loading script in case dependencies are not loading correctly.
 loadLibs <- function (x=1)
   {
   require(sp)
   #require(GISTools) # sudo apt-get install libgeos-dev
   require(maptools)
-  #require(DT)
   require(ggplot2)
   require(FNN)
   require(psych)

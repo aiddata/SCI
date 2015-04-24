@@ -25,8 +25,7 @@ timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield,newfieldID)
   analysisDF <- melt(tDF,id=c(IDfield))
 
   #cleaned GREP
-  new_pre <- sub("[0-9]","",prefix)
-  print(new_pre)
+  new_pre <- gsub("[0-9]","",prefix)
   analysisDF["Year"] <- lapply(analysisDF["variable"],FUN=function(x) as.numeric(gsub(new_pre,"",x,fixed=TRUE)))
   View(analysisDF)
   analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]

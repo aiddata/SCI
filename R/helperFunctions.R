@@ -17,3 +17,23 @@ timeRangeAvg <- function(dta,prefix,startyr,endyr)
   rmean <- rowMeans(dta[strt_id:end_id])
   return(rmean)
 }
+
+timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield,newfieldID)
+{
+  grep_str = paste(IDfield,prefix,sep="|")
+  tDF <- dta@data[grepl(grep_str,names(dta@data))]
+  analysisDF <- melt(tDF,id=c(IDfield))
+  analysisDF["Year"] <- lapply(analysisDF["variable"],FUN=function(x) as.numeric(gsub(prefix,"",x)))
+  analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]
+  analysisDF <- analysisDF[analysisDF["Year"] <= endyr ,]
+  dta@data[newfieldID] <- 0
+  for (i in 1:length(dta))
+  {
+    ID <- as.charachter(dta@data[IDfield][i,])
+    #Fit trend model
+    trend_mod <- lm(value ~ Year,data=analysisDF)
+    dta@data[newfieldID][i,] <- summary(trend_mod)$coefficients[2]
+  }
+  return(dta)
+  
+}

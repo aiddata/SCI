@@ -28,7 +28,6 @@ ViewTimeSeries <- function(dta,IDfield,TrtField,idPre)
     stat_summary(fun.y=mean,aes(x=variable, y=value, group=",TrtField,",colour=factor(",TrtField,")),data=vizDF,geom='line',size=1.5) +
     theme(axis.text.x=element_text(angle=90,hjust=1))",sep="")
   gg_ret <- eval(parse(text=ggplot_exec))
-  print(gg_ret)
   return(gg_ret)
   
 }

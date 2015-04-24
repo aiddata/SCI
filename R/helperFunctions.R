@@ -22,9 +22,12 @@ timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield,newfieldID)
 {
   grep_str = paste(IDfield,prefix,sep="|")
   tDF <- dta@data[grepl(grep_str,names(dta@data))]
-  View(tDF)
   analysisDF <- melt(tDF,id=c(IDfield))
-  analysisDF["Year"] <- lapply(analysisDF["variable"],FUN=function(x) as.numeric(gsub(prefix,"",x)))
+
+  #cleaned GREP
+  new_pre <- sub("[0-9]","",prefix)
+  
+  analysisDF["Year"] <- lapply(analysisDF["variable"],FUN=function(x) as.numeric(gsub(new_pre,"",x)))
   analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]
   analysisDF <- analysisDF[analysisDF["Year"] <= endyr ,]
   dta@data[newfieldID] <- 0

@@ -20,10 +20,10 @@ ViewShp = function(dta,field,loc,z)
 ViewTimeSeries <- function(dta,IDfield,TrtField)
 {
   vizDF <- melt(dta,id=c(IDfield,TrtField))
-  print(
-  ggplot(data = vizDF, aes(x=variable, y=value, group=IDfield,colour=factor(TrtField))) + 
+  ggplot_exec <- paste(" 
+    ggplot(data = vizDF, aes(x=variable, y=value, group=",IDfield,",colour=factor(",TrtField,"))) + 
     geom_line(size=.5, linetype=3) + 
-    stat_summary(fun.y=mean,aes(x=variable, y=value, group=TrtField,colour=factor(TrtField)),data=dta,geom="line",size=1.5) +
-    theme(axis.text.x=element_text(angle=90,hjust=1))
-  )
+    stat_summary(fun.y=mean,aes(x=variable, y=value, group=",TrtField,",colour=factor(",TrtField,")),data=dta,geom='line',size=1.5) +
+    theme(axis.text.x=element_text(angle=90,hjust=1))",sep="")
+  print(eval(parse(text=ggplot_exec)))
 }

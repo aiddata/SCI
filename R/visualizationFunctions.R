@@ -21,7 +21,6 @@ ViewTimeSeries <- function(dta,IDfield,TrtField,idPre)
 {
   grep_str = paste(idPre,IDfield,TrtField,sep="|")
   tDF <- dta@data[grepl(grep_str,names(dta@data))]
-  View(tDF)
   vizDF <- melt(tDF,id=c(IDfield,TrtField))
   ggplot_exec <- paste(" 
     ggplot(data = vizDF, aes(x=variable, y=value, group=",IDfield,",colour=factor(",TrtField,"))) + 

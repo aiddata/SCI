@@ -20,7 +20,8 @@ ViewShp = function(dta,field,loc,z)
 ViewTimeSeries <- function(dta,IDfield,TrtField,idPre)
 {
   grep_str = paste(idPre,IDfield,TrtField,"|")
-  tDF <- dta@data[grepl(grep_str,names(dta@data)),]
+  print(grep_str)
+  tDF <- dta@data[grepl(grep_str,names(dta@data))]
   View(tDF)
   vizDF <- melt(tDF,id=c(IDfield,TrtField))
   ggplot_exec <- paste(" 

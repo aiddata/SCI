@@ -41,7 +41,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
   for (k in res)
   {
     print(res[[k]])
-    if(res[[k]][1] == -999)
+    if(res[[k]] == -999)
     {
       res[[k]] <- NULL
     }

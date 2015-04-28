@@ -45,5 +45,6 @@ PSMdistCovariance = function (dta,psm_col,d1=0.5,d2=1.5)
   exec <- paste("sp.correlogram(r.nb,dta$",psm_col,",order=10,method="I",zero.policy=TRUE)",sep="")
   print(exec)
   sp.cor <- eval(parse(text=exec))
+  return(sp.cor)
 }
 

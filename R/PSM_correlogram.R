@@ -30,6 +30,8 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
       {
         cardnos[[i]] <- NULL
         cnt = cnt + 1
+        warn_str = paste("Bin h=",i,"was empty, and is excluded from the plot.")
+        warning(warn_str)
       }
       else
       {

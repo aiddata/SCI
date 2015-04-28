@@ -21,8 +21,8 @@ PSM_correlogram <- function (neighbours, var, order = 1, method = "corr", style 
   cardnos <- vector(mode = "list", length = order)
   for (i in 1:order) cardnos[[i]] <- table(card(nblags[[i]]))
   nobs <- sapply(cardnos, function(x) sum(x[names(x) > "0"]))
-  if (any(nobs < 3)) 
-    stop("sp.correlogram: too few included observations in higher lags:\n\treduce order.")
+  #if (any(nobs < 3)) 
+  #  stop("sp.correlogram: too few included observations in higher lags:\n\treduce order.")
   if (method == "corr") {
     lags.x <- matrix(0, nrow = length(var), ncol = order)
     for (i in 1:order) lags.x[, i] <- lag.listw(nb2listw(nblags[[i]], 

@@ -41,20 +41,14 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
   for (k in 1:length(res[,1]))
   {
     if(res[[k]][1] == -999)
-    {
-      print("test")
-      print(k)
-      print(res)
-      print(res[k])
-      print(res[k,])
-      
+    {    
       res <- res[-k]
     }
   }
-  print(res)
   
   obj <- list(res = res, method = "I", cardnos = cardnos, 
               var = deparse(substitute(var)))
   class(obj) <- "spcor"
+  print(obj)
   obj
 }

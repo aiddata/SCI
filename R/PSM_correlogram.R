@@ -39,6 +39,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, method = "corr", style 
       if (method == "I") {
         res[i, ] <- moran.test(var, listw, randomisation = randomisation, 
                                zero.policy = zero.policy)$estimate
+        print(res[i, ])
       }
       else {
         res[i, ] <- geary.test(var, listw, randomisation = randomisation, 

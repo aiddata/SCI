@@ -45,9 +45,10 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     print(res)
     if(res[[k]] == -999)
     {
-      res[[k]] <- NULL
+      res[k] <- NULL
     }
   }
+  print(res)
   
   obj <- list(res = res, method = "I", cardnos = cardnos, 
               var = deparse(substitute(var)))

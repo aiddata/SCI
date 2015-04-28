@@ -32,5 +32,13 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
   }
 }
 
-
+#PSM distance decay examination - should we enforce a threshold for matches or not?
+#Need to provide better settings for the distance bands, hacked for now.
+#Order also needs to be examined
+PSMdistCovariance = function (dta,psm_col,d1=0.5,d2=1.5)
+{
+  #Produce a corellogram using Moran's I at varying resolutions.
+  r.nb <- dnearneigh(as.matrix(coordinates(dta)),d1,d2)
+  sp.cor <- sp.correlogram(r.nb,dta[psm_col],order=10,method="I",zero.policy=TRUE)
+}
 

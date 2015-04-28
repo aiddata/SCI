@@ -44,8 +44,13 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
       warning(war_statement)
     } else {
+      
+      #Geographic constraints can be added here, using the t_dta and u_dta.
       t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
+      
+      
+      
       cnt = cnt + 1
     }
   }

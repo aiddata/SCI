@@ -35,7 +35,7 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
 #PSM distance decay examination - should we enforce a threshold for matches or not?
 #Need to provide better settings for the distance bands, hacked for now.
 #Order also needs to be examined
-PSMdistDecay = function(dta,psm_col,d1=0.5,d2=1.5)
+PSMdistDecay = function(dta,psm_col,d1,d2)
 {
   #Produce a corellogram using Moran's I at varying resolutions
   #First, convert to an equal-distance projection

@@ -37,13 +37,9 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
 #Order also needs to be examined
 PSMdistDecay = function(dta,psm_col,d1=0.5,d2=1.5)
 {
-  #Produce a corellogram using Moran's I at varying resolutions.
-  print("Test Out")
-  plot(dta)
-  View(coordinates(dta))
+  #Produce a corellogram using Moran's I at varying resolutions
   r.nb <- dnearneigh(as.matrix(coordinates(dta)),d1,d2)
   exec <- paste("sp.correlogram(r.nb,dta$",psm_col,",order=10,method='I',zero.policy=TRUE)",sep="")
-  print(exec)
   sp.cor <- eval(parse(text=exec))
   plot(sp.cor)
   return(sp.cor)

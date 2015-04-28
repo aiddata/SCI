@@ -43,6 +43,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     if(res[[k]][1] == -999)
     {    
       res <- res[-k]
+      cardnos <- cardnos[-i]
     }
   }
   

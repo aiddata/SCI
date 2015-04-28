@@ -38,6 +38,7 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
 PSMdistCovariance = function (dta,psm_col,d1=0.5,d2=1.5)
 {
   #Produce a corellogram using Moran's I at varying resolutions.
+  View(coordinates(dta))
   r.nb <- dnearneigh(as.matrix(coordinates(dta)),d1,d2)
   exec <- paste("sp.correlogram(r.nb,dta$",psm_col,",order=10,method="I",zero.policy=TRUE)",sep="")
   print(exec)

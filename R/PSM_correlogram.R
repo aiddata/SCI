@@ -40,8 +40,8 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
                                zero.policy = zero.policy)$estimate)
       }
     }
-    #order = order - (cnt-1)
-    rownames(res) <- 1:order
+
+    #rownames(res) <- 1:order
   
   obj <- list(res = res, method = "I", cardnos = cardnos, 
               var = deparse(substitute(var)))

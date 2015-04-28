@@ -40,8 +40,9 @@ PSMdistDecay = function(dta,psm_col,c1,c2)
   #Produce a corellogram using Moran's I at varying resolutions
   #First, convert to an equal-distance projection
   dta_prj <- project(as.matrix(coordinates(dta)),"+proj=laea") 
-  r.nb <- dnearneigh(as.matrix(coordinates(dta_prj),d1=c1,d2=c2))
   coordinates(dta) <- dta_prj
+  r.nb <- dnearneigh(as.matrix(coordinates(dta)),d1=c1,d2=c2)
+
   exec <- paste("sp.correlogram(r.nb,dta$",psm_col,",order=10,method='I',zero.policy=TRUE)",sep="")
   sp.cor <- eval(parse(text=exec))
   plot(sp.cor)

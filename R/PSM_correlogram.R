@@ -40,9 +40,6 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     }
     order = order - cnt
     rownames(res) <- 1:order
-
-  print(res)
-  print(cardnos)
   
   obj <- list(res = res, method = "I", cardnos = cardnos, 
               var = deparse(substitute(var)))

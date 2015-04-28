@@ -46,7 +46,6 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
       print(k)
       print(res)
       print(res[k])
-      print(res[,k])
       print(res[k,])
       
       res[[k]] <- NULL

@@ -38,8 +38,9 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     }
     rownames(res) <- 1:order
 
-  for (k in res)
+  for (k in 1:length(res))
   {
+    print(length(res))
     print(res[[k]][1])
     print(k)
     if(res[[k]][1] == -999)

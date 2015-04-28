@@ -35,7 +35,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
      
     }
     rownames(res) <- 1:order
-  else stop("method unknown")
+
   obj <- list(res = res, method = method, cardnos = cardnos, 
               var = deparse(substitute(var)))
   class(obj) <- "spcor"

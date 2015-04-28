@@ -46,7 +46,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
       cardnos <- cardnos[-i]
     }
   }
-  
+  print(res)
   print(cardnos)
   
   obj <- list(res = res, method = "I", cardnos = cardnos, 

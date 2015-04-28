@@ -27,7 +27,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     for (i in 1:order) {
       if(nobs[[i]] == 0)
       {
-        res[i ,] <- c(NULL,NULL,NULL)
+        res[i ,] <- c(0,0,0)
       }
       else
       {

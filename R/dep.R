@@ -15,4 +15,5 @@ loadLibs <- function (x=1)
   library(gridExtra)
   library(QuantPsyc)
   library(texreg)
+  require(proj4)
   }

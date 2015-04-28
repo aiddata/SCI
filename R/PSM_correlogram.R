@@ -23,21 +23,23 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
   nobs <- sapply(cardnos, function(x) sum(x[names(x) > "0"]))
   #if (any(nobs < 3)) 
   #  stop("sp.correlogram: too few included observations in higher lags:\n\treduce order.")
-    res <- matrix(NA, nrow = order, ncol = 3)
+    res <- matrix(NA, nrow = 0, ncol = 3)
+    cnt = 0
     for (i in 1:order) {
       if(nobs[[i]] == 0)
       {
         cardnos[[i]] <- NULL
+        cnt = cnt + 1
       }
       else
       {
       listw <- nb2listw(nblags[[i]], style = style, zero.policy = zero.policy)
-      res[i, ] <- moran.test(var, listw, randomisation = randomisation, 
-                               zero.policy = zero.policy)$estimate
+      res <- rbind(res,moran.test(var, listw, randomisation = randomisation, 
+                               zero.policy = zero.policy)$estimate)
       }
     }
+    order = order - cnt
     rownames(res) <- 1:order
-
 
   print(res)
   print(cardnos)

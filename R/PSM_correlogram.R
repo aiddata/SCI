@@ -25,14 +25,16 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
   #  stop("sp.correlogram: too few included observations in higher lags:\n\treduce order.")
     res <- matrix(NA, nrow = order, ncol = 3)
     for (i in 1:order) {
-      print(nobs)
+      if(nobs[[i]] == 0)
+      {
+        res[i ,] <- c(0,0,0)
+      }
+      else
+      {
       listw <- nb2listw(nblags[[i]], style = style, zero.policy = zero.policy)
-      
-      res[i ,] <- c(0,0,0)
-      
       res[i, ] <- moran.test(var, listw, randomisation = randomisation, 
                                zero.policy = zero.policy)$estimate
-     
+      }
     }
     rownames(res) <- 1:order
 

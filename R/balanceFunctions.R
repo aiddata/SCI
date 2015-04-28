@@ -35,7 +35,7 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
 #PSM distance decay examination - should we enforce a threshold for matches or not?
 #Need to provide better settings for the distance bands, hacked for now.
 #Order also needs to be examined
-PSMdistDecay = function(dta,psm_col,start_bin_dist,increment_dist,h)
+PSMdistDecay = function(dta,psm_col,lower_bound,upper_bound,h)
 {
   #Produce a corellogram using Moran's I at varying resolutions
   #First, convert to an equal-distance projection
@@ -43,8 +43,8 @@ PSMdistDecay = function(dta,psm_col,start_bin_dist,increment_dist,h)
   dta_prj_coords <- project(as.matrix(coordinates(dta)),"+proj=laea") 
   dta_prj <- as(dta,"data.frame")
   coordinates(dta_prj) <- dta_prj_coords
-  c1 = start_bin_dist * 1000
-  c2 = increment_dist * 1000
+  c1 = lower_bound * 1000
+  c2 = upper_bound * 1000
   r.nb <- dnearneigh(as.matrix(coordinates(dta_prj)),d1=c1,d2=c2)
   
   exec <- paste("PSM_correlogram(r.nb,dta_prj$",psm_col,",order=",h,",zero.policy=TRUE)",sep="")

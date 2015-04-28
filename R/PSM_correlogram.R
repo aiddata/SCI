@@ -27,7 +27,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     for (i in 1:order) {
       if(nobs[[i]] == 0)
       {
-        res[i ,] <- c(0,0,0)
+        res[i ,] <- c(NULL,NULL,NULL)
       }
       else
       {
@@ -38,6 +38,8 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     }
     rownames(res) <- 1:order
 
+  print(res)
+  
   obj <- list(res = res, method = "I", cardnos = cardnos, 
               var = deparse(substitute(var)))
   class(obj) <- "spcor"

@@ -35,6 +35,8 @@ PSM_correlogram <- function (neighbours, var, order = 1, method = "corr", style 
     for (i in 1:order) {
       print(nblags[[1]])
       print(nblags[[1]][1])
+      print(nblags[[1]][2])
+      print(nblags[[1]][3])
       listw <- nb2listw(nblags[[i]], style = style, zero.policy = zero.policy)
       if (method == "I") {
         res[i, ] <- moran.test(var, listw, randomisation = randomisation, 

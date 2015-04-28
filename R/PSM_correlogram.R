@@ -19,6 +19,7 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
     stop("order less than 1")
   nblags <- nblag(neighbours, maxlag = order)
   cardnos <- vector(mode = "list", length = order)
+  print(cardnos)
   for (i in 1:order) cardnos[[i]] <- table(card(nblags[[i]]))
   nobs <- sapply(cardnos, function(x) sum(x[names(x) > "0"]))
   #if (any(nobs < 3)) 

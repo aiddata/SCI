@@ -33,14 +33,12 @@ PSM_correlogram <- function (neighbours, var, order = 1, method = "corr", style 
   else if ((method == "I") || (method == "C")) {
     res <- matrix(NA, nrow = order, ncol = 3)
     for (i in 1:order) {
-      #print(str(nblags[[1]]))
-      #print(nblags[[1]])
-      print(str(print(nblags[[1]])))
+      print(str(nblags[[1]]))
       listw <- nb2listw(nblags[[i]], style = style, zero.policy = zero.policy)
+      res[i ,] <- c(0,0,0)
       if (method == "I") {
         res[i, ] <- moran.test(var, listw, randomisation = randomisation, 
                                zero.policy = zero.policy)$estimate
-        print(res[i, ])
       }
       else {
         res[i, ] <- geary.test(var, listw, randomisation = randomisation, 

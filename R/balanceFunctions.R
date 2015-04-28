@@ -38,7 +38,10 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
 PSMdistDecay = function(dta,psm_col,d1=0.5,d2=1.5)
 {
   #Produce a corellogram using Moran's I at varying resolutions
-  r.nb <- dnearneigh(as.matrix(coordinates(dta)),d1,d2)
+  #First, convert to an equal-distance projection
+  dta_prj <- project(as.matrix(coordinates(dta)),"+proj=9820")
+  View(as.matrix(coordinates(dta_prj))
+  r.nb <- dnearneigh(as.matrix(coordinates(dta_prj)),d1,d2)
   exec <- paste("sp.correlogram(r.nb,dta$",psm_col,",order=10,method='I',zero.policy=TRUE)",sep="")
   sp.cor <- eval(parse(text=exec))
   plot(sp.cor)

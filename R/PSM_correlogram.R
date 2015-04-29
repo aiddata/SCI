@@ -25,13 +25,13 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
   cur_start = start
   nblags[[1]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)
   binname <- list()
-  binname <- rbind(binname,paste(cur_start,"-",cur_step,sep=""))
+  binname <- rbind(binname,(cur_start/1000))
   for(L in 2:order)
   {
     cur_start = cur_step
     cur_step = cur_step + rng_increment
     nblags[[L]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)
-    binname <- rbind(binname,paste(cur_start,"-",cur_step,sep=""))
+    binname <- rbind(binname,(cur_start/1000))
   }
   cardnos <- vector(mode = "list", length = order)
   for (i in 1:order) cardnos[[i]] <- table(card(nblags[[i]]))

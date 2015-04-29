@@ -19,7 +19,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       }
     if(names(constraints)[cst] == "distance")
     {
-      dist_PSM_thresh = constraints["distance"]
+      dist_PSM = constraints["distance"]
     }
     }
   } else {
@@ -27,7 +27,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
     #max the distance threshold by taking the diagonal of the bounding box.
     x_dist = bbox(dta)[3] - bbox(dta)[1]
     y_dist = bbox(dta)[4] - bbox(dta)[2]
-    dist_PSM_thresh = sqrt(x_dist^2 + y_dist^2)
+    dist_PSM = sqrt(x_dist^2 + y_dist^2)
   }
   
   #Caclulate the number of groups to constrain by, if any.
@@ -60,9 +60,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       
       t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
-      
-      
-      
+        
       cnt = cnt + 1
     }
   }
@@ -72,15 +70,15 @@ for(i in 1:cnt)
   cur_grp <- grp_list[[i]]
   it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
 
-
+  
   if (mtd == "fastNN")
     {
-      temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp) 
+      temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
     }
   
   if (mtd == "NN_WithReplacement")
     {
-      temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp) 
+      temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
     }
   }
 

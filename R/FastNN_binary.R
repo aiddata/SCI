@@ -5,7 +5,7 @@
 #and then working through this list in order from highest to lowest.
 #Matches are removed each step.
 
-fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp)
+fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
 {
   #Fast nearest neighbors search - will not arrive at optimum,
   #but this may not be an issue for many analysis.

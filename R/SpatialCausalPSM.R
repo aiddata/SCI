@@ -25,9 +25,9 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   }
 
   
-  #Second, if a drop parameter - if set to "overlap", remove observations
+  #Second, if a drop parameter - if set to "support", remove observations
   #that don't overlap in the PSM distribution.
-  if(drop == "overlap")
+  if(drop == "support")
   {
     
     #Drop

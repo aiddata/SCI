@@ -24,11 +24,14 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
   cur_step = start + rng_increment
   cur_start = start
   nblags[[1]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)
+  binname <- list()
+  binname <- rbind(binname,paste(cur_start,"-",cur_step,sep=""))
   for(L in 2:order)
   {
     cur_start = cur_step
     cur_step = cur_step + rng_increment
     nblags[[L]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)
+    binname <- rbind(binname,paste(cur_start,"-",cur_step,sep=""))
   }
   cardnos <- vector(mode = "list", length = order)
   for (i in 1:order) cardnos[[i]] <- table(card(nblags[[i]]))
@@ -50,6 +53,7 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
       listw <- nb2listw(nblags[[i]], style = style, zero.policy = zero.policy)
       res <- rbind(res,moran.test(var, listw, randomisation = randomisation, 
                                zero.policy = zero.policy)$estimate)
+      rownames(res)[i] <- binname[[i]]
       }
     }
     order = order - cnt

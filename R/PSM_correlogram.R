@@ -20,12 +20,12 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
   rng_increment = (end-start) / order
   cur_step = start + rng_increment
   cur_start = start
-  nblags[[1]] <- dnearneigh(as.matrix(coordinates(dta)),d1=cur_start,d2=cur_step)
+  nblags[[1]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)
   for(L in 2:order)
   {
     cur_start = cur_step
     cur_step = cur_step + rng_increment
-    nblags[[L]] <- dnearneigh(as.matrix(coordinates(dta)),d1=cur_start,d2=cur_step)
+    nblags[[L]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)
   }
   
   print(nblags)

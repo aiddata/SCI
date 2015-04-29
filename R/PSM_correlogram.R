@@ -20,7 +20,6 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
   end = end * 1000
   start = start * 1000
   rng_increment = (end-start) / order
-  print(rng_increment)
   cur_step = start + rng_increment
   cur_start = start
   nblags[[1]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)

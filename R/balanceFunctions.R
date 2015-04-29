@@ -33,8 +33,9 @@ GroupCompHist = function (dta, compvar, title_pre,simple_out)
 }
 
 #PSM distance decay examination - should we enforce a threshold for matches or not?
-#Need to provide better settings for the distance bands, hacked for now.
-#Order also needs to be examined
+#This is a wrapper for a heavily modified  sp.correlogram from SPDEP
+#This new function (PSM_correlogram) allows for the specification of distance bands
+#Neighbors within each band are then tested for Moran's I correlation.
 PSMdistDecay = function(dta,psm_col,start,end,h)
 {
   #Produce a corellogram using Moran's I at varying resolutions
@@ -44,7 +45,6 @@ PSMdistDecay = function(dta,psm_col,start,end,h)
   dta_prj <- as(dta,"data.frame")
   coordinates(dta_prj) <- dta_prj_coords
   
-  #exec <- paste("PSM_correlogram(r.nb,dta_prj$",psm_col,",order=",h,",zero.policy=TRUE)",sep="")
   exec <- paste("PSM_correlogram(as.matrix(coordinates(dta_prj)),dta_prj$",psm_col,",order=",h,",zero.policy=TRUE,start=",start,",end=",end,")",sep="")
   sp.cor <- eval(parse(text=exec))
   plot(sp.cor)

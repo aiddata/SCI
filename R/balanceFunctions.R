@@ -48,6 +48,7 @@ PSMdistDecay = function(dta,psm_col,lower_bound,upper_bound,h)
   r.nb <- dnearneigh(as.matrix(coordinates(dta_prj)),d1=c1,d2=c2)
   
   exec <- paste("PSM_correlogram(r.nb,dta_prj$",psm_col,",order=",h,",zero.policy=TRUE)",sep="")
+  #exec <- paste("PSM_correlogram(as.matrix(coordinates(dta_prj)),dta_prj$",psm_col,",order=",h,",zero.policy=TRUE)",sep="")
   sp.cor <- eval(parse(text=exec))
   plot(sp.cor)
   return(sp.cor)

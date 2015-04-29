@@ -1,10 +1,8 @@
 #forked from SPDEP (sp.correlogram)
 
-PSM_correlogram <- function (neighbours, var, order = 1, style = "W", 
-          randomisation = TRUE, zero.policy = NULL, spChk = NULL) 
+PSM_correlogram <- function (dta, var, order = 1, style = "W", 
+          randomisation = TRUE, zero.policy = NULL, spChk = NULL, start,end) 
 {
-  if (class(neighbours) != "nb") 
-    stop("not a neighbours list")
   stopifnot(is.vector(var))
   if (any(is.na(var))) 
     stop("no NAs permitted in variable")
@@ -13,12 +11,23 @@ PSM_correlogram <- function (neighbours, var, order = 1, style = "W",
   stopifnot(is.logical(zero.policy))
   if (is.null(spChk)) 
     spChk <- get.spChkOption()
-  if (spChk && !chkIDs(var, nb2listw(neighbours, zero.policy = zero.policy))) 
-    stop("Check of data and weights ID integrity failed")
   if (order < 1) 
     stop("order less than 1")
-  nblags <- nblag(neighbours, maxlag = order)
+  
+  #nblags <- nblag(neighbours, maxlag = order)
   #r.nb <- dnearneigh(as.matrix(coordinates(dta_prj)),d1=c1,d2=c2)
+  nblags <- vector(mode = "list", length = maxlag)
+  rng_increment = (end-start) / order
+  cur_step = start + rng_increment
+  cur_start = start
+  nblags[[1]] <- dnearneigh(as.matrix(coordinates(dta_prj)),d1=cur_start,d2=cur_step)
+  for(L in 2:order)
+  {
+    cur_start = cur_step
+    cur_step = cur_step + rng_increment
+    nblags[[L]] <- dnearneigh(as.matrix(coordinates(dta_prj)),d1=cur_start,d2=cur_step)
+  }
+  
   print(nblags)
   cardnos <- vector(mode = "list", length = order)
   for (i in 1:order) cardnos[[i]] <- table(card(nblags[[i]]))

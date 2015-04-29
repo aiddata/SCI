@@ -10,10 +10,24 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
   
   if(!is.null(constraints))
   {
-    exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
-    eval(parse(text=exec_stmnt))
+    for(cst in 1:length(names(constraints)))
+    {
+    if(names(constraints)[cst] == "groups")
+      {
+      exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
+      eval(parse(text=exec_stmnt))
+      }
+    if(names(constraints[cst] == "distance"))
+    {
+      dist_PSM_thresh = constraints["distance"]
+    }
+    }
   } else {
     dta$ConstraintGroupSet_Opt <- 1
+    #max the distance threshold by taking the diagonal of the bounding box.
+    x_dist = bbox(dta)[3] - bbox(dta)[1]
+    y_dist = bbox(dta)[4] - bbox(dta)[2]
+    dist_PSM_thresh = sqrt(x_dist^2 + y_dist^2)
   }
   
   #Caclulate the number of groups to constrain by, if any.
@@ -30,7 +44,6 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
     grp_index = length(grp_list)+1
     t_index = length(t_dta)+1
     grp_list[[grp_index]] <- as.matrix(group_constraints)[grp]
-    test_test <- dta[dta$TrtBin == 1,]
     t_dta[[t_index]] <- dta[dta$TrtBin == 1,]
     u_dta[[t_index]] <- dta[dta$TrtBin == 0,]
     treatment_count <- cur_grp %in% t_dta[[t_index]]$ConstraintGroupSet_Opt
@@ -45,7 +58,6 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       warning(war_statement)
     } else {
       
-      #Geographic constraints can be added here, using the t_dta and u_dta.
       t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
       u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
       

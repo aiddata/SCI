@@ -17,7 +17,7 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
   #nblags <- nblag(neighbours, maxlag = order)
   #r.nb <- dnearneigh(as.matrix(coordinates(dta_prj)),d1=c1,d2=c2)
   nblags <- vector(mode = "list", length = order)
-  rng_increment = float((end-start) / order)
+  rng_increment = (end-start) / order
   print(rng_increment)
   cur_step = start + rng_increment
   cur_start = start

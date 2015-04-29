@@ -57,7 +57,7 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
       }
     }
     order = order - cnt
-    rownames(res) <- 1:order
+    #rownames(res) <- 1:order
   cardnos <- vector(mode = "list", length = order)
   for (i in 1:order) cardnos[[i]] <- table(card(nblags[[i]])) 
   obj <- list(res = res, method = "I", cardnos = cardnos, 

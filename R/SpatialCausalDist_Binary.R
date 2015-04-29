@@ -17,7 +17,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
       eval(parse(text=exec_stmnt))
       }
-    if(names(constraints[cst] == "distance"))
+    if(names(constraints)[cst] == "distance"))
     {
       dist_PSM_thresh = constraints["distance"]
     }

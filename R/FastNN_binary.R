@@ -51,6 +51,9 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         tid_txt = paste("treated$",ids,"[",mT,"]",sep="")
         Treatment_ID = toString(eval(parse(text=tid_txt)))
         
+        print(cid_txt)
+        print(tid_txt)
+        
         print(Treatment_ID)
         print(Control_ID)
         print("___")

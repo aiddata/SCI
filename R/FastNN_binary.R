@@ -70,7 +70,8 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         k$nn.dist[mC] <- geog_Weight * PSM_score
         
       }
-      View(k$nn.dist[mC])
+      View(k$nn.dist)
+      break
     }
     
     #Add the matched treatment and control values to the recording data frame

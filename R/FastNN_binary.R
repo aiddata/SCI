@@ -71,13 +71,13 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
           print(PSM_score)
           print(euc_dist)
           print(geog_Weight)
-          print(geog_Weight * PSM_score)
+          print((1-geog_Weight) * PSM_score)
           print("----")
         }
 
 
         
-        k$nn.dist[mC] <- geog_Weight * PSM_score
+        k$nn.dist[mC] <- ((1-geog_Weight) * PSM_score
         if(mC == 2)
         {
           break

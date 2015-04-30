@@ -40,6 +40,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     #Perturb the values based on the distance decay function, if selected.
     if(!is.null(dist_PSM))
     {
+      print(k$nn.dist[1])
       for(mC in 1:length(k[[1]]))
       {
         #Calculate the Euclidean Distance between pairs
@@ -63,14 +64,19 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         y_dist = abs(cCoord[1] - cCoord[2])
         x_dist = abs(tCoord[1] - tCoord[2])
         euc_dist = sqrt(y_dist^2 + x_dist^2)
-        
+        if(mC == 1)
+        {
+          print(PSM_score)
+          print(geog_Weight)
+          print(geog_Weight * PSM_score)
+        }
         PSM_score = k$nn.dist[mC]
         geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
         
         k$nn.dist[mC] <- geog_Weight * PSM_score
         
       }
-      View(k$nn.dist)
+      print(k$nn.dist[1])
       break
     }
     

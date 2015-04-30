@@ -38,7 +38,8 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     #Run the KNN for all neighbors. 
     k <- get.knnx(treated$PSM_trtProb, untreated$PSM_trtProb, 1)
     
-    
+    print(k)
+    break
     
     #Add the matched treatment and control values to the recording data frame
     #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.

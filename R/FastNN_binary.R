@@ -44,7 +44,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
       {
         print(k)
         print(length(k))
-        print(length(k[,1]))
+        print(length(k[[1]]))
         #Calculate the Euclidean Distance between pairs
         cid_txt = paste("untreated$",ids,"[",mC,"]",sep="")
         Control_ID = toString(eval(parse(text=cid_txt)))

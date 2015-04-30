@@ -51,13 +51,6 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         tid_txt = paste("treated$",ids,"[",mT,"]",sep="")
         Treatment_ID = toString(eval(parse(text=tid_txt)))
         
-        print(cid_txt)
-        print(tid_txt)
-        
-        print(Treatment_ID)
-        print(Control_ID)
-        print("___")
-        
         #Find the control x,y location
         cCoord_e = paste("coordinates(dta[which(dta@data$",ids," == Control_ID),])", sep="")
         cCoord = eval(parse(text=cCoord_e))
@@ -77,6 +70,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         k$nn.dist[mC] <- geog_Weight * PSM_score
         
       }
+      View(k$nn.dist[mC])
     }
     
     #Add the matched treatment and control values to the recording data frame

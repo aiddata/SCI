@@ -10,7 +10,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
   #Fast nearest neighbors search - will not arrive at optimum,
   #but this may not be an issue for many analysis.
   #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
-  
+  print(coordinates(dta))
   sorted_dta <- dta@data[order(dta@data$PSM_trtProb),]
   #Conduct the matching
   
@@ -24,6 +24,8 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
   dta@data$PSM_distance <- -999
   dta@data$PSM_match_ID <- -999
   
+  #Calculate a distance decay function
+  #to perturb pairs based on their distances.  
   for (j in 1:it_cnt)
   {
     str_trted <- paste("treated <- sorted_dta[sorted_dta$",trtMntVar, "== 1,]",sep="")
@@ -31,10 +33,12 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     eval(parse(text=str_trted))
     eval(parse(text=str_untrted))
     
+    #Perturb 
     
     #Run the KNN for all neighbors. 
-    
     k <- get.knnx(treated$PSM_trtProb, untreated$PSM_trtProb, 1)
+    
+    
     
     #Add the matched treatment and control values to the recording data frame
     #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.
@@ -46,9 +50,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     #Control PSM ID
     cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
     Control_ID = toString(eval(parse(text=cid_txt)))
-    
-    
-    
+        
     #Treatment PSM ID
     tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
     Treatment_ID = toString(eval(parse(text=tid_txt)))

@@ -78,7 +78,8 @@ for(i in 1:cnt)
   
   if (mtd == "NN_WithReplacement")
     {
-      temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+      print("NN with replacement is currently not available, please choose fastNN")
+     # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
     }
   }
 

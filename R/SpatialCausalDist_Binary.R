@@ -16,18 +16,22 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       {
       exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
       eval(parse(text=exec_stmnt))
+      } else
+      {
+        dta$ConstraintGroupSet_Opt <- 1
       }
     if(names(constraints)[cst] == "distance")
-    {
+      {
       dist_PSM = constraints["distance"]
-    }
+      } else
+      {
+      dist_PSM=NULL
+      }
     }
   } else {
     dta$ConstraintGroupSet_Opt <- 1
     #max the distance threshold by taking the diagonal of the bounding box.
-    x_dist = bbox(dta)[3] - bbox(dta)[1]
-    y_dist = bbox(dta)[4] - bbox(dta)[2]
-    dist_PSM = sqrt(x_dist^2 + y_dist^2)
+    dist_PSM = NULL
   }
   
   #Caclulate the number of groups to constrain by, if any.

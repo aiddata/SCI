@@ -33,13 +33,27 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     eval(parse(text=str_trted))
     eval(parse(text=str_untrted))
     
-    #Perturb 
+  
     
     #Run the KNN for all neighbors. 
     k <- get.knnx(treated$PSM_trtProb, untreated$PSM_trtProb, 1)
     
-    print(k)
-    break
+    #Perturb the values based on the distance decay function, if selected.
+    if(!is.null(dist_PSM))
+    {
+      for(mC in 1:length(k))
+      {
+        #Calculate the Euclidean Distance between pairs
+        cid_txt = paste("untreated$",ids,"[",mC,"]",sep="")
+        Control_ID = toString(eval(parse(text=cid_txt)))
+        
+        mT = k$nn.index[mP]
+        
+        tid_txt = paste("treated$",ids,"[",mT,"]",sep="")
+        Treatment_ID = toString(eval(parse(text=tid_txt)))
+        
+      }
+    }
     
     #Add the matched treatment and control values to the recording data frame
     #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.

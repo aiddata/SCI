@@ -60,9 +60,14 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         tCoord_e = paste("coordinates(dta[which(dta@data$",ids," == Treatment_ID),])", sep="")
         tCoord = eval(parse(text=tCoord_e))
 
-        print(cCoord)
-        print(cCoord[1])
-        #euc_dist = 
+        y_dist = abs(cCoord[1] - cCoord[2])
+        x_dist = abs(tCoord[1] - tCoord[2])
+        euc_dist = sqrt(y_dist^2 + x_dist^2)
+        
+        PSM_score = k$nn.dist[mC]
+        geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
+        
+        k$nn.dist[mc] <- geog_Weight * PSM_score
         
       }
     }

@@ -14,7 +14,7 @@ pairDistWeight <- function(dist,threshold,type)
   }
   if(type=="Spherical")
   {
-    if(dist==threshold)
+    if(dist>=threshold)
     {
       return(0)
     } else {
@@ -23,6 +23,3 @@ pairDistWeight <- function(dist,threshold,type)
   }
   
 }
-
-
-

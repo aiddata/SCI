@@ -22,7 +22,7 @@ SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_op
       }
     if(names(constraints)[cst] == "distance")
       {
-      dist_PSM = constraints["distance"]
+      dist_PSM = constraints["distance"][[1]]
       } else
       {
       dist_PSM=NULL

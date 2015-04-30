@@ -40,7 +40,6 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     #Perturb the values based on the distance decay function, if selected.
     if(!is.null(dist_PSM))
     {
-      print(k$nn.dist[1])
       for(mC in 1:length(k[[1]]))
       {
         #Calculate the Euclidean Distance between pairs
@@ -70,17 +69,21 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         if(mC == 1)
         {
           print(PSM_score)
+          print(euc_dist)
           print(geog_Weight)
           print(geog_Weight * PSM_score)
+          print("----")
         }
 
 
         
         k$nn.dist[mC] <- geog_Weight * PSM_score
-        
+        if(mc == 2)
+        {
+          break
+        }
       }
-      print(k$nn.dist[1])
-      break
+      
     }
     
     #Add the matched treatment and control values to the recording data frame

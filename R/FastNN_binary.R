@@ -78,7 +78,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
 
         
         k$nn.dist[mC] <- geog_Weight * PSM_score
-        if(mc == 2)
+        if(mC == 2)
         {
           break
         }

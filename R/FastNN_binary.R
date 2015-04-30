@@ -10,7 +10,6 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
   #Fast nearest neighbors search - will not arrive at optimum,
   #but this may not be an issue for many analysis.
   #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
-  print(coordinates(dta))
   sorted_dta <- dta@data[order(dta@data$PSM_trtProb),]
   #Conduct the matching
   
@@ -47,10 +46,14 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         cid_txt = paste("untreated$",ids,"[",mC,"]",sep="")
         Control_ID = toString(eval(parse(text=cid_txt)))
         
-        mT = k$nn.index[mP]
+        mT = k$nn.index[mC]
         
         tid_txt = paste("treated$",ids,"[",mT,"]",sep="")
         Treatment_ID = toString(eval(parse(text=tid_txt)))
+        
+        #Find the control x,y location
+        tid_a_1 = paste("coordinates(dta[which(dta@data$",ids," == Control_ID)])", sep="")
+        print(eval(parse(text=tid_a_1)))
         
       }
     }

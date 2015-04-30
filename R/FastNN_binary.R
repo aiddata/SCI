@@ -65,6 +65,8 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         euc_dist = sqrt(y_dist^2 + x_dist^2)
         
         PSM_score = k$nn.dist[mC]
+        print(dist_PSM)
+        print(euc_dist)
         geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
         
         k$nn.dist[mc] <- geog_Weight * PSM_score

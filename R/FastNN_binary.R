@@ -66,14 +66,9 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         
         PSM_score = k$nn.dist[mC]
         geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
-
-
+#Removed break here
         
         k$nn.dist[mC] <- ((1-geog_Weight) * PSM_score
-        if(mC == 2)
-        {
-          break
-        }
       }
       
     }

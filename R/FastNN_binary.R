@@ -42,6 +42,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     {
       for(mC in 1:length(k))
       {
+        print(k)
         print(length(k))
         print(length(k[1]))
         #Calculate the Euclidean Distance between pairs

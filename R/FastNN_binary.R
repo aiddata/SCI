@@ -40,11 +40,8 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
     #Perturb the values based on the distance decay function, if selected.
     if(!is.null(dist_PSM))
     {
-      for(mC in 1:length(k))
+      for(mC in 1:length(k[[1]]))
       {
-        print(k)
-        print(length(k))
-        print(length(k[[1]]))
         #Calculate the Euclidean Distance between pairs
         cid_txt = paste("untreated$",ids,"[",mC,"]",sep="")
         Control_ID = toString(eval(parse(text=cid_txt)))

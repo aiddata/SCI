@@ -61,7 +61,7 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         tCoord = eval(parse(text=tCoord_e))
 
         print(cCoord)
-        print(cCoord[[1]][,1])
+        print(cCoord[1])
         #euc_dist = 
         
       }

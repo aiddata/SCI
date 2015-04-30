@@ -16,7 +16,7 @@ pairDistWeight <- function(dist,threshold,type)
   {
     if(dist>=threshold)
     {
-      return(0)
+      return(1)
     } else {
       return( (3/2) * (dist/threshold) - (1 / 2) * (dist/threshold)^3 )
     }

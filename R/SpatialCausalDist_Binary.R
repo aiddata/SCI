@@ -180,7 +180,7 @@ if(cnt > 1)
       counter = counter + 4
     }
     View(bRes)
-    bTab <- stargazer(bRes,summary=FALSE,type="html")
+    bTab <- stargazer(bRes,summary=FALSE,type="html",rownames=FALSE)
     print.htmlTable(bTab)
   }
   

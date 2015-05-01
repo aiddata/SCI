@@ -133,7 +133,7 @@ if(cnt > 1)
     ed_v = sub(")","",ed_v)
     db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,"))")  
     db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,"))") 
-    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[3])") 
+    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")$mean)") 
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {

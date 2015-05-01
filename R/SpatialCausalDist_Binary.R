@@ -149,7 +149,7 @@ if(cnt > 1)
       
       if(i == 1)
       {
-        bRes <- data.frame(c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+        bRes <- data.frame(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff)
         View(bRes)
         colnames(bRes)[1] <- "Pre-Balance Mean"
         colnames(bRes)[2] <- "Post-Balance Mean"

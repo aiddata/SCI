@@ -127,13 +127,12 @@ if(cnt > 1)
   #Simplest suggestion of comparing means and checking if .25 SD apart used.
 
   #Balance results DF
-  bRes <- data.frame("str",0.0,0.0,0.0,0.0,0.0)
-  colnames(bRes)[1] <- "Variable"
-  colnames(bRes)[2] <- "Pre-Balance Mean"
-  colnames(bRes)[3] <- "Post-Balance Mean"
-  colnames(bRes)[4] <- "Absolute Difference"
-  colnames(bRes)[5] <- "StdDev of Pre-Balance Mean"
-  colnames(bRes)[6] <- "Post-Mean SD from Pre-Mean"
+  bRes <- data.frame(0.0,0.0,0.0,0.0,0.0)
+  colnames(bRes)[1] <- "Pre-Balance Mean"
+  colnames(bRes)[2] <- "Post-Balance Mean"
+  colnames(bRes)[3] <- "Absolute Difference"
+  colnames(bRes)[4] <- "StdDev of Pre-Balance Mean"
+  colnames(bRes)[5] <- "Post-Mean SD from Pre-Mean"
 
   for (i in 1:length(anc_vars))
   {
@@ -152,9 +151,11 @@ if(cnt > 1)
       it_preMatch_Mean <- eval(parse(text=db_i))
       it_preMatch_SD <- eval(parse(text=db_i_SD))
       it_postMatch_Mean <- eval(parse(text=db_p))
-      it_diff_Mean <- abs(it_postMatch_Mean-it_preMatch_Mean)
+      it_diff_Mean <- round(abs(it_postMatch_Mean-it_preMatch_Mean),3)
       it_std_diff <- round(it_diff_Mean / it_preMatch_SD,3)
-      bRes <- rbind(bRes, c(it_var,it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+      
+      bRes <- rbind(bRes, c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+      rownames(bRes)[i] <- ed_v
     }
   }
   

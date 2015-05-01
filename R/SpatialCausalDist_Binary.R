@@ -131,30 +131,55 @@ if(cnt > 1)
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
-    db_i = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]],5)")
-    db_i_SD = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
-    db_p = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]],5)") 
+    treat_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]],5)")
+    treat_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
+    
+    control_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[3]],5)")
+    control_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
+    
+    treat_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]],5)")
+    treat_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
+    
+    control_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[3]],5)")
+    control_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
+   
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {
       pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
       pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
-      it_var <- ed_v
-      it_preMatch_Mean <- eval(parse(text=db_i))
-      it_preMatch_SD <- eval(parse(text=db_i_SD))
-      it_postMatch_Mean <- eval(parse(text=db_p))
-      it_diff_Mean <- round(abs(it_postMatch_Mean-it_preMatch_Mean),5)
-      it_std_diff <- round(it_diff_Mean / it_preMatch_SD,5)
+
+      treat_mean_pre <- eval(parse(text=treat_mean_pre))
+      treat_SD_pre <- eval(parse(text=treat_SD_pre))
+      control_mean_pre <- eval(parse(text=control_mean_pre))
+      control_SD_pre <- eval(parse(text=control_SD_pre))
+      
+      treat_mean_post <- eval(parse(text=treat_mean_post))
+      treat_SD_post <- eval(parse(text=treat_SD_post))
+      control_mean_post <- eval(parse(text=control_mean_post))
+      control_SD_post <- eval(parse(text=control_SD_post))
+      
+      it_diff_Mean_pre <- round(abs( treat_mean_pre-control_mean_pre ),5)
+      it_diff_Mean_post <- round(abs(treat_mean_post-control_mean_post),5)
       
       
       if(i == 1)
       {
-        bRes <- data.frame(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff)
-        colnames(bRes)[1] <- "Pre-Balance Mean"
-        colnames(bRes)[2] <- "Post-Balance Mean"
-        colnames(bRes)[3] <- "Absolute Difference"
-        colnames(bRes)[4] <- "StdDev of Pre-Balance Mean"
-        colnames(bRes)[5] <- "Post-Mean SD from Pre-Mean"
+        bRes <- data.frame(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
+                           treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
+                           it_diff_Mean_pre,it_diff_Mean_post)
+        colnames(bRes)[1] <- "Pre-Balance Treated Mean"
+        colnames(bRes)[2] <- "Pre-Balance Treated SD"
+        colnames(bRes)[3] <- "Pre-Balance Control Mean"
+        colnames(bRes)[4] <- "Pre-Balance Control SD"
+        
+        colnames(bRes)[5] <- "Post-Balance Treated Mean"
+        colnames(bRes)[6] <- "Post-Balance Treated SD"
+        colnames(bRes)[7] <- "Post-Balance Control Mean"
+        colnames(bRes)[8] <- "Post-Balance Control SD"
+        
+        colnames(bRes)[8] <- "Mean Difference Pre-Balance"
+        colnames(bRes)[8] <- "Mean Difference Post-Balance"
       }else{
         bRes <- rbind(bRes, c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
       }

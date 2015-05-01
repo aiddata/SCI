@@ -181,7 +181,9 @@ if(cnt > 1)
         colnames(bRes)[8] <- "Mean Difference Pre-Balance"
         colnames(bRes)[8] <- "Mean Difference Post-Balance"
       }else{
-        bRes <- rbind(bRes, c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+        bRes <- rbind(bRes, c(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
+                              treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
+                              it_diff_Mean_pre,it_diff_Mean_post))
       }
       rownames(bRes)[i] <- gsub("[^a-zA-Z0-9]","",ed_v)
     }

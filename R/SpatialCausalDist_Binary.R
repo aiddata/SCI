@@ -140,9 +140,9 @@ if(cnt > 1)
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
-    db_i = paste("describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]]")
-    db_i_SD = paste("describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]]")
-    db_p = paste("describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]]") 
+    db_i = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]],3)")
+    db_i_SD = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],3)")
+    db_p = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]],3)") 
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {
@@ -153,7 +153,7 @@ if(cnt > 1)
       it_preMatch_SD <- eval(parse(text=db_i_SD))
       it_postMatch_Mean <- eval(parse(text=db_p))
       it_diff_Mean <- abs(it_postMatch_Mean-it_preMatch_Mean)
-      it_std_diff <- it_diff_Mean / it_preMatch_SD
+      it_std_diff <- round(it_diff_Mean / it_preMatch_SD,3)
       bRes <- rbind(bRes, c(it_var,it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
     }
   }
@@ -174,7 +174,7 @@ if(cnt > 1)
       do.call(grid.arrange,c(pltObjs[counter:d],nrow=2,ncol=2))
       counter = counter + 4
     }
-    bTab <- stargazer(bRes,summary=FALSE,type="html",digits=3)
+    bTab <- stargazer(bRes,summary=FALSE,type="html")
     print.htmlTable(bTab)
   }
   

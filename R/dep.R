@@ -17,4 +17,5 @@ loadLibs <- function (x=1)
   library(texreg)
   require(proj4)
   library(rgdal)
+  library(stargazer)
   }

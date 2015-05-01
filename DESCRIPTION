@@ -6,4 +6,4 @@ Description: A package designed to make using spatial information to guide devel
 Depends: R (>= 3.0.2)
 License: Creative Commons with Attribution
 LazyData: true
-Imports:sp,proj4,ggplot2,FNN,psych,spdep,RandomFields,ggmap,reshape,maptools,gridExtra,grid,QuantPsyc,texreg
+Imports:sp,proj4,ggplot2,FNN,psych,spdep,RandomFields,ggmap,reshape,maptools,gridExtra,grid,QuantPsyc,texreg,stargazer

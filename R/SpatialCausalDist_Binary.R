@@ -126,28 +126,35 @@ if(cnt > 1)
   #observationalists about causal inference", Imal, King, and Stuart.
   #Simplest suggestion of comparing means and checking if .25 SD apart used.
 
+  #Balance results DF
+  bRes <- data.frame("str",0.0,0.0,0.0,0.0,0.0)
+  colnames(bRes)[1] <- "Variable"
+  colnames(bRes)[2] <- "Pre-Balance Mean"
+  colnames(bRes)[3] <- "Post-Balance Mean"
+  colnames(bRes)[4] <- "Absolute Difference"
+  colnames(bRes)[5] <- "StdDev of Pre-Balance Mean"
+  colnames(bRes)[6] <- "Post-Mean SD from Pre-Mean"
+
   for (i in 1:length(anc_vars))
   {
     #gsub to remove any factors()
     ed_v = sub("factor\\(","",anc_vars[i])
     ed_v = sub(")","",ed_v)
-    db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,"))")  
-    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,"))") 
-    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")$mean)") 
+    db_i = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]])")
+    db_i_SD = paste("print(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]])")
+    db_p = paste("print(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]])") 
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {
       pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
       pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
-      print("")
-      print("=====================")
-      print("=====================")
-      print(ed_v)
-      print("::::::::::::Pre-Matching Balance:::::::::::::::")
-      eval(parse(text=db_i))
-      print("")
-      print("::::::::::::Post-Matching Balance:::::::::::::::")
-      eval(parse(text=db_p))
+      it_var <- ed_v
+      it_preMatch_Mean <- eval(parse(text=db_i))
+      it_preMatch_SD <- eval(parse(text=db_i_SD))
+      it_postMatch_Mean <- eval(parse(text=db_p))
+      it_diff_Mean <- abs(it_postMatch_Mean-it_preMatch_Mean)
+      it_std_diff <- it_diff_Mean / it_preMatch_SD
+      bRes <- rbind(bRes, c(it_var,it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
     }
   }
   
@@ -167,6 +174,8 @@ if(cnt > 1)
       do.call(grid.arrange,c(pltObjs[counter:d],nrow=2,ncol=2))
       counter = counter + 4
     }
+    bTab <- stargazer(bRes,summary=FALSE,type="html")
+    print.htmlTable(bTab)
   }
   
   return (dta)

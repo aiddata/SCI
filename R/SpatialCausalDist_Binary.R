@@ -127,7 +127,7 @@ if(cnt > 1)
   #Simplest suggestion of comparing means and checking if .25 SD apart used.
 
   #Balance results DF
-  bRes <- data.frame(0.0,0.0,0.0,0.0,0.0)
+  
   colnames(bRes)[1] <- "Pre-Balance Mean"
   colnames(bRes)[2] <- "Post-Balance Mean"
   colnames(bRes)[3] <- "Absolute Difference"
@@ -154,7 +154,13 @@ if(cnt > 1)
       it_diff_Mean <- round(abs(it_postMatch_Mean-it_preMatch_Mean),3)
       it_std_diff <- round(it_diff_Mean / it_preMatch_SD,3)
       
-      bRes <- rbind(bRes, c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+      
+      if(i == 1)
+      {
+        bRes <- data.frame(c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+      }else{
+        bRes <- rbind(bRes, c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+      }
       rownames(bRes)[i] <- ed_v
     }
   }

@@ -178,10 +178,10 @@ if(cnt > 1)
       do.call(grid.arrange,c(pltObjs[counter:d],nrow=2,ncol=2))
       counter = counter + 4
     }
-    View(bRes)
     bTab <- stargazer(bRes,summary=FALSE,type="html")
     print.htmlTable(bTab)
   }
   
   return (dta)
 }
+

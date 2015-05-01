@@ -128,11 +128,7 @@ if(cnt > 1)
 
   #Balance results DF
   
-  colnames(bRes)[1] <- "Pre-Balance Mean"
-  colnames(bRes)[2] <- "Post-Balance Mean"
-  colnames(bRes)[3] <- "Absolute Difference"
-  colnames(bRes)[4] <- "StdDev of Pre-Balance Mean"
-  colnames(bRes)[5] <- "Post-Mean SD from Pre-Mean"
+
 
   for (i in 1:length(anc_vars))
   {
@@ -158,6 +154,11 @@ if(cnt > 1)
       if(i == 1)
       {
         bRes <- data.frame(c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+        colnames(bRes)[1] <- "Pre-Balance Mean"
+        colnames(bRes)[2] <- "Post-Balance Mean"
+        colnames(bRes)[3] <- "Absolute Difference"
+        colnames(bRes)[4] <- "StdDev of Pre-Balance Mean"
+        colnames(bRes)[5] <- "Post-Mean SD from Pre-Mean"
       }else{
         bRes <- rbind(bRes, c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
       }

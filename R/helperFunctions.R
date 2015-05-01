@@ -62,6 +62,7 @@ print.htmlTable<- function(x, useViewer = TRUE, ...){
     cat(htmlPage, file=htmlFile)
     
     viewer <- getOption("viewer")
+    print(viewer)
     if (!is.null(viewer) &&
           is.function(viewer)){
       # (code to write some content to the file)

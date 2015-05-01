@@ -178,6 +178,5 @@ if(cnt > 1)
     print.htmlTable(bTab)
   }
   
-  #return (dta)
-  return(bTab)
+  return (dta)
 }

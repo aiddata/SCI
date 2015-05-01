@@ -150,7 +150,6 @@ if(cnt > 1)
       if(i == 1)
       {
         bRes <- data.frame(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff)
-        View(bRes)
         colnames(bRes)[1] <- "Pre-Balance Mean"
         colnames(bRes)[2] <- "Post-Balance Mean"
         colnames(bRes)[3] <- "Absolute Difference"
@@ -159,7 +158,7 @@ if(cnt > 1)
       }else{
         bRes <- rbind(bRes, c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
       }
-      rownames(bRes)[i] <- ed_v
+      rownames(bRes)[i] <- gsub("[^a-zA-Z0-9]","",ed_v)
     }
   }
   
@@ -180,7 +179,7 @@ if(cnt > 1)
       counter = counter + 4
     }
     View(bRes)
-    bTab <- stargazer(bRes,summary=FALSE,type="html",supress.errors=TRUE)
+    bTab <- stargazer(bRes,summary=FALSE,type="html")
     print.htmlTable(bTab)
   }
   

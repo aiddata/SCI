@@ -156,13 +156,8 @@ if(cnt > 1)
       it_std_diff <- it_diff_Mean / it_preMatch_SD
       bRes <- rbind(bRes, c(it_var,it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
     }
-    
   }
-  if(length(anc_vars)>2)
-  {
-    bTab <- stargazer(bRes,summary=FALSE,type="html")
-    print.htmlTable(bTab)
-  }
+  
   if(visual=="TRUE")
   {
     #Output graphics
@@ -179,7 +174,8 @@ if(cnt > 1)
       do.call(grid.arrange,c(pltObjs[counter:d],nrow=2,ncol=2))
       counter = counter + 4
     }
-
+    bTab <- stargazer(bRes,summary=FALSE,type="html")
+    print.htmlTable(bTab)
   }
   
   return (dta)

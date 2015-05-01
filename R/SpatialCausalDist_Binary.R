@@ -126,10 +126,6 @@ if(cnt > 1)
   #observationalists about causal inference", Imal, King, and Stuart.
   #Simplest suggestion of comparing means and checking if .25 SD apart used.
 
-  #Balance results DF
-  
-
-
   for (i in 1:length(anc_vars))
   {
     #gsub to remove any factors()
@@ -154,6 +150,7 @@ if(cnt > 1)
       if(i == 1)
       {
         bRes <- data.frame(c(it_preMatch_Mean,it_postMatch_Mean,it_diff_Mean,it_preMatch_SD,it_std_diff))
+        View(bRes)
         colnames(bRes)[1] <- "Pre-Balance Mean"
         colnames(bRes)[2] <- "Post-Balance Mean"
         colnames(bRes)[3] <- "Absolute Difference"

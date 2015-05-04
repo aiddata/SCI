@@ -81,7 +81,7 @@ print.htmlTable<- function(x, useViewer = TRUE, ...){
 #Helper function to remove bad rows from a shapefile
 removeRow <- function(dta,columnID,matchIDs)
 {
-  for (i in 1:length(dta))
+  for (i in 1:length(matchIDs))
   {
     exec_str <- paste("dta <- dta[dta@data$",columnID," !=",matchIDs[i],",]",sep="")
     print(exec_str)

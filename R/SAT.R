@@ -173,7 +173,7 @@ if(cnt > 1)
       it_diff_Mean_pre <- round(abs( treat_mean_pre-control_mean_pre ),5)
       it_diff_Mean_post <- round(abs(treat_mean_post-control_mean_post),5)
       
-      if(tryCatch(is.data.frame(bRes),error=function(cond)TRUE))
+      if(tryCatch(exists("bRes"),error=function(cond)TRUE))
       {
         print("#!")
         bRes <- data.frame(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,

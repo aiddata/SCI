@@ -42,7 +42,7 @@ timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield)
   
 }
 
-#From Gmisc-package
+#Slightly modified from Gmisc-package
 print.htmlTable<- function(x, useViewer = TRUE, ...){
   # Don't use viewer if in knitr
   if (useViewer &&
@@ -76,3 +76,17 @@ print.htmlTable<- function(x, useViewer = TRUE, ...){
     cat(x)
   }
 }
+
+
+#Helper function to remove bad rows from a shapefile
+removeRow <- function(dta,columnID,matchIDs)
+{
+  for (i in 1:length(dta))
+  {
+    exec_str <- paste("dta <- dta[dta@data$",columnID," !=",matchIDs[i],",]",sep="")
+    print(exec_str)
+    eval(parse(text=exec_str))
+  }
+  return(dta)
+}
+

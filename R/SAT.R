@@ -1,4 +1,4 @@
-SpatialCausalDist_Binary <- function(dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinColName)
+SAT <- function(dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinColName)
 {
   #Initialization
   pltObjs <- list()

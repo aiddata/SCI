@@ -172,14 +172,9 @@ if(cnt > 1)
       
       it_diff_Mean_pre <- round(abs( treat_mean_pre-control_mean_pre ),5)
       it_diff_Mean_post <- round(abs(treat_mean_post-control_mean_post),5)
-      exTe <- tryCatch(is.data.frame(get(bRes)),error=function(cond)TRUE)
-      if(exTe != TRUE)
+      
+      if(tryCatch(is.data.frame(get("bRes")),error=function(cond)TRUE))
       {
-        exTe == FALSE
-      }
-      if(exTe)
-      {
-        print("#1")
         bRes <- data.frame(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                            treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                            it_diff_Mean_pre,it_diff_Mean_post)
@@ -199,12 +194,9 @@ if(cnt > 1)
         bRes <- rbind(bRes, c(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                               treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                               it_diff_Mean_pre,it_diff_Mean_post))
-        print(bRes)
       }
       
-      print(i-(i-cnt))
-      print(i)
-      print(rownames(bRes))
+
       rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
     }
   }

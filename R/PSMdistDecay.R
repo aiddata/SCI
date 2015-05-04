@@ -10,13 +10,9 @@ PSMdistDecay = function(dta,psm_col,start,end,h)
   #Need to update this so it handles projections correctly every time.
   #Currently hacked together.
   
-  #For KFW:
-  #dta_prj_coords <- project(as.matrix(coordinates(dta)),"+proj=laea") 
-  #dta_prj <- as(dta,"data.frame")
-  #coordinates(dta_prj) <- dta_prj_coords
-  
-  #For Sims:
-  dta_prj <- dta
+  dta_prj_coords <- project(as.matrix(coordinates(dta)),"+proj=laea") 
+  dta_prj <- as(dta,"data.frame")
+  coordinates(dta_prj) <- dta_prj_coords
   
   exec <- paste("PSM_correlogram(as.matrix(coordinates(dta_prj)),dta_prj$",psm_col,",order=",h,",zero.policy=TRUE,start=",start,",end=",end,")",sep="")
   sp.cor <- eval(parse(text=exec))

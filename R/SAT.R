@@ -175,6 +175,7 @@ if(cnt > 1)
       
       if(tryCatch(is.data.frame(get("bRes")),error=function(cond)TRUE))
       {
+        print("#!")
         bRes <- data.frame(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                            treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                            it_diff_Mean_pre,it_diff_Mean_post)
@@ -196,7 +197,7 @@ if(cnt > 1)
                               it_diff_Mean_pre,it_diff_Mean_post))
       }
       
-
+  
       rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
     }
   }

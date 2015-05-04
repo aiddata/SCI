@@ -146,7 +146,7 @@ if(cnt > 1)
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     print(c_type)
     print(ed_v)
-    View(init_dta@data)
+    print(init_dta@data$ControlA)
     if((c_type == "numeric") & (visual == "TRUE"))
     {
       cnt = cnt + 1

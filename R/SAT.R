@@ -144,6 +144,7 @@ if(cnt > 1)
     control_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
    
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
+    print(c_type)
     if((c_type == "numeric") & (visual == "TRUE"))
     {
       cnt = cnt + 1

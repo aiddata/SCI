@@ -197,7 +197,8 @@ if(cnt > 1)
       }
       
       print(i-(i-cnt))
-      print(names(bRes))
+      print(i)
+      print(rownames(bRes))
       rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
     }
   }

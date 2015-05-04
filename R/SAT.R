@@ -152,6 +152,7 @@ if(cnt > 1)
       
       exec_str = paste("init_dta@data$",ed_v,"<- as.numeric(init_dta@data$",ed_v,")",sep="")
       eval(parse(text=exec_str))
+      c_type = "numeric"
     }
     if((c_type == "numeric") & (visual == "TRUE"))
     {

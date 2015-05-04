@@ -1,4 +1,4 @@
-SpatialCausalSim_DGP<- function(fld_size, SpatialCov_opt,rho_mult)
+SpatialCausalSim_DGP<- function(fld_size, SpatialCov_opt,rho_mult,B1,B2,B3)
 {
   x <- fld_size
   RFoptions(seed=NA)
@@ -48,7 +48,7 @@ SpatialCausalSim_DGP<- function(fld_size, SpatialCov_opt,rho_mult)
   
   #Build outcome variable for testing
   #y = intercept + (Theta * Treatment) + (Beta * ControlA)
-  yfunc <- function(a, b, c) (0.0+(1.0*a)+(1.0*b)+abs(1.0*c))
+  yfunc <- function(a, b, c) (0.0+(B1*a)+(B2*b)+abs(B3*c))
   f.SPDF@data["y"] = apply(f.SPDF@data[,c('TrtBin','ControlA','RandomFieldB')], 1, function(y) yfunc(y['TrtBin'],y['ControlA'],y['RandomFieldB']))
   
   f.SPDF@data <- cbind(simIDs = rownames(f.SPDF@data), f.SPDF@data)

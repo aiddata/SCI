@@ -147,7 +147,6 @@ if(cnt > 1)
     
     if(c_type == "matrix")
     {
-      print(c_type)
       exec_str = paste("dta@data$",ed_v,"<- as.numeric(dta@data$",ed_v,")",sep="")
       eval(parse(text=exec_str))
       
@@ -197,6 +196,8 @@ if(cnt > 1)
                               it_diff_Mean_pre,it_diff_Mean_post))
       }
       
+      print(i-(i-cnt))
+      print(names(bRes))
       rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
     }
   }

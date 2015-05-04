@@ -145,7 +145,7 @@ if(cnt > 1)
    
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     print(c_type)
-    if((c_type == "numeric") & (visual == "TRUE"))
+    if((c_type == "numeric" || c_type == "matrix") & (visual == "TRUE"))
     {
       cnt = cnt + 1
       pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)

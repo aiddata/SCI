@@ -153,9 +153,6 @@ if(cnt > 1)
       exec_str = paste("init_dta@data$",ed_v,"<- as.numeric(init_dta@data$",ed_v,")",sep="")
       eval(parse(text=exec_str))
     }
-    print(c_type)
-    print(ed_v)
-    print(init_dta@data$ControlA)
     if((c_type == "numeric") & (visual == "TRUE"))
     {
       cnt = cnt + 1

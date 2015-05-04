@@ -22,9 +22,6 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
   rng_increment = (end-start) / order
   cur_step = start + rng_increment
   cur_start = start
-  print(dta)
-  print(cur_start)
-  print(cur_step)
   nblags[[1]] <- dnearneigh(dta,d1=cur_start,d2=cur_step)
   binname <- list()
   binname <- rbind(binname,(cur_start/1000))

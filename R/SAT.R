@@ -163,7 +163,7 @@ if(cnt > 1)
       it_diff_Mean_post <- round(abs(treat_mean_post-control_mean_post),5)
       
       
-      if(!exists(bRes))
+      if(exists(bRes) && is.data.frame(get("bRes")))
       {
         bRes <- data.frame(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                            treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,

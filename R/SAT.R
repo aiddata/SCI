@@ -125,7 +125,7 @@ if(cnt > 1)
   #Balance metrics are based on "Misunderstandings between experimentalists and
   #observationalists about causal inference", Imal, King, and Stuart.
   #Simplest suggestion of comparing means and checking if .25 SD apart used.
-
+  cnt = 0
   for (i in 1:length(anc_vars))
   {
     #gsub to remove any factors()
@@ -146,6 +146,7 @@ if(cnt > 1)
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     if((c_type == "numeric") & (visual == "TRUE"))
     {
+      cnt = cnt + 1
       pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
       pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
 
@@ -184,7 +185,8 @@ if(cnt > 1)
                               treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                               it_diff_Mean_pre,it_diff_Mean_post))
       }
-      rownames(bRes)[i] <- gsub("[^a-zA-Z0-9]","",ed_v)
+      
+      rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
     }
   }
   

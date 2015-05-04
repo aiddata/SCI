@@ -48,9 +48,12 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
         warning(warn_str)
       } else
       {
+      print(i)
       listw <- nb2listw(nblags[[i]], style = style, zero.policy = zero.policy)
+      print(listw)
       res <- rbind(res,moran.test(var, listw, randomisation = randomisation, 
                                zero.policy = zero.policy)$estimate)
+      print(res)
       print(rownames(res))
       rownames(res)[i] <- binname[[i]]
       }

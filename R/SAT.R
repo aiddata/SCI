@@ -147,6 +147,7 @@ if(cnt > 1)
     
     if(c_type == "matrix")
     {
+      print(c_type)
       exec_str = paste("dta@data$",ed_v,"<- as.numeric(dta@data$",ed_v,")",sep="")
       eval(parse(text=exec_str))
       

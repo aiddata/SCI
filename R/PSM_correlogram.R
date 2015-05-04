@@ -46,11 +46,8 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
         cnt = cnt + 1
         warn_str = paste("Bin h=",i,"was empty, and is excluded from the plot.")
         warning(warn_str)
-      } else
-      {
-      print(i)
+      } else {
       listw <- nb2listw(nblags[[i]], style = style, zero.policy = zero.policy)
-      print(listw)
       res <- rbind(res,moran.test(var, listw, randomisation = randomisation, 
                                zero.policy = zero.policy)$estimate)
       print(res)

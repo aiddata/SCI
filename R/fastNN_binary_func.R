@@ -53,6 +53,8 @@ fastNN_binary_func <- function(dta,trtMntVar,ids,curgrp,dist_PSM)
         
         #Find the control x,y location
         cCoord_e = paste("coordinates(dta[which(dta@data$",ids," == Control_ID),])", sep="")
+        print(Control_ID)
+        print(Treatment_ID)
         cCoord = eval(parse(text=cCoord_e))
 
         

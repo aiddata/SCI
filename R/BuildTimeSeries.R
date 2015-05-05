@@ -6,7 +6,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
   meltList <- list()
   for (i in 1:length(varList_pre))
   {
-    grep_str = paste(idField,varList_pre[i],sep="|")
+    grep_str = paste(idField,varList_pre[i],"[0-9][0-9][0-9][0-9]",sep="|")
     tDF <- dta@data[grepl(grep_str,names(dta@data))]
 
     #Limit to only relevant years

@@ -10,6 +10,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre)
   }
 
   #Merge the melts together
+  summary(meltList)
   retDF <- merge(meltList)
   return(retDF)
 }

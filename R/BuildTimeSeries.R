@@ -1,4 +1,4 @@
-BuildTimeSeries <- function(data,idField,varList_pre)
+BuildTimeSeries <- function(dta,idField,varList_pre)
 {
   grep_str = idField
   for (i in 1:length(varList_pre))

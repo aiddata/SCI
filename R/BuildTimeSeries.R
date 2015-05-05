@@ -1,14 +1,26 @@
-BuildTimeSeries <- function(dta,idField,varList_pre)
+BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
 {
   #Run the melts
+  years <- startYear:endYear
+  print(years)
+
   meltList <- list()
   for (i in 1:length(varList_pre))
   {
     grep_str = paste(idField,varList_pre[i],sep="|")
     tDF <- dta@data[grepl(grep_str,names(dta@data))]
 
+    #Limit to only relevant years
+    grepStrYrs = ""
+    for(j in 1:length(years))
+    {
+      grepStrYrs <- paste(varList_pre[[i]],grepStrYrs,years[[j]],sep="|")
+    }
+    
+    tDF <- tDF[grepl(grepStrYrs,tDF$variable)]
+    
     meltList[[i]] <- melt(tDF,id=idField)
-    colnames(meltList[[i]][3]) <- "Test"
+    #colnames(meltList[[i]][3]) <- "Test"
     
     #if(exists("retDF"))
     #{

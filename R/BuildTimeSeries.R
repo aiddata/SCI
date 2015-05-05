@@ -8,7 +8,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre)
     tDF <- dta@data[grepl(grep_str,names(dta@data))]
 
     meltList[[i]] <- melt(tDF,id=idField)
-    colnames(meltlist[[i]][3]) <- "Test"
+    colnames(meltList[[i]][3]) <- "Test"
     
     #if(exists("retDF"))
     #{

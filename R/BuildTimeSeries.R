@@ -2,7 +2,6 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
 {
   #Run the melts
   years <- startYear:endYear
-  print(years)
 
   meltList <- list()
   for (i in 1:length(varList_pre))
@@ -16,9 +15,9 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
     {
       grepStrYrs <- paste(varList_pre[[i]],grepStrYrs,years[[j]],sep="|")
     }
-    
+    print(grepStrYrs)
     tDF <- tDF[grepl(grepStrYrs,tDF$variable)]
-    
+    View(tDF)
     meltList[[i]] <- melt(tDF,id=idField)
     #colnames(meltList[[i]][3]) <- "Test"
     

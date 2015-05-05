@@ -11,7 +11,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
     tDF <- dta@data[grepl(grep_str,names(dta@data))]
 
     #Limit to only relevant years
-    grepStrYrs = ""
+    grepStrYrs = idField
     for(j in 1:length(years))
     {
       grepStrYrs <- paste(varList_pre[[i]],grepStrYrs,years[[j]],sep="|")

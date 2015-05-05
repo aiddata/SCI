@@ -8,11 +8,16 @@ BuildTimeSeries <- function(dta,idField,varList_pre)
     tDF <- dta@data[grepl(grep_str,names(dta@data))]
 
     meltList[[i]] <- melt(tDF,id=idField)
+    
+    if(exists("retDF"))
+    {
+      retDF <- merge(retDF,meltList[[i]],by=idField)
+    } else {
+      retDF <- meltList[[i]]
+    }
 
   }
 
-  #Merge the melts together
-  retDF <- merge(meltList[[1]],meltList[[2]],meltList[[3]],by=idField)
   return(retDF)
 }
 

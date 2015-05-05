@@ -6,11 +6,12 @@ BuildTimeSeries <- function(dta,idField,varList_pre)
   {
     grep_str = paste(idField,varList_pre[i],sep="|")
     tDF <- dta@data[grepl(grep_str,names(dta@data))]
+    print("test")
     meltList[[i]] <- melt(tDF,id=idField)
+    print("test2")
   }
 
   #Merge the melts together
-  summary(meltList)
   retDF <- merge(meltList)
   return(retDF)
 }

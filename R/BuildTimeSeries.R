@@ -25,7 +25,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
     
     #Clean up year column
     gsub_command <- paste("^",varList_pre[[i]],sep="")
-    meltList[[i]][2] <- gsub(gsub_commmand, "", as.matrix(meltList[[i]][2]))
+    meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
     
     
     #Remove ID if this is at least the second variable to avoid duplications.

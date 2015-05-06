@@ -11,6 +11,8 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,TrtYears=N
       varN <- paste("TrtMnt",years[k],sep="")
       exec <- paste("dta$",varN,"=0",sep="")
       eval(parse(text=exec))
+      return(dta)
+      break
       dta[varN][dta[TrtYears] >= as.numeric(years[k])] <- 1
     }
     View(dta["TrtMnt1996"])

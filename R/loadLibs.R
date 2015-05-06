@@ -19,5 +19,5 @@ loadLibs <- function (x=1)
   library(rgdal)
   library(stargazer)
   library(lmtest)
-  library(multiwaycov)
+  library(multiwayvcov)
   }

@@ -18,4 +18,6 @@ loadLibs <- function (x=1)
   require(proj4)
   library(rgdal)
   library(stargazer)
+  library(lmtest)
+  library(multiwaycov)
   }

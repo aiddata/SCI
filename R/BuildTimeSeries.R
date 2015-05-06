@@ -28,10 +28,10 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
     meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
     
     
-    #Remove ID if this is at least the second variable to avoid duplications.
+    #Remove ID and year if this is at least the second variable to avoid duplications.
     if(i > 1)
     {
-      meltList[[i]] <- meltList[[i]][2:3]
+      meltList[[i]] <- meltList[[i]][3]
     }
     
 

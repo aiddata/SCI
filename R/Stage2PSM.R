@@ -44,10 +44,18 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
     if(!is.null(table_out))
     {
       dta_tmp <- dta
-      d_index <- sapply(dta_tmp@data, is.numeric)
-      dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
+      
+      if(class(dta) == "data.frame")
+      {
+        d_index <- sapply(dta_tmp, is.numeric)
+        dta_tmp[d_index] <- lapply(dta_tmp[d_index],scale)
+      } else {
+        d_index <- sapply(dta_tmp@data, is.numeric)
+        dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
+      }
       dta_fit_std <- lm(model,dta_tmp)
       texreg::plotreg(dta_fit_std,omit.coef="(match)|(Intercept)",custom.model.names="Standardized Model", custom.note=model)
+      
     }
     
     print(opts)

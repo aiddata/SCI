@@ -13,7 +13,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,TrtYears=N
       eval(parse(text=exec))
       return(dta)
       break
-      dta[varN][dta[TrtYears] >= as.numeric(years[k])] <- 1
+      dta@data[varN][dta@data[TrtYears] >= as.numeric(years[k])] <- 1
     }
     View(dta["TrtMnt1996"])
   }

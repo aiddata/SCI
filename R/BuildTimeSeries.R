@@ -1,7 +1,22 @@
-BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
+BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,TrtYears=NULL)
 {
-  #Run the melts
   years <- startYear:endYear
+  #If there is a "TrtYears" variable, convert to binaries.
+  #Eventually could be extended to more than one column.
+  if(!is.null(TrtYears))
+  {
+    #For each variable, for each year, create a binary representing the treatment status.
+    for(k in 1:length(years))
+    {
+      varN <- paste("TrtMnt",years[k],sep="")
+      dta[TrtMnt] = 0
+      dta[TrtMnt][dta[TrtYears] >= years[k]] <- 1
+    }
+    View(dta[TrtMnt])
+  }
+  
+  #Run the melts
+
   meltList <- list()
   for (i in 1:length(varList_pre))
   {

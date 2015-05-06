@@ -18,6 +18,23 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
     print(grepStrYrs)
     tDF <- dta@data[grepl(grepStrYrs,names(dta@data))]
     meltList[[i]] <- melt(tDF,id=idField)
+    
+    #Keep only years in the year column, rename columns
+    colnames(meltList[[i]])[2] <- "Year"
+    colnames(meltList[[i]])[3] <- varList_pre[[i]]
+    
+    #Clean up year column
+    gsub_command <- paste("^",varList_pre[[i]],sep="")
+    meltList[[i]][2] <- gsub(gsub_commmand, "", as.matrix(meltList[[i]][2]))
+    
+    
+    #Remove ID if this is at least the second variable to avoid duplications.
+    if(i > 1)
+    {
+      meltList[[i]] <- meltList[[i]][2:3]
+    }
+    
+
     #colnames(meltList[[i]][3]) <- "Test"
     
     #if(exists("retDF"))

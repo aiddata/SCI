@@ -30,16 +30,6 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
     {
       meltList[[i]] <- meltList[[i]][3]
     }
-    
-
-    #colnames(meltList[[i]][3]) <- "Test"
-    
-    #if(exists("retDF"))
-    #{
-    #  retDF <- merge(retDF,meltList[[i]],by=idField)
-    #} else {
-    #  retDF <- meltList[[i]]
-    #}
 
   }
 

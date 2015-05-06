@@ -54,7 +54,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
         dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
       }
       dta_fit_std <- lm(model,dta_tmp)
-      texreg::plotreg(dta_fit_std,omit.coef="(match)|(Intercept)",custom.model.names="Standardized Model", custom.note=model)
+      texreg::plotreg(dta_fit_std,omit.coef="(match)|(Intercept)|(id)",custom.model.names="Standardized Model", custom.note=model)
       
     }
     

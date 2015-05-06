@@ -43,7 +43,10 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
 
   }
 
-  return(meltList)
+  #Finish up with a cherry on top
+  meltListRet <- data.frame(meltList)
+  
+  return(meltListRet)
 }
 
 

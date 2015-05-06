@@ -2,7 +2,6 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear)
 {
   #Run the melts
   years <- startYear:endYear
-  print(years)
   meltList <- list()
   for (i in 1:length(varList_pre))
   {

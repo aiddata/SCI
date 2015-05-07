@@ -74,7 +74,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             tDframe["variable"] <- years[[u]]
             print(predict(mdl))
             View(tDframe)
-            tDframe[varI] <- predict(mdl)
+            tDframe[varI] <- predict(mdl,tDframe)
             View(tDframe)
             }
           }

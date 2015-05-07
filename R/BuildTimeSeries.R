@@ -54,9 +54,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
           for(k in 1:length(years))
           {
             varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
-            print(varI)
             eval(parse(text=varI))
-            print("test")
           }
         } else {
         #Here, we model out everything. 
@@ -68,9 +66,12 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         #Apply the model to interpolate
         for(u in 1:length(years))
           {
+          print("test")
           varI <- paste(cur_ancVi,years[[k]],sep="")
+          print(varI)
           if(!(varI %in% colnames(dta@data)))
             {
+            print("in")
             #Variable doesn't exist, so we need to interpolate.
             tDframe <- dta@data[idField]
             tDframe["variable"] <- years[[k]]

@@ -64,7 +64,8 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         #Melt the dataframe for modeling
         View(interpFrame)
         melt_Model_dta <- melt(data.frame(interpFrame),id=idField)
-        View(melt_Model_dta)
+        return(melt_Model_dta["variable"])
+        break
         melt_Model_dta["variable"] <- as.numeric(gsub("X","",melt_Model_dta$variable))
         View(melt_Model_dta)
                                                  

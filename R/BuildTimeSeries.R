@@ -21,8 +21,9 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
     for(AncInt in 1:length(interpYears))
       {
         cur_ancVi <- interpYears[AncInt]
-        interpFrame <- dta@data[idField]
-        cnt = 1
+        interpFrame <- data.frame()
+        interp_Frame[idField] <- dta@data[idField]
+        cnt = 2
         for(k in 1:length(years))
         {
         #First, build a model describing the relationship between years and any data in the interp field.
@@ -49,7 +50,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         
         }
         #Only one time point, so no interpolation is done - value is simply copied to all other columns.
-        if(cnt == 2)
+        if(cnt == 3)
         {
           for(k in 1:length(years))
           {
@@ -73,7 +74,8 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
           if(!(varI %in% colnames(dta@data)))
             {
             #Variable doesn't exist, so we need to interpolate.
-            tDframe <- dta@data[idField]
+            tDframe <- data.frame()
+            tDframe[idField] <- dta@data[idField]
             tDframe["variable"] <- years[[u]]
             View(tDframe)
             tDframe[varI] <- predict(mdl,newdata=tDframe)

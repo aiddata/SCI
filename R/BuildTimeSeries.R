@@ -41,7 +41,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         {
           add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
           eval(parse(text=add_data))
-          cnt = cnt + 1
+          cnt = 2
         }
       }
     

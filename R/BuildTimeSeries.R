@@ -32,7 +32,6 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
           print(varI)
           if(varI %in% colnames(dta@data))
           {
-            print("tst")
             add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
             eval(parse(text=add_data))
             colnames(interpFrame)[cnt] <- years[[k]]
@@ -64,8 +63,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         #Melt the dataframe for modeling
         View(interpFrame)
         melt_Model_dta <- melt(data.frame(interpFrame),id=idField)
-        return(melt_Model_dta)
-        break
+        #View(melt_Model_dta)
         melt_Model_dta["variable"] <- as.numeric(gsub("X","",melt_Model_dta$variable))
         View(melt_Model_dta)
                                                  

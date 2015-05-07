@@ -18,50 +18,60 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
   #If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.
   if(!is.null(interpYears))
   {
-    interpFrame <- dta@data[idField]
-    cnt = 1
-    for(k in 1:length(years))
-    {
-    #First, build a model describing the relationship between years and any data in the interp field.
-    varI <- paste(interpYears,years[[k]],sep="")
-    #Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
-    
-      if(varI %in% colnames(dta@data))
+    for(AncInt in 1:length(interpYears))
       {
-        add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
-        eval(parse(text=add_data))
-        cnt = cnt + 1
-        colnames(interpFrame)[cnt] <- years[[k]]
-      } else
-      {
-        #Exception for a single-point interpolation
-        varC <- paste(interpYears,sep="")
-        print(varC)
-        if(varC %in% colnames(dta@data))
+        cur_ancVi <- interpYears[AncInt]
+        interpFrame <- dta@data[idField]
+        cnt = 1
+        for(k in 1:length(years))
         {
-          add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
-          eval(parse(text=add_data))
-          cnt = 2
+        #First, build a model describing the relationship between years and any data in the interp field.
+        varI <- paste(cur_ancVi,years[[k]],sep="")
+        #Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
+        
+          if(varI %in% colnames(dta@data))
+          {
+            add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
+            eval(parse(text=add_data))
+            cnt = cnt + 1
+            colnames(interpFrame)[cnt] <- years[[k]]
+          } else
+          {
+            #Exception for a single-point interpolation
+            varC <- paste(cur_ancVi,sep="")
+            print(varC)
+            if(varC %in% colnames(dta@data))
+            {
+              add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
+              eval(parse(text=add_data))
+              cnt = 2
+            }
+          }
+        
         }
+        print(cnt)
+        #Only one time point, so no interpolation is done - value is simply copied to all other columns.
+        if(cnt == 2)
+        {
+          for(k in 1:length(years))
+          {
+            varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
+            eval(parse(text=varI))
+          }
+        } else {
+        #Here, we model out everything. 
+        #Melt the dataframe for modeling
+        melt_Model_dta <- melt(interpFrame,id=idField)
+        View(melt_Model_dta)
+        }
+      
       }
     
-    }
-    print(cnt)
-    #Only one time point, so no interpolation is done - value is simply copied to all other columns.
-    if(cnt == 2)
-    {
-      for(k in 1:length(years))
+    #Append interpolated fields to our melting lists
+    for(v in 1:length(interpYears))
       {
-        varI <- paste("dta@data$",interpYears,years[[k]]," <- interpFrame[2]",sep="")
-        eval(parse(text=varI))
+      varList_pre[[length(varList_pre)+1]] <- interpYears[v]
       }
-    } else {
-    #Here, we model out everything. 
-    #Melt the dataframe for modeling
-    melt_Model_dta <- melt(interpFrame,id=idField)
-    View(melt_Model_dta)
-    }
-    
     
   }
   

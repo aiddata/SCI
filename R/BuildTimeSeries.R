@@ -21,7 +21,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
     for(AncInt in 1:length(interpYears))
       {
         cur_ancVi <- interpYears[AncInt]
-        interpFrame <- data.frame()
+        interpFrame <- dta@data[idField]
         interpFrame[idField] <- dta@data[idField]
         cnt = 2
         for(k in 1:length(years))
@@ -74,7 +74,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
           if(!(varI %in% colnames(dta@data)))
             {
             #Variable doesn't exist, so we need to interpolate.
-            tDframe <- data.frame()
+            tDframe <- dta@data[idField]
             tDframe[idField] <- dta@data[idField]
             tDframe["variable"] <- years[[u]]
             View(tDframe)

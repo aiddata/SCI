@@ -77,14 +77,9 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             tDframe[idField] <- dta@data[idField]
             tDframe["variable"] <- years[[u]]
             dta@data[varI] <- predict(mdl,newdata=tDframe)
-            print("check")
+
             }
-#           else {
-#             #Variable exists, so we just slot it in
-#             tDframe[varI] <- dta@data[varI]
-#           }
-          }
-        print(tDframe[])        
+          }     
         }
       
       }

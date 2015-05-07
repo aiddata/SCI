@@ -34,9 +34,20 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
       }
     
     }
+    
+    #Only one time point, so no interpolation is done - value is simply copied to all other columns.
+    if(cnt == 1)
+    {
+      for(k in 1:length(years))
+      {
+        varI <- paste("dta@data$",interpYears,years[[k]]," <- interpFrame[2]",sep="")
+      }
+    } else {
+    #Here, we model out everything. 
     #Melt the dataframe for modeling
     melt_Model_dta <- melt(interpFrame,id=idField)
     View(melt_Model_dta)
+    }
     
   }
   

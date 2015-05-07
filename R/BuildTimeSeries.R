@@ -1,9 +1,9 @@
-BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,TrtYears=NULL)
+BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=NULL,interpYears=NULL)
 {
   years <- startYear:endYear
-  #If there is a "TrtYears" variable, convert to binaries.
+  #If there is a "colYears" variable, convert to binaries.
   #Eventually could be extended to more than one column.
-  if(!is.null(TrtYears))
+  if(!is.null(colYears))
   {
     #For each variable, for each year, create a binary representing the treatment status.
     for(k in 1:length(years))
@@ -11,9 +11,35 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,TrtYears=N
       varN <- paste("TrtMnt",years[k],sep="")
       exec <- paste("dta$",varN,"=0",sep="")
       eval(parse(text=exec))
-      dta@data[varN][dta@data[TrtYears] <= as.numeric(years[k])] <- 1
+      dta@data[varN][dta@data[colYears] <= as.numeric(years[k])] <- 1
     }
   }
+  
+  #If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.
+  if(!is.null(interpYears))
+  {
+    interpFrame <- dta@data[idField]
+    cnt = 0
+    for(k in 1:length(years))
+    {
+    #First, build a model describing the relationship between years and any data in the interp field.
+    varI <- paste("dta@data$",interpYears,years[[k]],sep="")
+    #Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
+    
+      if(exists(varI))
+      {
+        interpFrame[cnt] <- varI
+        cnt = cnt + 1
+        colnames(interpFrame)[cnt] <- years[[k]]
+      }
+    
+    }
+    #Melt the dataframe for modeling
+    melt_Model_dta <- melt(interpFrame,id=idField)
+    View(melt_Model_dta)
+    
+  }
+  
   
   #Run the melts
 

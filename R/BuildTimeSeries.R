@@ -58,6 +58,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             eval(parse(text=varI))
           }
         } else {
+        tDframe <- dta@data[idField]
         #Here, we model out everything. 
         #Melt the dataframe for modeling
         View(interpFrame)
@@ -73,7 +74,6 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
           if(!(varI %in% colnames(dta@data)))
             {
             #Variable doesn't exist, so we need to interpolate.
-            tDframe <- dta@data[idField]
             tDframe[idField] <- dta@data[idField]
             tDframe["variable"] <- years[[u]]
             tDframe[varI] <- predict(mdl,newdata=tDframe)

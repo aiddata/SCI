@@ -18,8 +18,10 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
   #If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.
   if(!is.null(interpYears))
   {
+    print(interpYears)
     for(AncInt in 1:length(interpYears))
       {
+        print(AncInt)
         cur_ancVi <- interpYears[AncInt]
         print(cur_ancVi)
         interpFrame <- dta@data[idField]

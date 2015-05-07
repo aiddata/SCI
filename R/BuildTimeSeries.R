@@ -66,15 +66,12 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         #Apply the model to interpolate
         for(u in 1:length(years))
           {
-          print("test")
-          varI <- paste(cur_ancVi,years[[k]],sep="")
-          print(varI)
+          varI <- paste(cur_ancVi,years[[u]],sep="")
           if(!(varI %in% colnames(dta@data)))
             {
-            print("in")
             #Variable doesn't exist, so we need to interpolate.
             tDframe <- dta@data[idField]
-            tDframe["variable"] <- years[[k]]
+            tDframe["variable"] <- years[[u]]
             tDframe[varI] <- predict(mdl)
             View(tDframe)
             }

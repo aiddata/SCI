@@ -76,10 +76,10 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             tDframe <- dta@data[idField]
             tDframe[idField] <- dta@data[idField]
             tDframe["variable"] <- years[[u]]
-            View(tDframe)
             tDframe[varI] <- predict(mdl,newdata=tDframe)
             }
           }
+        View(tDframe)
         }
       
       }

@@ -19,7 +19,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
   if(!is.null(interpYears))
   {
     interpFrame <- dta@data[idField]
-    cnt = 0
+    cnt = 1
     for(k in 1:length(years))
     {
     #First, build a model describing the relationship between years and any data in the interp field.
@@ -31,12 +31,21 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         interpFrame[cnt] <- varI
         cnt = cnt + 1
         colnames(interpFrame)[cnt] <- years[[k]]
+      } else
+      {
+        #Exception for a single-point interpolation
+        varC <- paste("dta@data$",interpYears,sep="")
+        if(exists(varC))
+        {
+          interpFrame[cnt] <- varC
+          cnt = cnt + 1
+        }
       }
     
     }
     
     #Only one time point, so no interpolation is done - value is simply copied to all other columns.
-    if(cnt == 1)
+    if(cnt == 2)
     {
       for(k in 1:length(years))
       {

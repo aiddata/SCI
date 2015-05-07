@@ -72,9 +72,8 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             #Variable doesn't exist, so we need to interpolate.
             tDframe <- dta@data[idField]
             tDframe["variable"] <- years[[u]]
-            print(predict(mdl))
             View(tDframe)
-            tDframe[varI] <- predict(mdl,tDframe)
+            tDframe[varI] <- predict(mdl,newdata=tDframe)
             View(tDframe)
             }
           }

@@ -22,7 +22,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
       {
         cur_ancVi <- interpYears[AncInt]
         interpFrame <- data.frame()
-        interp_Frame[idField] <- dta@data[idField]
+        interpFrame[idField] <- dta@data[idField]
         cnt = 2
         for(k in 1:length(years))
         {

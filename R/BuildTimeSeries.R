@@ -60,7 +60,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         } else {
         #Here, we model out everything. 
         #Melt the dataframe for modeling
-        
+        View(interpFrame)
         melt_Model_dta <- melt(interpFrame,id=idField)
         melt_Model_dta["variable"] <- as.numeric(melt_Model_dta$variable)
         #Fit the model for interpolation

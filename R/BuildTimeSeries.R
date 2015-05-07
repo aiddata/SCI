@@ -29,7 +29,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
       if(varI %in% colnames(dta@data))
       {
         add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
-        exec(parse(text=add_data))
+        eval(parse(text=add_data))
         cnt = cnt + 1
         colnames(interpFrame)[cnt] <- years[[k]]
       } else
@@ -39,7 +39,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         if(varC %in% colnames(dta@data))
         {
           add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
-          exec(parse(text=add_data))
+          eval(parse(text=add_data))
           cnt = cnt + 1
         }
       }

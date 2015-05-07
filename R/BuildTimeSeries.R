@@ -23,21 +23,23 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
     for(k in 1:length(years))
     {
     #First, build a model describing the relationship between years and any data in the interp field.
-    varI <- paste("dta@data$",interpYears,years[[k]],sep="")
+    varI <- paste(interpYears,years[[k]],sep="")
     #Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
     
-      if(exists(varI))
+      if(varI %in% colnames(dta@data))
       {
-        interpFrame[cnt] <- varI
+        add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
+        exec(parse(text=add_data))
         cnt = cnt + 1
         colnames(interpFrame)[cnt] <- years[[k]]
       } else
       {
         #Exception for a single-point interpolation
-        varC <- paste("dta@data$",interpYears,sep="")
-        if(exists(varC))
+        varC <- paste(interpYears,sep="")
+        if(varC %in% colnames(dta@data))
         {
-          interpFrame[cnt] <- varC
+          add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
+          exec(parse(text=add_data))
           cnt = cnt + 1
         }
       }

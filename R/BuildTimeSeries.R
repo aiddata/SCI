@@ -54,7 +54,9 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
           for(k in 1:length(years))
           {
             varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
+            print(varI)
             eval(parse(text=varI))
+            print("test")
           }
         } else {
         #Here, we model out everything. 

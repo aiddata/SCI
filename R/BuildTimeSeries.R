@@ -45,14 +45,12 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             {
               add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
               eval(parse(text=add_data))
-              cnt = 2
+              cnt = 3
             }
           }
         
         }
         #Only one time point, so no interpolation is done - value is simply copied to all other columns.
-        print(cnt)
-        print(cur_ancVi)
         if(cnt == 3)
         {
           for(k in 1:length(years))

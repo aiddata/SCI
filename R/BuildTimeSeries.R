@@ -36,6 +36,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
       {
         #Exception for a single-point interpolation
         varC <- paste(interpYears,sep="")
+        print(varC)
         if(varC %in% colnames(dta@data))
         {
           add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
@@ -45,7 +46,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
       }
     
     }
-    
+    print(cnt)
     #Only one time point, so no interpolation is done - value is simply copied to all other columns.
     if(cnt == 2)
     {

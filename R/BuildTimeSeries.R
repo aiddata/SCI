@@ -29,9 +29,10 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         #First, build a model describing the relationship between years and any data in the interp field.
         varI <- paste(cur_ancVi,years[[k]],sep="")
         #Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
-        
+          print(varI)
           if(varI %in% colnames(dta@data))
           {
+            print(adding)
             add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
             eval(parse(text=add_data))
             colnames(interpFrame)[cnt] <- years[[k]]
@@ -61,10 +62,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         tDframe <- dta@data[idField]
         #Here, we model out everything. 
         #Melt the dataframe for modeling
-        View(interpFrame)
         melt_Model_dta <- melt(data.frame(interpFrame),id=idField)
-        return(melt_Model_dta)
-        break
         melt_Model_dta["variable"] <- as.numeric(melt_Model_dta$variable)
         #Fit the model for interpolation
         View(melt_Model_dta)

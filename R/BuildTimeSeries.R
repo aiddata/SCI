@@ -32,7 +32,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
           print(varI)
           if(varI %in% colnames(dta@data))
           {
-            print(adding)
+            print("tst")
             add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
             eval(parse(text=add_data))
             colnames(interpFrame)[cnt] <- years[[k]]

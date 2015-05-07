@@ -61,6 +61,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
         #Melt the dataframe for modeling
         interpFrame[idField] <- row.names(interpFrame)
         melt_Model_dta <- melt(interpFrame,id=idField)
+        melt_Model_dta["variable"] <- as.numeric(melt_Model_dta["variable"])
         #Fit the model for interpolation
         mdl <- lm(value ~ variable + factor(reu_id),data=melt_Model_dta)
         #Apply the model to interpolate
@@ -71,7 +72,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             {
             #Variable doesn't exist, so we need to interpolate.
             tDframe <- dta@data[idField]
-            tDframe["variable"] <- as.factor(years[[u]])
+            tDframe["variable"] <- years[[u]]
             View(tDframe)
             tDframe[varI] <- predict(mdl,newdata=tDframe)
             View(tDframe)

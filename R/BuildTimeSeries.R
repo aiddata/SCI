@@ -21,6 +21,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
     for(AncInt in 1:length(interpYears))
       {
         cur_ancVi <- interpYears[AncInt]
+        print(cur_ancVi)
         interpFrame <- dta@data[idField]
         cnt = 1
         for(k in 1:length(years))

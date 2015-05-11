@@ -12,7 +12,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
   {
     m_fit <- lm(model,dta)
     mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
-    print(mTab)
+    print(summary(m_fit))
     texreg::plotreg(m_fit,omit.coef="(match)|(Intercept)",custom.model.names="Unstandardized Model",custom.note=model)
     
     if(!is.null(table_out))
@@ -28,7 +28,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
       dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
       }
       dta_fit_std <- lm(model,dta_tmp)
-      print(dta_fit_std )
+      print(summary(dta_fit_std))
       texreg::plotreg(dta_fit_std,omit.coef="(match)|(Intercept)",custom.model.names="Standardized Model", custom.note=model)
       
     }
@@ -40,7 +40,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
     m_fit <- lm(model,dta)
     mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
     #print.htmlTable(mTab)
-    print(mTab)
+    print(summary(m_fit))
     texreg::plotreg(m_fit,omit.coef="(match)|(Intercept)",custom.model.names="Unstandardized Model",custom.note=model)
     
     if(!is.null(table_out))
@@ -56,7 +56,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
         dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
       }
       dta_fit_std <- lm(model,dta_tmp)
-      print(dta_fit_std)
+      print(summary(dta_fit_std))
       texreg::plotreg(dta_fit_std,omit.coef="(match)|(Intercept)|(factor)",custom.model.names="Standardized Model", custom.note=model)
       
     }

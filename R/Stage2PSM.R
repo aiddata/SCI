@@ -11,7 +11,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
   if(type == "lm")
   {
     m_fit <- lm(model,dta)
-    mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
+    #mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
     print(summary(m_fit))
     texreg::plotreg(m_fit,omit.coef="(match)|(Intercept)",custom.model.names="Unstandardized Model",custom.note=model)
     
@@ -38,7 +38,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
   if(type == "cmreg")
   {
     m_fit <- lm(model,dta)
-    mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
+    #mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
     #print.htmlTable(mTab)
     print(summary(m_fit))
     texreg::plotreg(m_fit,omit.coef="(match)|(Intercept)",custom.model.names="Unstandardized Model",custom.note=model)

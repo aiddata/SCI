@@ -2,7 +2,7 @@
 #Algorithm to find an optimal match of pairs with replacement
 #In a treatment and control group
 
-NN_WithReplacement_binary_func <- function(dta,trtMntVar,ids)
+NN_WithReplacement_binary_func <- function(dta,trtMntVar,ids,dist_PSM)
 {
   #Fast nearest neighbors search - will not arrive at optimum,
   #but this may not be an issue for many analysis.

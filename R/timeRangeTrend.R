@@ -1,29 +1,9 @@
-BinCheck = function(b, naVal="NA")
-{
-  bSet = unique(b)
-  bSet = bSet[!is.na(bSet)]
-  
-  if(any(as.integer(bSet) != bSet)) "con"
-  else if (length(bSet) > 2) "con"
-  else "bin"
-}
-
-timeRangeAvg <- function(dta,prefix,startyr,endyr)
-{
-  searchS = paste("^",prefix,startyr,sep="")
-  searchE = paste("^",prefix,endyr,sep="")
-  strt_id <- grep(searchS,colnames(dta))
-  end_id <- grep(searchE,colnames(dta))
-  rmean <- rowMeans(dta[strt_id:end_id])
-  return(rmean)
-}
-
 timeRangeTrend <- function(dta,prefix,startyr,endyr,IDfield)
 {
   grep_str = paste(IDfield,prefix,sep="|")
   tDF <- dta@data[grepl(grep_str,names(dta@data))]
   analysisDF <- melt(tDF,id=c(IDfield))
-
+  
   #cleaned GREP
   new_pre <- gsub("[0-9]","",prefix,fixed=TRUE)
   analysisDF["Year"] <- lapply(analysisDF["variable"],FUN=function(x) as.numeric(gsub(new_pre,"",x)))

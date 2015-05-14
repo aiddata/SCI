@@ -1,4 +1,4 @@
-#Analytics and Modelsa
+#Analytics and Models
 #Note most users will likely want to run their own models.
 #These functions are to make common modeling strategies easier to specify for users
 #That do not write their own models.

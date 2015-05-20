@@ -188,8 +188,8 @@ if(cnt > 1)
         colnames(bRes)[7] <- "Post-Balance Control Mean"
         colnames(bRes)[8] <- "Post-Balance Control SD"
         
-        colnames(bRes)[8] <- "Mean Difference Pre-Balance"
-        colnames(bRes)[8] <- "Mean Difference Post-Balance"
+        colnames(bRes)[9] <- "Mean Difference Pre-Balance"
+        colnames(bRes)[10] <- "Mean Difference Post-Balance"
       }else{
         bRes <- rbind(bRes, c(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                               treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,

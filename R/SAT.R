@@ -221,6 +221,9 @@ if(cnt > 1)
     print.htmlTable(bTab)
   }
   
-  return (dta)
+  ret_field <- list()
+  ret_field$dta <- dta
+  ret_field$balance <- bTab
+  return (ret_field)
 }
 

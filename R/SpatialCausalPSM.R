@@ -52,5 +52,5 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
   retEle <- 0
   retEle$data <- retData
   retEle$model <- PSMfit
-  return (retData)
+  return (retEle)
 }

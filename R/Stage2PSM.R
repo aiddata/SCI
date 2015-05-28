@@ -64,7 +64,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL)
         d_index <- sapply(dta_tmp@data, is.numeric)
         dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
       }
-      dta_fit_std <- lm(model,dta_tmp)
+      dta_fit_std <- lm(model,dta_tmp,weights=log(terrai_are))
       ret_var$standardized <- dta_fit_std
       print(summary(dta_fit_std))
       texreg::plotreg(dta_fit_std,omit.coef="(match)|(Intercept)|(factor)",custom.model.names="Standardized Model", custom.note=model)

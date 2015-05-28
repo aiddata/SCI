@@ -49,7 +49,8 @@ SpatialCausalPSM <- function(dta, mtd,mdl,drop, visual)
     grid.arrange(pltObjs[[1]], pltObjs[[2]],ncol=2,main="PSM Matching Stage 1 (Dropping Observations Requiring Extrapolation)")
     
   }
-  retEle <- retData
+  retEle <- 0
+  retEle$data <- retData
   retEle$model <- PSMfit
   return (retData)
 }

@@ -135,13 +135,13 @@ if(cnt > 1)
     treat_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
     
     control_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[3]],5)")
-    control_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
+    control_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[4]],5)")
     
     treat_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]],5)")
     treat_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
     
     control_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[3]],5)")
-    control_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
+    control_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[4]],5)")
    
     c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
     
@@ -188,8 +188,8 @@ if(cnt > 1)
         colnames(bRes)[7] <- "Post-Balance Control Mean"
         colnames(bRes)[8] <- "Post-Balance Control SD"
         
-        colnames(bRes)[8] <- "Mean Difference Pre-Balance"
-        colnames(bRes)[8] <- "Mean Difference Post-Balance"
+        colnames(bRes)[9] <- "Mean Difference Pre-Balance"
+        colnames(bRes)[10] <- "Mean Difference Post-Balance"
       }else{
         bRes <- rbind(bRes, c(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                               treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
@@ -221,6 +221,7 @@ if(cnt > 1)
     print.htmlTable(bTab)
   }
   
+
   return (dta)
 }
 

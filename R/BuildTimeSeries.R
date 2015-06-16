@@ -8,10 +8,13 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
     #For each variable, for each year, create a binary representing the treatment status.
     for(k in 1:length(years))
     {
-      varN <- paste("TrtMnt",years[k],sep="")
+      for(j in 1:length(colYears))
+      {
+      varN <- paste("TrtMnt",j,years[k],sep="")
       exec <- paste("dta$",varN,"=0",sep="")
       eval(parse(text=exec))
-      dta@data[varN][dta@data[colYears] <= as.numeric(years[k])] <- 1
+      dta@data[varN][dta@data[colYears[j]] <= as.numeric(years[k])] <- 1
+      }
     }
   }
   

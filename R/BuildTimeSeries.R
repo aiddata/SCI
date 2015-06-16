@@ -18,7 +18,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
       }
     }
   }
-  for j in 1:length(colYears)
+  for (j in 1:length(colYears))
   {
   interpYears <- c(interpYears,colYears[j])  
   }

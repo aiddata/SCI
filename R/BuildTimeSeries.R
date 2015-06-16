@@ -15,10 +15,11 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
       eval(parse(text=exec))
 
       dta@data[varN][dta@data[colYears[j]] <= as.numeric(years[k])] <- 1
+      interpYears <- c(interpYears,varN)
       }
     }
   }
-  interpYears <- c(interpYears,colYears)
+  print(interpYears)
   #If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.
   if(!is.null(interpYears))
   {

@@ -20,7 +20,8 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
   }
   for (j in 1:length(colYears))
   {
-  interpYears <- c(interpYears,colYears[j])  
+  trt_id = paste("TrtMnt_",colYears[j])
+  interpYears <- c(interpYears,trt_id)  
   }
   print(interpYears)
   #If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.

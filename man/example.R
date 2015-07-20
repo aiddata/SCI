@@ -100,6 +100,43 @@ psmRes <- SpatialCausalPSM(dta_Shp,mtd="logit",psmModel,drop="support",visual=TR
 #we don't want to pair neighbors as it is possible 
 #treatment effects may contain spillovers.
 #To model this, we first identify the distance at which units
-#are no longer similar to eachother ('spatial autocorrelation')
-PSMdistDecay(dta_Shp,"PSM_trtProb",1,500,10)
+#are minimally similar to eachother ('spatial autocorrelation')
+#This is generally the "lag distance" at which the Moran's I ceases to decrease,
+#Or alternatively when it becomes non-significant.
+#start is the closest distance, end is the farthest distance tested,
+#and h is the number of "bins" of distance.
+#In the plot produced in this example, the first bin ("1") is representative
+#of how similar units between 10 and (590/20+10 = 39.5) kilometers away are to one another.
+
+PSMdistDecay(psmRes$data,"PSM_trtProb",start=10,end=600,h=20)
+
+#In this example, we can see that at 246 kilometers units become statistically
+#uncorrelated with one another, and Moran's I is only a small positive in steps after this.
+#Thus, we will use that threshold for a distance-decay penalty in our matching procedure.
+#In the matching step, setting this penalizes units of observation closer than 246
+#kilometers, with units 1km away receiving the largest penalty (thus being a highly unlikely match)
+
+#Here, we create our treatment and control 
+#First, we choose if we drop observations.  I.e., do we (a) drop observations that
+#do not have a match (drop_unmatched), and (b) do we drop observations that do not
+#have a match that is very similar?  To do (b), you can choose a drop method (right now,
+#the best coded option is "SD", which is standard deviations of difference), and you set
+#the drop_thresh - in this case, we have it equal to 0.25, so observations that have PSM
+#scores moer than 0.25 standard deviations away from one another will be dropped.
+drop_set<- c(drop_unmatched=TRUE,drop_method="SD",drop_thresh=0.25)
+
+#Second, we select the approach and constraints to our matches.
+#The "FastNN" (though not always optimal) option for method is a fast approach to finding the nearest neighbor.
+#Constraints can be use to geographically constrain matches - in this case we have a distance constrain
+#that penalizes close pairs.
+#psm_eq is the equation used in the first-stage PSM 
+#ids are a unique ID field, and must be specified.
+#drop_opts are the settings set above (line 126)
+#visual enables visual outputs of the balance across control and treatment groups.
+#TrtbinColName is the column that represents the binary (0/1) treatment variable.
+psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),psm_eq = psmModel, ids = "id", drop_opts = drop_set, visual="TRUE", TrtBinColName="TrtBin")
+
+
+
+
 

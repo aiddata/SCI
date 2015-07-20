@@ -40,8 +40,43 @@ dta_Shp = readShapePoly(shpfile)
 #and also has a year in it (with each of the 4 year digits being equal to
 #0-9).
 
-dta_Shp$pre_trend_NDVI_mean <- timeRangeTrend(dta_Shp,"MeanL_[0-9][0-9][0-9][0-9]",1982,1995,"SP_ID")
+dta_Shp$pre_trend_NDVI <- timeRangeTrend(dta_Shp,"MeanL_[0-9][0-9][0-9][0-9]",1982,1995,"SP_ID")
 
+#To see our new column of data:
+#View(dta_Shp$pre_trend_NDVI_mean)
+#Using the same function, calculate the trend after the intervention period
+dta_Shp$NDVI_trend_01_10 <- timeRangeTrend(dta_Shp,"MeanL_[0-9][0-9][0-9][0-9]",2001,2010,"SP_ID")
 
+#Because we believe temperature and precipitation also matter, 
+#construct the same variables for these.
+#Note you could extend this to minimum, maximum, or other
+#derivatives of weather/climate variables, but for illustration
+#here we only use mean.
+dta_Shp$pre_trend_temp_mean <- timeRangeTrend(dta_Shp,"MeanT_[0-9][0-9][0-9][0-9]",1982,1995,"SP_ID")
+dta_Shp$post_trend_temp_01_10 <- timeRangeTrend(dta_Shp,"MeanT_[0-9][0-9][0-9][0-9]",2001,2010,"SP_ID")
 
+dta_Shp$pre_trend_precip_mean <- timeRangeTrend(dta_Shp,"MeanP_[0-9][0-9][0-9][0-9]",1982,1995,"SP_ID")
+dta_Shp$post_trend_precip_01_10 <- timeRangeTrend(dta_Shp,"MeanP_[0-9][0-9][0-9][0-9]",2001,2010,"SP_ID")
 
+#Define a treatment variables.
+#The script requires a binary 1 or 0 for units that were "Treated" 
+#(i.e., had an intervention) and those that were not.
+#Here, we define communities that were given legal status
+#in the amazon before 2001 as "treated" communities,
+#and all other communities as untreated.
+dta_Shp@data["TrtBin"] <- 0
+dta_Shp@data$TrtBin[dta_Shp@data$demend_y <= 2001] <- 1
+
+#This program currently uses a method called
+#"Propensity Score Matching", which matches treatment
+#and control communities based on their similarity
+#in terms of a single "Propensity Score".
+#The matches are weighted according to a calibrated
+#distance-decay metric.
+
+#The first step of this process is to calculate the PSM:
+psmModel <-  "TrtBin ~ terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 +
+pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist +
+pre_trend_precip_mean"
+
+psmRes <- SAT::SpatialCausalPSM(dta_Shp,mtd="logit",psmModel,drop="support",visual=TRUE)

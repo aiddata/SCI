@@ -7,7 +7,7 @@ PSM_correlogram <- function (dta, var, order = 1, style = "W",
   if (any(is.na(var))) 
     stop("no NAs permitted in variable")
   if (is.null(zero.policy)) 
-    zero.policy <- TRUE
+    zero.policy <- FALSE
   stopifnot(is.logical(zero.policy))
   if (is.null(spChk)) 
     spChk <- get.spChkOption()

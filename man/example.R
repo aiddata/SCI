@@ -101,5 +101,5 @@ psmRes <- SpatialCausalPSM(dta_Shp,mtd="logit",psmModel,drop="support",visual=TR
 #treatment effects may contain spillovers.
 #To model this, we first identify the distance at which units
 #are no longer similar to eachother ('spatial autocorrelation')
-PSM_correlogram(dta_Shp, "PSM_trtProb", start=0,end=500) 
+PSMdistDecay(dta_Shp,"PSM_trtProb",1,500,10)
 

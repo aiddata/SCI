@@ -1,2 +1,2 @@
-import(maptools)
+imports(maptools)
 exportPattern("^[^\\.]")

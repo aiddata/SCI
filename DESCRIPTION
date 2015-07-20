@@ -3,7 +3,7 @@ Title: Spatial Cauasal Inference
 Version: 0.0.0.1
 Authors@R: person("Dan", "Runfola", , "drunfola@aiddata.org", role = c("aut", "cre"))
 Description: An alpha release of a package designed to make impact evaluation that includes spatial data easier within R.  See http://www.aiddata.org for more information.
-Depends: R (>= 3.0.2), sp, maptools, reshape, ggplot2
+Depends: R (>= 3.0.2), sp, maptools, reshape, ggplot2, grid
 License: Creative Commons with Attribution
 LazyData: true
-Imports:sp, maptools, reshape, ggplot2
+Imports:sp, maptools, reshape, ggplot2, grid

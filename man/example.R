@@ -63,9 +63,15 @@ dta_Shp$post_trend_precip_01_10 <- timeRangeTrend(dta_Shp,"MeanP_[0-9][0-9][0-9]
 #(i.e., had an intervention) and those that were not.
 #Here, we define communities that were given legal status
 #in the amazon before 2001 as "treated" communities,
-#and all other communities as untreated.
+#and communities after 2001 as "untreated".
 dta_Shp@data["TrtBin"] <- 0
 dta_Shp@data$TrtBin[dta_Shp@data$demend_y <= 2001] <- 1
+
+#Remove units that did not ever receive any treatment (within-sample test)
+dta_Shp@data$NA_check <- 0
+dta_Shp@data$NA_check[is.na(dta_Shp@data$demend_y)] <- 1
+int_Shp <- dta_Shp[dta_Shp@data$NA_check != 1,]
+dta_Shp <- int_Shp
 
 #This program currently uses a method called
 #"Propensity Score Matching", which matches treatment

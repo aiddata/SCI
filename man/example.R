@@ -80,9 +80,26 @@ dta_Shp <- int_Shp
 #The matches are weighted according to a calibrated
 #distance-decay metric.
 
-#The first step of this process is to calculate the PSM:
+#The first step of this process is to calculate the PSM.  The 'psmmodel' predicts the chance
+#of receiving treatment for each unit of analysis, and should include all variables you think
+#might have impacted the treatment.
 psmModel <-  "TrtBin ~ terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 +
 pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist +
 pre_trend_precip_mean"
 
-psmRes <- SAT::SpatialCausalPSM(dta_Shp,mtd="logit",psmModel,drop="support",visual=TRUE)
+#This wil create a new column of data, "PSM_trtProb", held in psmRes$data.
+#dta_Shp is the dataset (shapefile)
+#method is the fitting method; logit is preferred in binary cases.
+#psmModel is the model defined above
+#drop="support" will remove observations that do not have a meaningful "comparison" case.
+#visual=TRUE will output histograms showing before and after support drops.
+psmRes <- SpatialCausalPSM(dta_Shp,mtd="logit",psmModel,drop="support",visual=TRUE)
+
+#Now, based on these treatment and control groups we want
+#to identify "pairs" that are as similar as possible. However,
+#we don't want to pair neighbors as it is possible 
+#treatment effects may contain spillovers.
+#To model this, we first identify the distance at which units
+#are no longer similar to eachother ('spatial autocorrelation')
+PSM_correlogram(dta_Shp, "PSM_trtProb", start=0,end=500) 
+

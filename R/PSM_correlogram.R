@@ -3,6 +3,7 @@
 PSM_correlogram <- function (dta, var, order = 1, style = "W", 
           randomisation = TRUE, zero.policy = NULL, spChk = NULL, start,end) 
 {
+  library(spdep)
   stopifnot(is.vector(var))
   if (any(is.na(var))) 
     stop("no NAs permitted in variable")

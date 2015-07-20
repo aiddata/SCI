@@ -6,4 +6,4 @@ Description: An alpha release of a package designed to make impact evaluation th
 Depends: R (>= 3.0.2)
 License: Creative Commons with Attribution
 LazyData: true
-Imports:sp,proj4,ggplot2,FNN,psych,spdep,RandomFields,ggmap,reshape,maptools,gridExtra,grid,QuantPsyc,texreg,stargazer,lmtest
+Imports:maptools

@@ -107,7 +107,6 @@ psmRes <- SpatialCausalPSM(dta_Shp,mtd="logit",psmModel,drop="support",visual=TR
 #and h is the number of "bins" of distance.
 #In the plot produced in this example, the first bin ("1") is representative
 #of how similar units between 10 and (590/20+10 = 39.5) kilometers away are to one another.
-
 PSMdistDecay(psmRes$data,"PSM_trtProb",start=10,end=600,h=20)
 
 #In this example, we can see that at 246 kilometers units become statistically

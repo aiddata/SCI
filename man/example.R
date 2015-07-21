@@ -1,5 +1,9 @@
 #Example script for the use of the
 #Spatial Causal Inference package in R
+#Please note this package is in an early alpha release, and as such
+#has many instabilities, bugs and errors, and is limited in functionality.
+#If you encounter issues, do not hesitate to contact
+#the authors at drunfola@aiddata.org .
 
 #Load the SCI library using devtools
 #Devtools is necessary as the package is currently
@@ -121,7 +125,7 @@ PSMdistDecay(psmRes$data,"PSM_trtProb",start=10,end=600,h=20)
 #have a match that is very similar?  To do (b), you can choose a drop method (right now,
 #the best coded option is "SD", which is standard deviations of difference), and you set
 #the drop_thresh - in this case, we have it equal to 0.25, so observations that have PSM
-#scores moer than 0.25 standard deviations away from one another will be dropped.
+#scores more than 0.25 standard deviations away from one another will be dropped.
 drop_set<- c(drop_unmatched=TRUE,drop_method="SD",drop_thresh=0.25)
 
 #Second, we select the approach and constraints to our matches.
@@ -134,3 +138,32 @@ drop_set<- c(drop_unmatched=TRUE,drop_method="SD",drop_thresh=0.25)
 #visual enables visual outputs of the balance across control and treatment groups.
 #TrtbinColName is the column that represents the binary (0/1) treatment variable.
 psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),psm_eq = psmModel, ids = "id", drop_opts = drop_set, visual="TRUE", TrtBinColName="TrtBin")
+
+#In the histograms, you will see a clear alignment between treated and untreated in the PSM_trtProb variable.
+#Generally, as you decrease the drop_thresh (i.e., make it more stringent), you will see improvement in
+#"balance" across all variables (similar distributions), but also see a decreased sample size.
+#In this example, the inital dataset was 106 units of observation.  This was cut down to 93 when
+#observations were dropped on line 96 to facilitate common support.  Finally, it was cut down to 50
+#(25 in each group) when pairs were matched on line 136, dropping pairs according to the settings
+#on line 125.
+
+#Now that we have our paired dataset, we can proceed as usual with our modeling strategy.
+#Here, for illustration we simply conduct a linear fit.
+
+analyticModel <-  "NDVI_trend_01_10 ~ TrtBin + terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 +
+pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist +
+pre_trend_precip_mean"
+
+#Here, you can either run a model manually, or with a wrapper command (Stage2PSM) in the package.
+#The wrapper will automatically produce graphics and standardized (z-score) model output
+#in the linear model case, but is limited to only two types of regression - linear models
+#and 2-way clustering panel models.  
+
+#Approach 1:
+summary(lm(analyticModel, psm_Pairs))
+
+#Approach 2:
+Stage2PSM(analyticModel,psm_Pairs,type="lm",table_out=TRUE)
+
+#In both of these models, the TrtBin variable indicates the significance (or, in this case, lack of)
+#the treatment variable in driving the outcome variable.  

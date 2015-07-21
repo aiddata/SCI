@@ -135,8 +135,3 @@ drop_set<- c(drop_unmatched=TRUE,drop_method="SD",drop_thresh=0.25)
 #visual enables visual outputs of the balance across control and treatment groups.
 #TrtbinColName is the column that represents the binary (0/1) treatment variable.
 psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),psm_eq = psmModel, ids = "id", drop_opts = drop_set, visual="TRUE", TrtBinColName="TrtBin")
-
-
-
-
-

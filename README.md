@@ -10,7 +10,7 @@ has many instabilities, bugs and errors, and is limited in functionality.
 If you encounter issues, do not hesitate to contact
 the authors.
 
-
+#Package and data loading
 library(devtools)
 devtools::install_github("itpir/SCI@master")
 library(SCI)

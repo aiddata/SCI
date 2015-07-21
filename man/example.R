@@ -152,7 +152,7 @@ psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),p
 
 analyticModel <-  "NDVI_trend_01_10 ~ TrtBin + terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 +
 pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist +
-pre_trend_precip_mean"
+pre_trend_precip_mean + post_trend_precip_01_10 + post_trend_temp_01_10"
 
 #Here, you can either run a model manually, or with a wrapper command (Stage2PSM) in the package.
 #The wrapper will automatically produce graphics and standardized (z-score) model output

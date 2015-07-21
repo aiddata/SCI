@@ -28,17 +28,23 @@ dta_Shp$pre_trend_NDVI <- timeRangeTrend(dta_Shp,"MeanL_[0-9][0-9][0-9][0-9]",19
 dta_Shp$NDVI_trend_01_10 <- timeRangeTrend(dta_Shp,"MeanL_[0-9][0-9][0-9][0-9]",2001,2010,"SP_ID")
 
 dta_Shp$pre_trend_temp_mean <- timeRangeTrend(dta_Shp,"MeanT_[0-9][0-9][0-9][0-9]",1982,1995,"SP_ID")
+
 dta_Shp$post_trend_temp_01_10 <- timeRangeTrend(dta_Shp,"MeanT_[0-9][0-9][0-9][0-9]",2001,2010,"SP_ID")
 
 dta_Shp$pre_trend_precip_mean <- timeRangeTrend(dta_Shp,"MeanP_[0-9][0-9][0-9][0-9]",1982,1995,"SP_ID")
+
 dta_Shp$post_trend_precip_01_10 <- timeRangeTrend(dta_Shp,"MeanP_[0-9][0-9][0-9][0-9]",2001,2010,"SP_ID")
 
 dta_Shp@data["TrtBin"] <- 0
+
 dta_Shp@data$TrtBin[dta_Shp@data$demend_y <= 2001] <- 1
 
 dta_Shp@data$NA_check <- 0
+
 dta_Shp@data$NA_check[is.na(dta_Shp@data$demend_y)] <- 1
+
 int_Shp <- dta_Shp[dta_Shp@data$NA_check != 1,]
+
 dta_Shp <- int_Shp
 
 #Modeling examples
@@ -52,11 +58,11 @@ PSMdistDecay(psmRes$data,"PSM_trtProb",start=10,end=600,h=20)
 
 drop_set<- c(drop_unmatched=TRUE,drop_method="SD",drop_thresh=0.25)
 
-psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),psm_eq = psmModel, ids = "id", drop_opts = drop_set, visual="TRUE", TrtBinColName="TrtBin")
+psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),psm_eq = psmModel, ids = "id", \
 
-analyticModel <-  "NDVI_trend_01_10 ~ TrtBin + terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 +
-pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist +
-pre_trend_precip_mean"
+drop_opts = drop_set, visual="TRUE", TrtBinColName="TrtBin")
+
+analyticModel <-  "NDVI_trend_01_10 ~ TrtBin + terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 + pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist + pre_trend_precip_mean"
 
 summary(lm(analyticModel, psm_Pairs))
 

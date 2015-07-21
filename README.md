@@ -11,10 +11,15 @@ If you encounter issues, do not hesitate to contact
 the authors.
 
 #Package and data loading
+
 library(devtools)
+
 devtools::install_github("itpir/SCI@master")
+
 library(SCI)
+
 shpfile = file.path(getwd(),"man","data","example.shp")
+
 dta_Shp = readShapePoly(shpfile)
 
 #Variable construction examples

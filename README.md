@@ -11,6 +11,7 @@ The examples included currently focus on cross-sectional analyses, but
 the package can support spatio-temporal panel modeling via a two-way clustering
 algorithm.  See Stage2PSM() for details - examples of this modeling approach
 are forthcoming.
+
 If you encounter issues, do not hesitate to contact me (drunfola@aiddata.org).
 
 #Package and data loading

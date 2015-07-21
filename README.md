@@ -57,9 +57,7 @@ PSMdistDecay(psmRes$data,"PSM_trtProb",start=10,end=600,h=20)
 
 drop_set<- c(drop_unmatched=TRUE,drop_method="SD",drop_thresh=0.25)
 
-psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),psm_eq = psmModel, ids = "id", \
-
-drop_opts = drop_set, visual="TRUE", TrtBinColName="TrtBin")
+psm_Pairs <- SAT(dta = psmRes$data, mtd = "fastNN",constraints=c(distance=246),psm_eq = psmModel, ids = "id", drop_opts = drop_set, visual="TRUE", TrtBinColName="TrtBin")
 
 analyticModel <-  "NDVI_trend_01_10 ~ TrtBin + terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 + pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist + pre_trend_precip_mean"
 

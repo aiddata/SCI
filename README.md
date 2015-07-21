@@ -17,7 +17,7 @@ library(SCI)
 shpfile = file.path(getwd(),"man","data","example.shp")
 dta_Shp = readShapePoly(shpfile)
 
-#variable construction examples
+#Variable construction examples
 dta_Shp$pre_trend_NDVI <- timeRangeTrend(dta_Shp,"MeanL_[0-9][0-9][0-9][0-9]",1982,1995,"SP_ID")
 
 dta_Shp$NDVI_trend_01_10 <- timeRangeTrend(dta_Shp,"MeanL_[0-9][0-9][0-9][0-9]",2001,2010,"SP_ID")
@@ -36,7 +36,7 @@ dta_Shp@data$NA_check[is.na(dta_Shp@data$demend_y)] <- 1
 int_Shp <- dta_Shp[dta_Shp@data$NA_check != 1,]
 dta_Shp <- int_Shp
 
-#modeling examples
+#Modeling examples
 psmModel <-  "TrtBin ~ terrai_are + Pop_1990 + MeanT_1995 + pre_trend_temp_mean + MeanP_1995 +
 pre_trend_NDVI + Slope + Elevation +  MeanL_1995 + Riv_Dist + Road_dist +
 pre_trend_precip_mean"

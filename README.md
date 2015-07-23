@@ -1,5 +1,5 @@
 # SCI
-Spatial Causal Inference Package for R
+Spatial PSM for R
 
 Below is an exmaple for the use of this package - you can also find this
 example, with much more extensive documentation,

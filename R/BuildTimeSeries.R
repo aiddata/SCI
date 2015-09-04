@@ -96,6 +96,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             }
 
             print("bts3.0.2")
+            # this is a slow part
+
             # Only one time point, so no interpolation is done - value is simply copied to all other columns.
             if (cnt == 3) {
 
@@ -106,14 +108,17 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                     dta@data[[paste(cur_ancVi,years[[k]], sep="")]] <- interpFrame[2]
                 }
 
-            } else {
+            } else if (cnt < length(years) + 2) {
+
                 tDframe <- dta@data[idField]
 
                 # Here, we model out everything. 
+
                 # Melt the dataframe for modeling
                 melt_Model_dta <- melt(data.frame(interpFrame),id=idField)
                 melt_Model_dta["variable"] <- as.numeric(gsub("X","",melt_Model_dta$variable))
-                                                         
+                
+
                 # Fit the model for interpolation
                 
                 execstr <- paste("mdl <- lm(value ~ variable + factor(",idField,"),data=melt_Model_dta)",sep="")
@@ -132,9 +137,9 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                         dta@data[varI] <- predict(mdl,newdata=tDframe)
 
                     }
-                }     
+                }
             }
-      
+
         }
 
         print("bts3.1")        

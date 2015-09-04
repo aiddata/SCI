@@ -12,7 +12,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             if(names(constraints)[cst] == "groups") {
                 # exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
                 # eval(parse(text=exec_stmnt))
-                dta[,ConstraintGroupSet_Opt] <- dta[,constraints["groups"]]
+                dta[,"ConstraintGroupSet_Opt"] <- dta[,constraints["groups"]]
 
             } else {
                 dta$ConstraintGroupSet_Opt <- 1

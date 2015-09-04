@@ -53,11 +53,16 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     
     # If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.
     if (!is.null(interpYears)) {
+        print("bts3.0")
         for (AncInt in 1:length(interpYears)) {
+
+            print("bts3.0.0")
             cur_ancVi <- interpYears[AncInt]
             interpFrame <- dta@data[idField]
             interpFrame[idField] <- dta@data[idField]
             cnt = 2
+
+            print("bts3.0.1")
             for (k in 1:length(years)) {
                 # First, build a model describing the relationship between years and any data in the interp field.
                 varI <- paste(cur_ancVi,years[[k]],sep="")
@@ -68,7 +73,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                     # add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
                     # eval(parse(text=add_data))
-                    interpFrame[cnt] <- dta@data[,varI]
+                    interpFrame[cnt] <- dta@data[[varI]]
 
 
                     colnames(interpFrame)[cnt] <- years[[k]]
@@ -81,7 +86,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                         # add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
                         # eval(parse(text=add_data))
-                        interpFrame[cnt] <- dta@data[,varC]
+                        interpFrame[cnt] <- dta@data[[varC]]
 
 
                         cnt = 3
@@ -90,6 +95,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         
             }
 
+            print("bts3.0.2")
             # Only one time point, so no interpolation is done - value is simply copied to all other columns.
             if (cnt == 3) {
 
@@ -97,7 +103,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                     # varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
                     # eval(parse(text=varI))
-                    dta@data[,cur_ancVi,years[[k]]] <- interpFrame[2]
+                    dta@data[[paste(cur_ancVi,years[[k]]], sep="")]] <- interpFrame[2]
                 }
 
             } else {
@@ -130,7 +136,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             }
       
         }
-        
+
+        print("bts3.1")        
         # Append interpolated fields to our melting lists
         for (v in 1:length(interpYears)) {
             varList_pre[[length(varList_pre)+1]] <- interpYears[v]

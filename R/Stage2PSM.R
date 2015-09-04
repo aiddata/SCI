@@ -3,24 +3,24 @@
 #These functions are to make common modeling strategies easier to specify for users
 #That do not write their own models.
 
-Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL) {
+Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
   
     ret_var <- list()
   
-    if(type == "lm") {
+    if (type == "lm") {
         m_fit <- lm(model,dta)
         print("==========================")
         print("UNSTANDARDIZED MODEL RESULTS")
         print("==========================")
         #mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
         print(summary(m_fit))
-        ret_var[["unstandardized"]] <- lm(model,dta)
-        texreg::plotreg(m_fit,omit.coef="(match)|(Intercept)",custom.model.names="Unstandardized Model",custom.note=model)
+        ret_var[["unstandardized"]] <- lm(model, dta)
+        texreg::plotreg(m_fit, omit.coef="(match)|(Intercept)", custom.model.names="Unstandardized Model", custom.note=model)
         
-        if(!is.null(table_out)) {
+        if (!is.null(table_out)) {
             dta_tmp <- dta
       
-            if(class(dta) == "data.frame") {
+            if (class(dta) == "data.frame") {
                 d_index <- sapply(dta_tmp, is.numeric)
                 dta_tmp[d_index] <- lapply(dta_tmp[d_index],scale)
             } else {
@@ -40,7 +40,7 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL) {
     
     }
   
-    if(type == "cmreg") {
+    if (type == "cmreg") {
         m_fit <- lm(model,dta)
         ret_var[["unstandardized"]] <- m_fit
         #mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
@@ -48,10 +48,10 @@ Stage2PSM <- function(model, dta, type, table_out = NULL, opts = NULL) {
         print(summary(m_fit))
         texreg::plotreg(m_fit,omit.coef="(match)|(Intercept)|(factor)",custom.model.names="Unstandardized Model",custom.note=model)
         
-        if(!is.null(table_out)) {
+        if (!is.null(table_out)) {
             dta_tmp <- dta
           
-            if(class(dta) == "data.frame") {
+            if( class(dta) == "data.frame") {
                 d_index <- sapply(dta_tmp, is.numeric)
                 dta_tmp[d_index] <- lapply(dta_tmp[d_index],scale)
             } else {

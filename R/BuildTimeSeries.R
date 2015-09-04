@@ -61,6 +61,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             for (k in 1:length(years)) {
                 # First, build a model describing the relationship between years and any data in the interp field.
                 varI <- paste(cur_ancVi,years[[k]],sep="")
+                print(varI)
                 # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
                 if (varI %in% colnames(dta@data)) {
 

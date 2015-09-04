@@ -10,13 +10,15 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     if (!is.null(constraints)) {
         for (cst in 1:length(names(constraints))) {
             if(names(constraints)[cst] == "groups") {
-                exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
-                eval(parse(text=exec_stmnt))
+                # exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
+                # eval(parse(text=exec_stmnt))
+                dta[,ConstraintGroupSet_Opt] <- dta[,constraints["groups"]]
+
             } else {
                 dta$ConstraintGroupSet_Opt <- 1
             }
             if (names(constraints)[cst] == "distance") {
-            dist_PSM = as.numeric(constraints["distance"][[1]])
+                dist_PSM = as.numeric(constraints["distance"][[1]])
             } else {
                 dist_PSM=NULL
             }
@@ -138,7 +140,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
             # exec_str = paste("init_dta@data$",ed_v,"<- as.numeric(init_dta@data$",ed_v,")",sep="")
             # eval(parse(text=exec_str))
-            init_dta@data[[ed_v]] <- as.numeric(init_dta@data[[ed_v]])
+            init_dta@data[,ed_v] <- as.numeric(init_dta@data[,ed_v])
 
             c_type = "numeric"
         }

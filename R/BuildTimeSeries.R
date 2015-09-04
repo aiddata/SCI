@@ -2,20 +2,39 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     
     years <- startYear:endYear
 
+
+
+    print("bts1")
+    timer <- proc.time()
+
     # If there is a "colYears" variable, convert to binaries.
     # Eventually could be extended to more than one column.
     if (!is.null(colYears)) {
         # For each variable, for each year, create a binary representing the treatment status.
         for (k in 1:length(years)) {
             for (j in 1:length(colYears)) {
-                varN <- paste("TrtMnt_",colYears[j],years[k],sep="")
-                exec <- paste("dta$",varN,"=0",sep="")
-                eval(parse(text=exec))
+
+                varN <- paste("TrtMnt_", colYears[j], years[k], sep="")
+
+
+                # exec <- paste("dta$",varN,"=0",sep="")
+                # eval(parse(text=exec))
+
+                dta[,varN] = 0
+
 
                 dta@data[varN][dta@data[colYears[j]] <= as.numeric(years[k])] <- 1
             }
         }
     }
+
+    timer <- proc.time() - timer
+    print(paste("section completed in", timer[3], "seconds."))
+
+
+
+    print("bts2")
+    timer <- proc.time()
 
     for (j in 1:length(colYears)) {
         trt_id = paste("TrtMnt_",colYears[j],sep="")
@@ -23,6 +42,14 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     }
 
     print(interpYears)
+
+    timer <- proc.time() - timer
+    print(paste("section completed in", timer[3], "seconds."))
+
+
+
+    print("bts3")
+    timer <- proc.time()
     
     # If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.
     if (!is.null(interpYears)) {
@@ -36,16 +63,26 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 varI <- paste(cur_ancVi,years[[k]],sep="")
                 # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
                 if (varI %in% colnames(dta@data)) {
-                    add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
-                    eval(parse(text=add_data))
+
+
+                    # add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
+                    # eval(parse(text=add_data))
+                    interpFrame[cnt] <- dta@data[,varI]
+
+
                     colnames(interpFrame)[cnt] <- years[[k]]
                     cnt = cnt + 1
                 } else {
                     # Exception for a single-point interpolation
                     varC <- paste(cur_ancVi,sep="")
                     if (varC %in% colnames(dta@data)) {
-                        add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
-                        eval(parse(text=add_data))
+
+
+                        # add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
+                        # eval(parse(text=add_data))
+                        interpFrame[cnt] <- dta@data[,varC]
+
+
                         cnt = 3
                     }
                 }
@@ -56,21 +93,27 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             if (cnt == 3) {
 
                 for (k in 1:length(years)) {
-                    varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
-                    eval(parse(text=varI))
+
+                    # varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
+                    # eval(parse(text=varI))
+                    dta@data[,cur_ancVi,years[[k]]] <- interpFrame[2]
                 }
 
             } else {
                 tDframe <- dta@data[idField]
-                
+
                 # Here, we model out everything. 
                 # Melt the dataframe for modeling
                 melt_Model_dta <- melt(data.frame(interpFrame),id=idField)
                 melt_Model_dta["variable"] <- as.numeric(gsub("X","",melt_Model_dta$variable))
                                                          
                 # Fit the model for interpolation
+                
                 execstr <- paste("mdl <- lm(value ~ variable + factor(",idField,"),data=melt_Model_dta)",sep="")
                 eval(parse(text=execstr))
+
+                # mdl <- lm(value ~ variable + factor(idField), data=melt_Model_dta)
+
 
                 # Apply the model to interpolate
                 for (u in 1:length(years)) {
@@ -94,7 +137,14 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     
     }
   
-  
+    timer <- proc.time() - timer
+    print(paste("section completed in", timer[3], "seconds."))
+
+
+
+    print("bts4")
+    timer <- proc.time()
+
     # Run the melts
     meltList <- list()
     for (i in 1:length(varList_pre)) {
@@ -125,6 +175,12 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         }
 
     }
+
+
+    timer <- proc.time() - timer
+    print(paste("section completed in", timer[3], "seconds."))
+
+
 
     # Finish up with a cherry on top
     meltListRet <- data.frame(meltList)

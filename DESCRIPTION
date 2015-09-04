@@ -1,4 +1,4 @@
-Package: SCI
+Package: SCI2
 Title: Spatial Cauasal Inference
 Version: 0.0.0.1
 Authors@R: person("Dan", "Runfola", , "drunfola@aiddata.org", role = c("aut", "cre"))

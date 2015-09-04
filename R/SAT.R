@@ -76,6 +76,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
         print("sat3.2")
         if (mtd == "fastNN") {
+            # ***
             # this is the slow part of functions
             temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
         }

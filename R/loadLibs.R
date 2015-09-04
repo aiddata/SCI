@@ -1,6 +1,5 @@
 #Library loading script in case dependencies are not loading correctly.
-loadLibs <- function (x=1)
-  {
+loadLibs <- function (x=1) {
   require(sp)
   #require(GISTools) # sudo apt-get install libgeos-dev
   require(maptools)
@@ -20,4 +19,4 @@ loadLibs <- function (x=1)
   library(stargazer)
   library(lmtest)
   library(multiwayvcov)
-  }
+}

@@ -14,10 +14,10 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         for (k in 1:length(years)) {
             for (j in 1:length(colYears)) {
 
-                varN <- paste("TrtMnt_", colYears[j], years[k], sep="")
+                varN <- paste("TrtMnt_",colYears[j],years[k], sep="")
 
                 print(varN)
-                exec <- paste("dta$",varN,"=0",sep="")
+                exec <- paste("dta$",varN,"=0", sep="")
                 eval(parse(text=exec))
 
                 # dta[,varN] = 0
@@ -37,8 +37,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     timer <- proc.time()
 
     for (j in 1:length(colYears)) {
-        trt_id = paste("TrtMnt_",colYears[j],sep="")
-        interpYears <- c(interpYears,trt_id)  
+        trt_id = paste("TrtMnt_",colYears[j], sep="")
+        interpYears <- c(interpYears, trt_id)  
     }
 
     print(interpYears)
@@ -65,7 +65,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             print("bts3.0.1")
             for (k in 1:length(years)) {
                 # First, build a model describing the relationship between years and any data in the interp field.
-                varI <- paste(cur_ancVi,years[[k]],sep="")
+                varI <- paste(cur_ancVi,years[[k]], sep="")
                 print(varI)
                 # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
                 if (varI %in% colnames(dta@data)) {
@@ -80,7 +80,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                     cnt = cnt + 1
                 } else {
                     # Exception for a single-point interpolation
-                    varC <- paste(cur_ancVi,sep="")
+                    varC <- paste(cur_ancVi, sep="")
                     if (varC %in% colnames(dta@data)) {
 
 
@@ -115,26 +115,25 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 # Here, we model out everything. 
 
                 # Melt the dataframe for modeling
-                melt_Model_dta <- melt(data.frame(interpFrame),id=idField)
+                melt_Model_dta <- melt(data.frame(interpFrame), id=idField)
                 melt_Model_dta["variable"] <- as.numeric(gsub("X","",melt_Model_dta$variable))
                 
 
                 # Fit the model for interpolation
                 
-                execstr <- paste("mdl <- lm(value ~ variable + factor(",idField,"),data=melt_Model_dta)",sep="")
+                execstr <- paste("mdl <- lm(value ~ variable + factor(",idField,"),data=melt_Model_dta)", sep="")
                 eval(parse(text=execstr))
-
                 # mdl <- lm(value ~ variable + factor(idField), data=melt_Model_dta)
 
 
                 # Apply the model to interpolate
                 for (u in 1:length(years)) {
-                    varI <- paste(cur_ancVi,years[[u]],sep="")
+                    varI <- paste(cur_ancVi,years[[u]], sep="")
                     if (!(varI %in% colnames(dta@data))) {
                         # Variable doesn't exist, so we need to interpolate.
                         tDframe[idField] <- dta@data[idField]
                         tDframe["variable"] <- years[[u]]
-                        dta@data[varI] <- predict(mdl,newdata=tDframe)
+                        dta@data[varI] <- predict(mdl, newdata=tDframe)
 
                     }
                 }
@@ -167,11 +166,11 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         grepStrYrs = idField
         for (j in 1:length(years)) {
             tempGrep <- grepStrYrs
-            grepStrYrs <- paste(tempGrep,"|",varList_pre[[i]],years[[j]],sep="")
+            grepStrYrs <- paste(tempGrep,"|",varList_pre[[i]],years[[j]], sep="")
         }
 
-        tDF <- dta@data[grepl(grepStrYrs,names(dta@data))]
-        meltList[[i]] <- melt(tDF,id=idField)
+        tDF <- dta@data[grepl(grepStrYrs, names(dta@data))]
+        meltList[[i]] <- melt(tDF, id=idField)
         
         # Keep only years in the year column, rename columns
         colnames(meltList[[i]])[2] <- "Year"

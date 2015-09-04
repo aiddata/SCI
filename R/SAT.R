@@ -7,6 +7,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     drop_method = drop_opts["drop_method"]
     drop_thresh = as.numeric(drop_opts["drop_thresh"])
   
+    print("sat1")
+
     if (!is.null(constraints)) {
         for (cst in 1:length(names(constraints))) {
             if(names(constraints)[cst] == "groups") {
@@ -28,7 +30,9 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         #max the distance threshold by taking the diagonal of the bounding box.
         dist_PSM = NULL
     }
-  
+
+    print("sat2")
+
     #Caclulate the number of groups to constrain by, if any.
     group_constraints <- unique(dta$ConstraintGroupSet_Opt)
   
@@ -60,6 +64,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             cnt = cnt + 1
         }
     }
+    print("sat3")
 
     temp_dta <- list()
 
@@ -77,6 +82,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
         }
     }
+    print("sat4")
 
     #Build the final datasets from subsets
     if (cnt > 1) {
@@ -88,6 +94,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
       dta <- temp_dta[[1]]
     }
 
+    print("sat5")
 
     if (drop_unmatched == TRUE) {
         dta <- dta[dta@data$PSM_match_ID != -999,]    
@@ -96,6 +103,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     anc_v_int <- strsplit(psm_eq, "~")[[1]][2]
     anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
     anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
+    
+    print("sat6")
   
     #Drop observations according to the selected method
     if (drop_method == "SD") {
@@ -112,6 +121,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     #observationalists about causal inference", Imal, King, and Stuart.
     #Simplest suggestion of comparing means and checking if .25 SD apart used.
     cnt = 0
+
+    print("sat7")
     
     for (i in 1:length(anc_vars)) {
         #gsub to remove any factors()
@@ -188,6 +199,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
         }
     }
+    
+    print("sat8")
   
     if (visual=="TRUE") {
         #Output graphics

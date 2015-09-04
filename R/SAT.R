@@ -11,13 +11,13 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
     if (!is.null(constraints)) {
         for (cst in 1:length(names(constraints))) {
-            if(names(constraints)[cst] == "groups") {
+            if (names(constraints)[cst] == "groups") {
                 # exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
                 # eval(parse(text=exec_stmnt))
-                dta[,"ConstraintGroupSet_Opt"] <- dta[,constraints["groups"]]
+                dta[["ConstraintGroupSet_Opt"]] <- dta[[constraints["groups"]]]
 
             } else {
-                dta$ConstraintGroupSet_Opt <- 1
+                dta[["ConstraintGroupSet_Opt"]] <- 1
             }
             if (names(constraints)[cst] == "distance") {
                 dist_PSM = as.numeric(constraints["distance"][[1]])
@@ -26,7 +26,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             }
         }
     } else {
-        dta$ConstraintGroupSet_Opt <- 1
+        dta[["ConstraintGroupSet_Opt"]] <- 1
         #max the distance threshold by taking the diagonal of the bounding box.
         dist_PSM = NULL
     }
@@ -34,7 +34,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     print("sat2")
 
     #Caclulate the number of groups to constrain by, if any.
-    group_constraints <- unique(dta$ConstraintGroupSet_Opt)
+    group_constraints <- unique(dta[["ConstraintGroupSet_Opt"]])
   
     #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
     t_dta <- list()
@@ -199,7 +199,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
         }
     }
-    
+
     print("sat8")
   
     if (visual=="TRUE") {

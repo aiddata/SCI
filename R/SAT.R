@@ -12,8 +12,6 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     if (!is.null(constraints)) {
         for (cst in 1:length(names(constraints))) {
             if (names(constraints)[cst] == "groups") {
-                # exec_stmnt = paste("dta$ConstraintGroupSet_Opt <- dta$",constraints["groups"],sep="")
-                # eval(parse(text=exec_stmnt))
                 dta[["ConstraintGroupSet_Opt"]] <- dta[[constraints["groups"]]]
 
             } else {
@@ -136,30 +134,13 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         ed_v = sub("factor\\(","",anc_vars[i])
         ed_v = sub(")","",ed_v)
 
-        # treat_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]],5)")
-        # treat_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
-        
-        # control_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[3]],5)")
-        # control_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[4]],5)")
-        
-        # treat_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]],5)")
-        # treat_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
-        
-        # control_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[3]],5)")
-        # control_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[4]],5)")
-       
-        # c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
         c_type = class(init_dta@data[[ed_v]])
 
         print("sat7.1")
         if (c_type == "matrix") {
 
-            # exec_str = paste("dta@data$",ed_v,"<- as.numeric(dta@data$",ed_v,")",sep="")
-            # eval(parse(text=exec_str))
             dta@data[[ed_v]] <- as.numeric(dta@data[[ed_v]])
 
-            # exec_str = paste("init_dta@data$",ed_v,"<- as.numeric(init_dta@data$",ed_v,")",sep="")
-            # eval(parse(text=exec_str))
             init_dta@data[[ed_v]] <- as.numeric(init_dta@data[[ed_v]])
 
             c_type = "numeric"
@@ -170,16 +151,6 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             cnt = cnt + 1
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
-
-            # treat_mean_pre <- eval(parse(text=treat_mean_pre))
-            # treat_SD_pre <- eval(parse(text=treat_SD_pre))
-            # control_mean_pre <- eval(parse(text=control_mean_pre))
-            # control_SD_pre <- eval(parse(text=control_SD_pre))
-
-            # treat_mean_post <- eval(parse(text=treat_mean_post))
-            # treat_SD_post <- eval(parse(text=treat_SD_post))
-            # control_mean_post <- eval(parse(text=control_mean_post))
-            # control_SD_post <- eval(parse(text=control_SD_post))
 
 
             treat_mean_pre <- round(describeBy(init_dta@data[[ed_v]], group=init_dta@data[[TrtBinColName]])[[2]][[3]], 5)

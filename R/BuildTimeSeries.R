@@ -2,8 +2,6 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     
     years <- startYear:endYear
 
-
-
     print("bts1")
     timer <- proc.time()
 
@@ -15,11 +13,10 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             for (j in 1:length(colYears)) {
 
                 varN <- paste("TrtMnt_",colYears[j],years[k], sep="")
-
                 print(varN)
+
                 exec <- paste("dta$",varN,"=0", sep="")
                 eval(parse(text=exec))
-
                 # dta[,varN] = 0
 
 
@@ -30,7 +27,6 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
-
 
 
     print("bts2")
@@ -45,7 +41,6 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
-
 
 
     print("bts3")
@@ -70,11 +65,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
                 if (varI %in% colnames(dta@data)) {
 
-
-                    # add_data <- paste("interpFrame[cnt] <- dta@data$",varI)
-                    # eval(parse(text=add_data))
                     interpFrame[cnt] <- dta@data[[varI]]
-
 
                     colnames(interpFrame)[cnt] <- years[[k]]
                     cnt = cnt + 1
@@ -83,16 +74,11 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                     varC <- paste(cur_ancVi, sep="")
                     if (varC %in% colnames(dta@data)) {
 
-
-                        # add_data <- paste("interpFrame[cnt] <- dta@data$",varC)
-                        # eval(parse(text=add_data))
                         interpFrame[cnt] <- dta@data[[varC]]
-
 
                         cnt = 3
                     }
                 }
-        
             }
 
             print("bts3.0.2")
@@ -102,9 +88,6 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             if (cnt == 3) {
 
                 for (k in 1:length(years)) {
-
-                    # varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
-                    # eval(parse(text=varI))
                     dta@data[[paste(cur_ancVi,years[[k]], sep="")]] <- interpFrame[2]
                 }
 
@@ -188,10 +171,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
     }
 
-
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
-
 
 
     # Finish up with a cherry on top

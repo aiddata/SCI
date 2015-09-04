@@ -14,15 +14,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     
 
     #Conduct the matching
-
-    # str_trted <- paste("treated <- sorted_dta[sorted_dta$",trtMntVar, "== 1,]",sep="")
-    # str_untrted <- paste("untreated <- sorted_dta[sorted_dta$",trtMntVar,"==0,]",sep="")
-    # eval(parse(text=str_trted))
-    # eval(parse(text=str_untrted))
-
     treated <- sorted_dta[sorted_dta[[trtMntVar]] == 1,]
     untreated <- sorted_dta[sorted_dta[[trtMntVar]] == 0,]
-
 
     it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
     dta@data[["match"]] <- -999
@@ -33,14 +26,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     #to perturb pairs based on their distances.  
     for (j in 1:it_cnt) {
 
-        # str_trted <- paste("treated <- sorted_dta[sorted_dta$",trtMntVar, "== 1,]",sep="")
-        # str_untrted <- paste("untreated <- sorted_dta[sorted_dta$",trtMntVar,"==0,]",sep="")
-        # eval(parse(text=str_trted))
-        # eval(parse(text=str_untrted))
-    
         treated <- sorted_dta[sorted_dta[[trtMntVar]] == 1,]
         untreated <- sorted_dta[sorted_dta[[trtMntVar]] ==0,]
-
 
         #Run the KNN for all neighbors. 
         k <- get.knnx(treated[["PSM_trtProb"]], untreated[["PSM_trtProb"]], 1)
@@ -49,25 +36,17 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         if (!is.null(dist_PSM)) {
             for (mC in 1:length(k[[1]])) {
                 #Calculate the Euclidean Distance between pairs
-                # cid_txt = paste("untreated$",ids,"[",mC,"]",sep="")
-                # Control_ID = toString(eval(parse(text=cid_txt)))
                 Control_ID = toString(untreated[[ids]][[mC]])
 
                 mT = k[["nn.index"]][mC]
                 
-                # tid_txt = paste("treated$",ids,"[",mT,"]",sep="")
-                # Treatment_ID = toString(eval(parse(text=tid_txt)))
-                Treatment_ID = toString(treated[[ids]][[mT]])
+                 Treatment_ID = toString(treated[[ids]][[mT]])
 
                 #Find the control x,y location
-                # cCoord_e = paste("coordinates(dta[which(dta@data$",ids," == Control_ID),])", sep="")
-                # cCoord = eval(parse(text=cCoord_e))
                 cCoord = coordinates(dta[which(dta@data[[ids]] == Control_ID),])
                 
 
                 #Find the treatment x,y location
-                # tCoord_e = paste("coordinates(dta[which(dta@data$",ids," == Treatment_ID),])", sep="")
-                # tCoord = eval(parse(text=tCoord_e))
                 tCoord = coordinates(dta[which(dta@data[[ids]] == Treatment_ID),])
 
                 y_dist = abs(cCoord[1] - cCoord[2])
@@ -93,13 +72,9 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         best_m_treated = k[["nn.index"]][best_m_control]
         
         #Control PSM ID
-        # cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
-        # Control_ID = toString(eval(parse(text=cid_txt)))
         Control_ID = toString(untreated[[ids]][[best_m_control]])    
 
         #Treatment PSM ID
-        # tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
-        # Treatment_ID = toString(eval(parse(text=tid_txt)))
         Treatment_ID = toString(treated[[ids]][[best_m_treated]])
 
 
@@ -108,33 +83,17 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         
 
         #Add the Treatment ID to the Control Row 
-        # tid_a_1 = paste("dta@data$match[which(dta@data$",ids," == Control_ID)] = Treatment_ID", sep="")
-        # tid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Control_ID)] = k$nn.dist[,1][best_m_control]",sep="")
-        # tid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Control_ID)] = pair_id", sep="")
-        # eval(parse(text=tid_a_1))
-        # eval(parse(text=tid_a_2))
-        # eval(parse(text=tid_a_3))
         dta@data$match[which(dta@data[[ids]] == Control_ID)] = Treatment_ID
         dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID)] = k[["nn.dist"]][,1][best_m_control]
         dta@data$PSM_match_ID[which(dta@data[[ids]] == Control_ID)] = pair_id        
         
         
         #Add the Control ID to the Treatment Row
-        # cid_a_1 = paste("dta@data$match[which(dta@data$",ids," == Treatment_ID)] = Control_ID", sep="")
-        # cid_a_2 = paste("dta@data$PSM_distance[which(dta@data$",ids," == Treatment_ID)] = k$nn.dist[,1][best_m_control]", sep="")
-        # cid_a_3 = paste("dta@data$PSM_match_ID[which(dta@data$",ids," == Treatment_ID)] = pair_id", sep="")
-        # eval(parse(text=cid_a_1))
-        # eval(parse(text=cid_a_2))
-        # eval(parse(text=cid_a_3))
         dta@data[["match"]][which(dta@data[[ids]] == Treatment_ID)] = Control_ID
         dta@data[["PSM_distance"]][which(dta@data[[ids]] == Treatment_ID)] = k[["nn.dist"]][,1][best_m_control]
         dta@data[["PSM_match_ID"]][which(dta@data[[ids]] == Treatment_ID)] = pair_id        
         
         #Drop the paired match out of the iteration matrix 
-        # did_a_1 = paste("sorted_dta <- sorted_dta[sorted_dta$",ids,"!= Treatment_ID ,]",sep="")
-        # did_a_2 = paste("sorted_dta <- sorted_dta[sorted_dta$",ids,"!= Control_ID ,]",sep="")
-        # eval(parse(text=did_a_1))
-        # eval(parse(text=did_a_2))
         sorted_dta <- sorted_dta[sorted_dta[[ids]] != Treatment_ID ,]
         sorted_dta <- sorted_dta[sorted_dta[[ids]] != Control_ID ,]    
     

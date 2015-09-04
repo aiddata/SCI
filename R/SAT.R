@@ -70,9 +70,11 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
     for (i in 1:cnt) {
         cur_grp <- grp_list[[i]]
+
+        print("sat3.1")
         it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
 
-  
+        print("sat3.2")
         if (mtd == "fastNN") {
             temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
         }
@@ -143,19 +145,21 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         # c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
         c_type = class(init_dta@data[,ed_v])
 
+        print("sat7.1")
         if (c_type == "matrix") {
 
             # exec_str = paste("dta@data$",ed_v,"<- as.numeric(dta@data$",ed_v,")",sep="")
             # eval(parse(text=exec_str))
-            dta@data[,ed_v] <- as.numeric(dta@data[,ed_v])
+            dta@data[[ed_v]] <- as.numeric(dta@data[[ed_v]])
 
             # exec_str = paste("init_dta@data$",ed_v,"<- as.numeric(init_dta@data$",ed_v,")",sep="")
             # eval(parse(text=exec_str))
-            init_dta@data[,ed_v] <- as.numeric(init_dta@data[,ed_v])
+            init_dta@data[[ed_v]] <- as.numeric(init_dta@data[[ed_v]])
 
             c_type = "numeric"
         }
 
+        print("sat7.2")
         if ((c_type == "numeric") & (visual == "TRUE")) {
             cnt = cnt + 1
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
@@ -174,7 +178,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             it_diff_Mean_pre <- round(abs( treat_mean_pre-control_mean_pre ),5)
             it_diff_Mean_post <- round(abs(treat_mean_post-control_mean_post),5)
 
-            if(!exists("bRes")) {
+            if (!exists("bRes")) {
                 bRes <- data.frame(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                            treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                            it_diff_Mean_pre,it_diff_Mean_post)
@@ -207,9 +211,9 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         #Remove the factor rows
         nrow_c <- length(pltObjs)
         counter <- 1
-        while(counter <= nrow_c) {
+        while (counter <= nrow_c) {
             d = counter + 3
-            if(d > nrow_c) {
+            if (d > nrow_c) {
                 d = nrow_c
             }
             do.call(grid.arrange,c(pltObjs[counter:d],nrow=2,ncol=2))

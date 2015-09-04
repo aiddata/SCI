@@ -6,7 +6,7 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {}
     if (mtd == "logit") {
         # generalized linear model
         PSMfit <- glm(mdl, dta@data, family="binomial")
-    else if (mtd == "lm") {
+    } else if (mtd == "lm") {
         # linear model
         PSMfit <- lm(mdl, dta@data)
     }

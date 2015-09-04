@@ -10,7 +10,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     #Fast nearest neighbors search - will not arrive at optimum,
     #but this may not be an issue for many analysis.
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
-    sorted_dta <- dta@data[order(dta@data$PSM_trtProb),]
+    sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]),]
     
 
     #Conduct the matching
@@ -53,7 +53,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
                 # Control_ID = toString(eval(parse(text=cid_txt)))
                 Control_ID = toString(untreated[[ids]][[mC]])
 
-                mT = k$nn.index[mC]
+                mT = k[["nn.index"]][mC]
                 
                 # tid_txt = paste("treated$",ids,"[",mT,"]",sep="")
                 # Treatment_ID = toString(eval(parse(text=tid_txt)))
@@ -74,12 +74,12 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
                 x_dist = abs(tCoord[1] - tCoord[2])
                 euc_dist = sqrt(y_dist^2 + x_dist^2)
                 
-                PSM_score = k$nn.dist[mC]
+                PSM_score = k[["nn.dist"]][mC]
                 geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
 
 
                 
-                k$nn.dist[mC] <- ((1-geog_Weight) * PSM_score)
+                k[["nn.dist"]][mC] <- ((1-geog_Weight) * PSM_score)
 
             }
       
@@ -87,10 +87,10 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     
         #Add the matched treatment and control values to the recording data frame
         #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.
-        best_m_control = which(k$nn.dist %in% sort(k$nn.dist)[1])
+        best_m_control = which(k[["nn.dist"]] %in% sort(k[["nn.dist"]])[1])
         
         #This will give us the matched index in the "treated" dataset.
-        best_m_treated = k$nn.index[best_m_control]
+        best_m_treated = k[["nn.index"]][best_m_control]
         
         #Control PSM ID
         # cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
@@ -115,7 +115,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # eval(parse(text=tid_a_2))
         # eval(parse(text=tid_a_3))
         dta@data$match[which(dta@data[[ids]] == Control_ID)] = Treatment_ID
-        dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID)] = k$nn.dist[,1][best_m_control]
+        dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID)] = k[["nn.dist"]][,1][best_m_control]
         dta@data$PSM_match_ID[which(dta@data[[ids]] == Control_ID)] = pair_id        
         
         
@@ -126,9 +126,9 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # eval(parse(text=cid_a_1))
         # eval(parse(text=cid_a_2))
         # eval(parse(text=cid_a_3))
-        dta@data$match[which(dta@data[[ids]] == Treatment_ID)] = Control_ID
-        dta@data$PSM_distance[which(dta@data[[ids]] == Treatment_ID)] = k$nn.dist[,1][best_m_control]
-        dta@data$PSM_match_ID[which(dta@data[[ids]] == Treatment_ID)] = pair_id        
+        dta@data[["match"]][which(dta@data[[ids]] == Treatment_ID)] = Control_ID
+        dta@data[["PSM_distance"]][which(dta@data[[ids]] == Treatment_ID)] = k[["nn.dist"]][,1][best_m_control]
+        dta@data[["PSM_match_ID"]][which(dta@data[[ids]] == Treatment_ID)] = pair_id        
         
         #Drop the paired match out of the iteration matrix 
         # did_a_1 = paste("sorted_dta <- sorted_dta[sorted_dta$",ids,"!= Treatment_ID ,]",sep="")

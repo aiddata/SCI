@@ -46,20 +46,20 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         grp_index = length(grp_list)+1
         t_index = length(t_dta)+1
         grp_list[[grp_index]] <- as.matrix(group_constraints)[grp]
-        t_dta[[t_index]] <- dta[dta$TrtBin == 1,]
-        u_dta[[t_index]] <- dta[dta$TrtBin == 0,]
-        treatment_count <- cur_grp %in% t_dta[[t_index]]$ConstraintGroupSet_Opt
-        untreated_count <- cur_grp %in% u_dta[[t_index]]$ConstraintGroupSet_Opt
+        t_dta[[t_index]] <- dta[dta[["TrtBin"]] == 1,]
+        u_dta[[t_index]] <- dta[dta[["TrtBin"]] == 0,]
+        treatment_count <- cur_grp %in% t_dta[[t_index]][["ConstraintGroupSet_Opt"]]
+        untreated_count <- cur_grp %in% u_dta[[t_index]][["ConstraintGroupSet_Opt"]]
         if ((untreated_count == FALSE) || (treatment_count == FALSE)) {
-            dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
+            dta <- dta[!dta[["ConstraintGroupSet_Opt"]] == cur_grp,]
             t_dta[[t_index]] <- NULL
             u_dta[[t_index]] <- NULL
             grp_list[[t_index]] <- NULL
             war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
             warning(war_statement)
         } else { 
-            t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
-            u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
+            t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]][["ConstraintGroupSet_Opt"]] == cur_grp,]
+            u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]][["ConstraintGroupSet_Opt"]] == cur_grp,]
         
             cnt = cnt + 1
         }
@@ -76,9 +76,10 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
         print("sat3.2")
         if (mtd == "fastNN") {
+            # this is the slow part of functions
             temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
         }
-  
+
         if (mtd == "NN_WithReplacement") {
             print("NN with replacement is currently not available, please choose fastNN")
             # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
@@ -99,7 +100,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     print("sat5")
 
     if (drop_unmatched == TRUE) {
-        dta <- dta[dta@data$PSM_match_ID != -999,]    
+        dta <- dta[dta@data[["PSM_match_ID"]] != -999,]    
     }
   
     anc_v_int <- strsplit(psm_eq, "~")[[1]][2]
@@ -111,11 +112,11 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     #Drop observations according to the selected method
     if (drop_method == "SD") {
         #Method to drop pairs that are greater than a set threshold apart in terms of PSM Standard Deviations.
-        psm_sd_thresh = sd(dta$PSM_trtProb) * drop_thresh
+        psm_sd_thresh = sd(dta[["PSM_trtProb"]]) * drop_thresh
         if (visual == "TRUE") {
             print(psm_sd_thresh)
         }
-        dta <- dta[dta@data$PSM_distance < psm_sd_thresh,]
+        dta <- dta[dta@data[["PSM_distance"]] < psm_sd_thresh,]
     }
   
     #Plot the pre and post-dropping balance for PSM model...
@@ -127,23 +128,27 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     print("sat7")
     
     for (i in 1:length(anc_vars)) {
+
+        print("sat7.0")
+
         #gsub to remove any factors()
         ed_v = sub("factor\\(","",anc_vars[i])
         ed_v = sub(")","",ed_v)
-        treat_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]],5)")
-        treat_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
+
+        # treat_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[3]],5)")
+        # treat_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[2]][[4]],5)")
         
-        control_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[3]],5)")
-        control_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[4]],5)")
+        # control_mean_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[3]],5)")
+        # control_SD_pre = paste("round(describeBy(init_dta@data$",ed_v,", group=init_dta@data$",TrtBinColName,")[[1]][[4]],5)")
         
-        treat_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]],5)")
-        treat_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
+        # treat_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[3]],5)")
+        # treat_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[2]][[4]],5)")
         
-        control_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[3]],5)")
-        control_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[4]],5)")
+        # control_mean_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[3]],5)")
+        # control_SD_post = paste("round(describeBy(dta@data$",ed_v,", group=dta@data$",TrtBinColName,")[[1]][[4]],5)")
        
         # c_type = eval(parse(text=paste("class(init_dta@data$",ed_v,")")))
-        c_type = class(init_dta@data[,ed_v])
+        c_type = class(init_dta@data[[ed_v]])
 
         print("sat7.1")
         if (c_type == "matrix") {
@@ -165,23 +170,37 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
 
-            treat_mean_pre <- eval(parse(text=treat_mean_pre))
-            treat_SD_pre <- eval(parse(text=treat_SD_pre))
-            control_mean_pre <- eval(parse(text=control_mean_pre))
-            control_SD_pre <- eval(parse(text=control_SD_pre))
+            # treat_mean_pre <- eval(parse(text=treat_mean_pre))
+            # treat_SD_pre <- eval(parse(text=treat_SD_pre))
+            # control_mean_pre <- eval(parse(text=control_mean_pre))
+            # control_SD_pre <- eval(parse(text=control_SD_pre))
 
-            treat_mean_post <- eval(parse(text=treat_mean_post))
-            treat_SD_post <- eval(parse(text=treat_SD_post))
-            control_mean_post <- eval(parse(text=control_mean_post))
-            control_SD_post <- eval(parse(text=control_SD_post))
+            # treat_mean_post <- eval(parse(text=treat_mean_post))
+            # treat_SD_post <- eval(parse(text=treat_SD_post))
+            # control_mean_post <- eval(parse(text=control_mean_post))
+            # control_SD_post <- eval(parse(text=control_SD_post))
+
+
+            treat_mean_pre <- round(describeBy(init_dta@data[[ed_v]], group=init_dta@data[[TrtBinColName]])[[2]][[3]], 5)
+            treat_SD_pre <- round(describeBy(init_dta@data[[ed_v]], group=init_dta@data[[TrtBinColName]])[[2]][[4]], 5)
+            control_mean_pre <- round(describeBy(init_dta@data[[ed_v]], group=init_dta@data[[TrtBinColName]])[[1]][[3]], 5)
+            control_SD_pre <- round(describeBy(init_dta@data[[ed_v]], group=init_dta@data[[TrtBinColName]])[[1]][[4]], 5)
+
+            treat_mean_post <- round(describeBy(dta@data[[ed_v]], group=dta@data[[TrtBinColName]])[[2]][[3]], 5)
+            treat_SD_post <- round(describeBy(dta@data[[ed_v]], group=dta@data[[TrtBinColName]])[[2]][[4]], 5)
+            control_mean_post <- round(describeBy(dta@data[[ed_v]], group=dta@data[[TrtBinColName]])[[1]][[3]], 5)
+            control_SD_post <- round(describeBy(dta@data[[ed_v]], group=dta@data[[TrtBinColName]])[[1]][[4]], 5)
+
 
             it_diff_Mean_pre <- round(abs( treat_mean_pre-control_mean_pre ),5)
             it_diff_Mean_post <- round(abs(treat_mean_post-control_mean_post),5)
 
             if (!exists("bRes")) {
+
                 bRes <- data.frame(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                            treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                            it_diff_Mean_pre,it_diff_Mean_post)
+
                 colnames(bRes)[1] <- "Pre-Balance Treated Mean"
                 colnames(bRes)[2] <- "Pre-Balance Treated SD"
                 colnames(bRes)[3] <- "Pre-Balance Control Mean"
@@ -194,13 +213,14 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
                 colnames(bRes)[9] <- "Mean Difference Pre-Balance"
                 colnames(bRes)[10] <- "Mean Difference Post-Balance"
+
             } else {
                 bRes <- rbind(bRes, c(treat_mean_pre,treat_SD_pre,control_mean_pre,control_SD_pre,
                               treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                               it_diff_Mean_pre,it_diff_Mean_post))
             }
       
-            rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]","",ed_v)
+            rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]", "", ed_v)
         }
     }
 

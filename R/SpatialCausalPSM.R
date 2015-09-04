@@ -1,4 +1,4 @@
-SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {}
+SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
     # Initialization
     pltObjs <- list()
     

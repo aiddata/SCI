@@ -103,7 +103,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                     # varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
                     # eval(parse(text=varI))
-                    dta@data[[paste(cur_ancVi,years[[k]]], sep="")]] <- interpFrame[2]
+                    dta@data[[paste(cur_ancVi,years[[k]], sep="")]] <- interpFrame[2]
                 }
 
             } else {

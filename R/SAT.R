@@ -138,7 +138,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
             # exec_str = paste("init_dta@data$",ed_v,"<- as.numeric(init_dta@data$",ed_v,")",sep="")
             # eval(parse(text=exec_str))
-            init_dta@data[,ed_v] <- as.numeric(init_dta@data[,ed_v])
+            init_dta@data[[ed_v]] <- as.numeric(init_dta@data[[ed_v])
 
             c_type = "numeric"
         }

@@ -16,11 +16,11 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                 varN <- paste("TrtMnt_", colYears[j], years[k], sep="")
 
+                print(varN)
+                exec <- paste("dta$",varN,"=0",sep="")
+                eval(parse(text=exec))
 
-                # exec <- paste("dta$",varN,"=0",sep="")
-                # eval(parse(text=exec))
-
-                dta[,varN] = 0
+                # dta[,varN] = 0
 
 
                 dta@data[varN][dta@data[colYears[j]] <= as.numeric(years[k])] <- 1

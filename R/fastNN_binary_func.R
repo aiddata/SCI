@@ -40,7 +40,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
                 mT = k[["nn.index"]][mC]
                 
-                 Treatment_ID = toString(treated[[ids]][[mT]])
+                Treatment_ID = toString(treated[[ids]][[mT]])
 
                 #Find the control x,y location
                 cCoord = coordinates(dta[which(dta@data[[ids]] == Control_ID),])

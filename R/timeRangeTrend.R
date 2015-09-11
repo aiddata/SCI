@@ -11,10 +11,14 @@ timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield) {
     analysisDF <- melt(tDF, id=c(IDfield))
     
     # cleaned GREP - remove year digit placeholders
-    new_pre <- gsub("[0-9]", "", prefix, fixed=TRUE)
+    # new_pre <- gsub("[0-9]", "", prefix, fixed=TRUE)
+
+    # get location of year in prefix
+    yIndex <- regexpr("[0-9]", prefix, fixed=TRUE)
 
     # generate new year field by removing prefix from variable (original column names)
-    analysisDF["Year"] <- lapply(analysisDF["variable"], FUN=function(x) as.numeric(gsub(new_pre, "", x)))
+    # analysisDF["Year"] <- lapply(analysisDF["variable"], FUN=function(x) as.numeric(gsub(new_pre, "", x)))
+    analysisDF["Year"] <- lapply(analysisDF["variable"], FUN=function(x) as.numeric(substr(x, yIndex[1], yIndex[1]+3)))
 
     # keep years in range specified
     analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]

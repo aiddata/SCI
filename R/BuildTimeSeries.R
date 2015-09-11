@@ -65,7 +65,7 @@ BuildTimeSeries <- function(dta,idField,varList_pre,startYear,endYear,colYears=N
             varI <- paste("dta@data$",cur_ancVi,years[[k]]," <- interpFrame[2]",sep="")
             eval(parse(text=varI))
           }
-        } else {
+        } else if (cnt < length(years) + 2) {
         tDframe <- dta@data[idField]
         #Here, we model out everything. 
         #Melt the dataframe for modeling

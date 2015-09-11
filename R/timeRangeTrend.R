@@ -1,6 +1,6 @@
 # run linear model on data within year range as specified
 # by field prefix and return coefficients
-timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield) {
+timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield, thresh=0.5) {
 
     # create new dataframe from all columns in dta dataframe that 
     # are either the ID or a year which is indicated by the prefix
@@ -35,14 +35,27 @@ timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield) {
         # get all data corresponding to id from analysis dataframe
         ID_dat <- analysisDF[analysisDF[IDfield] == ID,]
 
-        # fit trend model
-        trend_mod <- lm(value ~ Year, data=ID_dat)
+        dat_length <-length(ID_dat)
+        count_na <-sum(is.na(ID_dat[['value']])) 
+        count_non_na <- dat_length - count_na
+        percent_na <- count_na / dat_length
 
-        # add trend coefficients to new field
-        dta@data["newfieldID"][i,] <- summary(trend_mod)$coefficients[2]
+        # if number of NAs is over threshold or if less than 2 points of data are not NA, return NA
+        if (percent_na > thresh || count_non_na < 2) {
+            
+            dta@data["newfieldID"][i,] <- NA
+        
+        } else {
+            # fit trend model
+            trend_mod <- lm(value ~ Year, data=ID_dat, na.action = na.omit)
+      
+            # add trend coefficients to new field
+            dta@data["newfieldID"][i,] <- summary(trend_mod)$coefficients[2]
+        }
+
     }
     
     # return new field with trend coefficients
-    return(dta$newfieldID)
+    return(dta[["newfieldID"]])
     
 }

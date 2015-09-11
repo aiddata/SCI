@@ -32,6 +32,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     print("bts2")
     timer <- proc.time()
 
+
+    # add the "TrtMnt_" + colYears[j] prefix to interpYears
     for (j in 1:length(colYears)) {
         trt_id = paste("TrtMnt_",colYears[j], sep="")
         interpYears <- c(interpYears, trt_id)  
@@ -60,24 +62,21 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             print("bts3.0.1")
             for (k in 1:length(years)) {
                 # First, build a model describing the relationship between years and any data in the interp field.
-                varI <- paste(cur_ancVi,years[[k]], sep="")
-                print(varI)
+
                 # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
+                varI <- gsub('####', years[[k]], cur_ancVi)
                 if (varI %in% colnames(dta@data)) {
 
                     interpFrame[cnt] <- dta@data[[varI]]
-
                     colnames(interpFrame)[cnt] <- years[[k]]
                     cnt = cnt + 1
-                } else {
+
+                } else if (cur_ancVi %in% colnames(dta@data)) {
+
                     # Exception for a single-point interpolation
-                    varC <- paste(cur_ancVi, sep="")
-                    if (varC %in% colnames(dta@data)) {
-
-                        interpFrame[cnt] <- dta@data[[varC]]
-
-                        cnt = 3
-                    }
+                    interpFrame[cnt] <- dta@data[[cur_ancVi]]
+                    cnt = 3
+                    
                 }
             }
 
@@ -88,7 +87,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             if (cnt == 3) {
 
                 for (k in 1:length(years)) {
-                    dta@data[[paste(cur_ancVi,years[[k]], sep="")]] <- interpFrame[2]
+                    # add _year to end of non temporal data
+                    dta@data[[paste(cur_ancVi,years[[k]],sep="_")]] <- interpFrame[2]
                 }
 
             } else if (cnt < length(years) + 2) {
@@ -99,7 +99,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                 # Melt the dataframe for modeling
                 melt_Model_dta <- melt(data.frame(interpFrame), id=idField)
-                melt_Model_dta["variable"] <- as.numeric(gsub("X","",melt_Model_dta[["variable"]]))
+                melt_Model_dta["variable"] <- as.numeric(gsub("X", "", melt_Model_dta[["variable"]]))
                 
 
                 # Fit the model for interpolation
@@ -111,7 +111,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                 # Apply the model to interpolate
                 for (u in 1:length(years)) {
-                    varI <- paste(cur_ancVi,years[[u]], sep="")
+
+                    varI <- gsub('####', years[[u]], cur_ancVi)
                     if (!(varI %in% colnames(dta@data))) {
                         # Variable doesn't exist, so we need to interpolate.
                         tDframe[idField] <- dta@data[idField]
@@ -144,13 +145,21 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     meltList <- list()
     for (i in 1:length(varList_pre)) {
 
-        # grep_str = paste(idField,"|",varList_pre[i],"[0-9][0-9][0-9][0-9]",sep="")
+
         # Limit to only relevant years
         grepStrYrs = idField
+
         for (j in 1:length(years)) {
             tempGrep <- grepStrYrs
-            grepStrYrs <- paste(tempGrep,"|",varList_pre[[i]],years[[j]], sep="")
+
+            if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
+                grepStrYrs <- paste(tempGrep,"|",paste(varList_pre[[i]]],years[[j]], sep="_"), sep="")
+            } else {
+                grepStrYrs <- paste(tempGrep,"|",gsub('####', years[[j]], varList_pre[[i]]]), sep="")
+            }
         }
+    
+
 
         tDF <- dta@data[grepl(grepStrYrs, names(dta@data))]
         meltList[[i]] <- melt(tDF, id=idField)

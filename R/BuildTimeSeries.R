@@ -153,9 +153,9 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             tempGrep <- grepStrYrs
 
             if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
-                grepStrYrs <- paste(tempGrep,"|",paste(varList_pre[[i]]],years[[j]], sep="_"), sep="")
+                grepStrYrs <- paste(tempGrep,"|",paste(varList_pre[[i]],years[[j]], sep="_"), sep="")
             } else {
-                grepStrYrs <- paste(tempGrep,"|",gsub('####', years[[j]], varList_pre[[i]]]), sep="")
+                grepStrYrs <- paste(tempGrep,"|",gsub('####', years[[j]], varList_pre[[i]]), sep="")
             }
         }
     

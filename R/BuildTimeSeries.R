@@ -81,6 +81,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 }
             }
 
+            print(cnt)
+
             print("bts3.0.2")
             # this is a slow part
 

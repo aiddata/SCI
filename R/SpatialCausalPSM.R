@@ -1,11 +1,12 @@
 SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
+
     # Initialization
     pltObjs <- list()
-    
+
     # generate model based on method
     if (mtd == "logit") {
         # generalized linear model
-        PSMfit <- glm(mdl, dta@data, family="binomial")
+        PSMfit <- glm(mdl, dta@data, family="binomial", na.action=na.omit)
     } else if (mtd == "lm") {
         # linear model
         PSMfit <- lm(mdl, dta@data)
@@ -16,8 +17,8 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
 
     # predict values based on model
     retData[["PSM_trtProb"]] <- predict(PSMfit, dta@data, type="response")
-    
-    
+
+
     if (visual == "TRUE") {
         # Show user distributions.
         pltObjs[[1]] <- GroupCompHist(retData, "PSM_trtProb", "Initial PSM Balance", simple_out=FALSE)
@@ -26,7 +27,7 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
 
     # Second, if a drop parameter - if set to "support", remove observations
     # that don't overlap in the PSM distribution.
-    if (drop == "support") {
+    #if (drop == "support") {
         
         # Drop
         treated <- retData@data[retData@data[["TrtBin"]] == 1,]
@@ -37,8 +38,8 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
         retData <- retData[!is.na(retData@data[["PSM_trtProb"]]),]
         retData <- retData[retData@data[["PSM_trtProb"]] >= min_cut,]    
         retData <- retData[retData@data[["PSM_trtProb"]] <= max_cut,] 
-
-    }
+        
+    #}
 
     if (visual == "TRUE") {
         # Post drop histograms
@@ -53,5 +54,3 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
     retEle <- c()
     retEle$data <- retData
     retEle$model <- PSMfit
-    return (retEle)
-}

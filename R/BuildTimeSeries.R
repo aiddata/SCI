@@ -1,5 +1,7 @@
 BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colYears=NULL, interpYears=NULL) {
     
+    print(varList_pre)
+    
     years <- startYear:endYear
 
     print("bts1")

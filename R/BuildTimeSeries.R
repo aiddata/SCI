@@ -64,23 +64,25 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             cnt = 2
 
             print("bts3.0.1")
-            for (k in 1:length(years)) {
-                # First, build a model describing the relationship between years and any data in the interp field.
-
-                # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
-                varI <- gsub('####', years[[k]], cur_ancVi)
-                if (varI %in% colnames(dta@data)) {
-
-                    interpFrame[cnt] <- dta@data[[varI]]
-                    colnames(interpFrame)[cnt] <- years[[k]]
-                    cnt = cnt + 1
-
-                } else if (cur_ancVi %in% colnames(dta@data)) {
-
+            if (cur_ancVi %in% colnames(dta@data)) {
+                    print("IN!!")
                     # Exception for a single-point interpolation
                     interpFrame[cnt] <- dta@data[[cur_ancVi]]
                     cnt = 3
                     
+            } else {
+                for (k in 1:length(years)) {
+                    # First, build a model describing the relationship between years and any data in the interp field.
+
+                    # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
+                    varI <- gsub('####', years[[k]], cur_ancVi)
+                    if (varI %in% colnames(dta@data)) {
+
+                        interpFrame[cnt] <- dta@data[[varI]]
+                        colnames(interpFrame)[cnt] <- years[[k]]
+                        cnt = cnt + 1
+
+                    } 
                 }
             }
 

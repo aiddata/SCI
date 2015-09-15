@@ -188,9 +188,16 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         print("bts3.4")
 
         # Clean up year column
-        gsub_command <- paste("^",varList_pre[[i]],sep="")
-        meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
+        # gsub_command <- paste("^",varList_pre[[i]],sep="")
+        # meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
         
+        if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
+            meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {return substr(z,regexpr("####", varList_pre[[i]], fixed=TRUE)[1],nchar("####")})
+        } else {
+            meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {return substr(z,nchar(z)-nchar("####")+1,nchar(z)})
+        }
+
+
         print("bts3.5")
 
         # Remove ID and year if this is at least the second variable to avoid duplications.

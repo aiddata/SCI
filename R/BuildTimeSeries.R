@@ -231,7 +231,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         })
     }
 
-    colnames(meltListRet) <- lapply(colnames(meltListRet), function (z) {return gsub("....", "#####", z, fixed=TRUE)})
+    colnames(meltListRet) <- lapply(colnames(meltListRet), function (z) {return(gsub("....", "#####", z, fixed=TRUE))})
 
     return(meltListRet)
 }

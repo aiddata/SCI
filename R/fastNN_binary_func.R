@@ -7,6 +7,8 @@
 
 fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
+    print("nn1.0")
+
     #Fast nearest neighbors search - will not arrive at optimum,
     #but this may not be an issue for many analysis.
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
@@ -21,6 +23,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     dta@data[["match"]] <- -999
     dta@data[["PSM_distance"]] <- -999
     dta@data[["PSM_match_ID"]] <- -999
+
+    print("nn2.0")
 
     #Calculate a distance decay function
     #to perturb pairs based on their distances.  
@@ -63,7 +67,9 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
             }
       
         }
-    
+
+        print("nn3.0")
+
         #Add the matched treatment and control values to the recording data frame
         #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.
         best_m_control = which(k[["nn.dist"]] %in% sort(k[["nn.dist"]])[1])
@@ -81,7 +87,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
         pair_id = paste(curgrp,j,sep="")
         
-
+        print("nn4.0")
+        
         #Add the Treatment ID to the Control Row 
         dta@data$match[which(dta@data[[ids]] == Control_ID)] = Treatment_ID
         dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID)] = k[["nn.dist"]][,1][best_m_control]

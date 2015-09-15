@@ -133,9 +133,10 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
         print("bts3.1")        
         # Append interpolated fields to our melting lists
-        for (v in 1:length(interpYears)) {
-            varList_pre[[length(varList_pre)+1]] <- interpYears[v]
-        }
+        varList_pre <- c(varList_pre, interpYears)
+        # for (v in 1:length(interpYears)) {
+        #     varList_pre[[length(varList_pre)+1]] <- interpYears[v]
+        # }
     
     }
   

@@ -193,11 +193,15 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         
         if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
             meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-                return(substr(z,nchar(z)-nchar("####")+1,nchar(z)))
-                })
+                print(z)
+                return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
+            })
 
         } else {
-            meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {return(substr(z,regexpr("####", varList_pre[[i]], fixed=TRUE)[1],nchar("####")))})
+            meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
+                print(z)
+                return(substr(z, regexpr("####", varList_pre[[i]], fixed=TRUE)[1], nchar("####")))
+            })
 
         }
 

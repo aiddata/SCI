@@ -91,7 +91,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 print("bts2.0.2a")
                 for (k in 1:length(years)) {
                     # add _year to end of non temporal data
-                    dta@data[,paste(cur_ancVi,years[[k]],sep="_")] <- interpFrame[2]
+                    dta@data[paste(cur_ancVi,years[[k]],sep="_")] <- interpFrame[2]
                 }
 
             } else if (cnt < length(years) + 2) {

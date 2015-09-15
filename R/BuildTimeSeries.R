@@ -28,6 +28,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
 
+    print(colnames(dta))
 
     print("bts2")
     timer <- proc.time()

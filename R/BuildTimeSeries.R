@@ -195,27 +195,15 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
         print("bts3.5")
 
-        if (i > 1) {
+        if (i == 1) {
+            # set field to use for regex when formatting year field later
+            year_regex_field <- varList_pre[[i]]
+
+        } else {
             # remove id and year after first pass to avoid duplications
             meltList[[i]] <- meltList[[i]][3]
 
-        } #else {
-            # for first pass format year 
-
-            # meltList[[i]][2] <- lapply(meltList[[i]][2], as.character)
-
-            # if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
-            #     meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-            #         return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
-            #     })
-
-            # } else {
-            #     meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-            #         return(substr(z, regexpr("####", varList_pre[[i]], fixed=TRUE)[1], nchar("####")))
-            #     })
-
-            # }
-        # }
+        }
 
     }
 
@@ -228,9 +216,24 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
     print("bts4")
 
-    # Finish up with a cherry on top
+    # convert meltList to data frame
     meltListRet <- data.frame(meltList)
-  
+
+    # format year 
+    meltListRet['Year'] <- lapply(meltListRet['Year'], as.character)
+
+    if (regexpr("####", year_regex_field, fixed=TRUE)[1] == -1) {
+        meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
+            return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
+        })
+
+    } else {
+        meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
+            return(substr(z, regexpr("####", year_regex_field, fixed=TRUE)[1], nchar("####")))
+        })
+
+    }
+
     return(meltListRet)
 }
 

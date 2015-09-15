@@ -175,7 +175,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         meltList[[i]] <- melt(tDF, id=idField)
         
         print("bts4.2")
-
+        print(colnames(meltList[[i]]))
         # Keep only years in the year column, rename columns
         colnames(meltList[[i]])[2] <- "Year"
 

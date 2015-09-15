@@ -168,6 +168,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 grepStrYrs <- paste(tempGrep,"|",gsub('####', years[[j]], varList_pre[[i]]), sep="")
             }
         }
+
         print(grepStrYrs)
 
         print("bts3.1")
@@ -193,13 +194,15 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         
         if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
             meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-                print(z)
+                # print(z)
+                z = toString(z)
                 return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
             })
 
         } else {
             meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-                print(z)
+                # print(z)
+                z = toString(z)
                 return(substr(z, regexpr("####", varList_pre[[i]], fixed=TRUE)[1], nchar("####")))
             })
 

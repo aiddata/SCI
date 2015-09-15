@@ -219,7 +219,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     meltListRet <- data.frame(meltList)
 
     # format year
-    regex_test <-regexpr("####", year_regex_field, fixed=TRUE)[1]
+    regex_test <- regexpr("####", year_regex_field, fixed=TRUE)[1]
     if (regex_test > -1) {
         meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
             return(as.numeric(substr(z, regex_test, regex_test+nchar("####")-1)))
@@ -230,6 +230,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             return(as.numeric(substr(z, nchar(z)-nchar("####")+1, nchar(z))))
         })
     }
+
+    colnames(meltListRet) <- lapply(colnames(meltListRet), function (z) {return gsub("....", "#####", z, fixed=TRUE)})
 
     return(meltListRet)
 }

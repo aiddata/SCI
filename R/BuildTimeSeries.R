@@ -169,7 +169,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 grepStrYrs <- paste(tempGrep,"|",gsub('####', years[[j]], varList_pre[[i]]), sep="")
             }
         }
-    
+        print(grepStrYrs)
+
         print("bts4.1")
 
 

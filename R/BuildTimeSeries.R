@@ -192,28 +192,29 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         # gsub_command <- paste("^",varList_pre[[i]],sep="")
         # meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
         
-        # if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
-        #     meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-        #         # print(z)
-        #         z = toString(z)
-        #         return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
-        #     })
-
-        # } else {
-        #     meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-        #         # print(z)
-        #         z = toString(z)
-        #         return(substr(z, regexpr("####", varList_pre[[i]], fixed=TRUE)[1], nchar("####")))
-        #     })
-
-        # }
-
 
         print("bts3.5")
 
-        # Remove ID and year if this is at least the second variable to avoid duplications.
         if (i > 1) {
+            # Remove ID and year after first pass to avoid duplications
             meltList[[i]] <- meltList[[i]][3]
+
+        } else {
+            # for first pass format year 
+
+            # format year
+            meltList[[i]][2] <- lapply(meltList[[i]][2], as.character)
+            if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
+                meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
+                    return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
+                })
+
+            } else {
+                meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
+                    return(substr(z, regexpr("####", varList_pre[[i]], fixed=TRUE)[1], nchar("####")))
+                })
+
+            }
         }
 
     }

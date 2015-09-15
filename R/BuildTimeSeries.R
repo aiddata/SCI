@@ -25,10 +25,16 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 # exec <- paste("dta$",varN," = 0", sep="")
                 # eval(parse(text=exec))
 
-                dta@data[[varN]] <- 0
+                dta@data[[varN]] <- lapply(dta@data[colYears[j]], function (cYear) {
+                    if (cYear <= as.Date(paste(years[k],"01","01", sep="-"))) {
+                        return(1)
+                    } else {
+                        return(0)
+                    }
+                })
 
-
-                dta@data[[varN]][dta@data[colYears[j]] <= as.Date(paste(years[k],"01","01", sep="-"))] <- 1
+                # dta@data[[varN]] <- 0
+                # dta@data[[varN]][dta@data[colYears[j]] <= as.Date(paste(years[k],"01","01", sep="-"))] <- 1
             }
         }
     }

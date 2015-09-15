@@ -1,8 +1,10 @@
 BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colYears=NULL, interpYears=NULL) {
     
-    print(varList_pre)
-
+    # generate year range 
     years <- startYear:endYear
+
+
+
 
     print("bts1")
     timer <- proc.time()
@@ -11,8 +13,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     # Eventually could be extended to more than one column.
     if (!is.null(colYears)) {
         # For each variable, for each year, create a binary representing the treatment status.
-        for (k in 1:length(years)) {
-            for (j in 1:length(colYears)) {
+        for (j in 1:length(colYears)) {
+            for (k in 1:length(years)) {
 
                 varN <- paste("TrtMnt_",colYears[j],"_",years[k], sep="")
                 print(varN)
@@ -21,19 +23,12 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 eval(parse(text=exec))
                 # dta[,varN] = 0
 
-
-                dta@data[varN][dta@data[colYears[j]] <= as.numeric(years[k])] <- 1
+                dta@data[varN][as.Date(dta@data[colYears[j]]) <= as.Date(years[k])] <- 1
             }
         }
     }
 
-    timer <- proc.time() - timer
-    print(paste("section completed in", timer[3], "seconds."))
-
     print(colnames(dta@data))
-
-    print("bts2")
-    timer <- proc.time()
 
 
     # add the "TrtMnt_" + colYears[j] prefix to interpYears
@@ -44,8 +39,9 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
     print(interpYears)
 
-    timer <- proc.time() - timer
-    print(paste("section completed in", timer[3], "seconds."))
+
+
+
 
 
     print("bts3")
@@ -53,11 +49,13 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     
     # If there is an "interpVars" variable, linearly interpolate values based on at least 2 known points in time.
     if (!is.null(interpYears)) {
+
         print("bts3.0")
+
         for (AncInt in 1:length(interpYears)) {
+
             print(interpYears[AncInt])
 
-            print("bts3.0.0")
             cur_ancVi <- interpYears[AncInt]
             interpFrame <- dta@data[idField]
             interpFrame[idField] <- dta@data[idField]
@@ -65,7 +63,6 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
             print("bts3.0.1")
             if (cur_ancVi %in% colnames(dta@data)) {
-                    print("IN!!")
                     # Exception for a single-point interpolation
                     interpFrame[cnt] <- dta@data[[cur_ancVi]]
                     cnt = 3
@@ -87,6 +84,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             }
 
             print(cnt)
+
 
             print("bts3.0.2")
             # this is a slow part
@@ -138,14 +136,15 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         print("bts3.1")        
         # Append interpolated fields to our melting lists
         varList_pre <- c(varList_pre, interpYears)
-        # for (v in 1:length(interpYears)) {
-        #     varList_pre[[length(varList_pre)+1]] <- interpYears[v]
-        # }
     
     }
   
+    print(varList_pre)
+
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
+
+
 
 
 
@@ -205,6 +204,10 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
+
+
+
+
 
     print("bts5")
 

@@ -24,7 +24,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             }
 
             # add the "TrtMnt_" + colYears[j] prefix to interpYears
-            trt_id = paste("TrtMnt_",colYears[j],"_####", sep="")
+            trt_id = paste("TrtMnt_",colYears[j],"_....", sep="")
             interpYears <- c(interpYears, trt_id)    
         }
     }
@@ -69,7 +69,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                     # First, build a model describing the relationship between years and any data in the interp field.
 
                     # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
-                    varI <- gsub('####', years[[k]], cur_ancVi)
+                    varI <- gsub('....', years[[k]], cur_ancVi)
                     if (varI %in% colnames(dta@data)) {
 
                         interpFrame[[cnt]] <- dta@data[[varI]]
@@ -119,7 +119,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                 for (u in 1:length(years)) {
 
-                    varI <- gsub('####', years[[u]], cur_ancVi)
+                    varI <- gsub('....', years[[u]], cur_ancVi)
                     if (!(varI %in% colnames(dta@data))) {
                         # Variable doesn't exist, so we need to interpolate.
                         tDframe[idField] <- dta@data[idField]
@@ -162,10 +162,10 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         for (j in 1:length(years)) {
             tempGrep <- grepStrYrs
 
-            if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
+            if (regexpr("....", varList_pre[[i]], fixed=TRUE)[1] == -1) {
                 grepStrYrs <- paste(tempGrep,"|",paste(varList_pre[[i]],years[[j]], sep="_"), sep="")
             } else {
-                grepStrYrs <- paste(tempGrep,"|",gsub('####', years[[j]], varList_pre[[i]]), sep="")
+                grepStrYrs <- paste(tempGrep,"|",gsub('....', years[[j]], varList_pre[[i]]), sep="")
             }
         }
 
@@ -219,19 +219,17 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     meltListRet <- data.frame(meltList)
 
     # format year
-    regex_test <- regexpr("####", year_regex_field, fixed=TRUE)[1]
+    regex_test <- regexpr("....", year_regex_field, fixed=TRUE)[1]
     if (regex_test > -1) {
         meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
-            return(as.numeric(substr(z, regex_test, regex_test+nchar("####")-1)))
+            return(as.numeric(substr(z, regex_test, regex_test+nchar("....")-1)))
         })
 
     } else {
         meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
-            return(as.numeric(substr(z, nchar(z)-nchar("####")+1, nchar(z))))
+            return(as.numeric(substr(z, nchar(z)-nchar("....")+1, nchar(z))))
         })
     }
-
-    colnames(meltListRet) <- lapply(colnames(meltListRet), function (z) {return(gsub("....", "####", z, fixed=TRUE))})
 
     return(meltListRet)
 }

@@ -8,7 +8,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
     ret_var <- list()
   
     if (type == "lm") {
-        m_fit <- lm(model,dta)
+        m_fit <- lm(model, dta)
         print("==========================")
         print("UNSTANDARDIZED MODEL RESULTS")
         print("==========================")
@@ -43,9 +43,9 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
     if (type == "cmreg") {
 
         print("c1a")
-        m_fit <- lm(model,dta)
-        print("c1b")
+        m_fit <- lm(model, dta)
 
+        print("c1b")
         ret_var[["unstandardized"]] <- m_fit
 
         print("c1c")

@@ -31,9 +31,10 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
         # Drop
         treated <- retData@data[retData@data[["TrtBin"]] == 1,]
         untreated <- retData@data[retData@data[["TrtBin"]] == 0,]
-        min_cut <- max(min(treated[["PSM_trtProb"]]), min(untreated[["PSM_trtProb"]]))
-        max_cut <- min(max(treated[["PSM_trtProb"]]), max(untreated[["PSM_trtProb"]]))
+        min_cut <- max(min(treated[["PSM_trtProb"]], na.rm = TRUE), min(untreated[["PSM_trtProb"]], na.rm = TRUE))
+        max_cut <- min(max(treated[["PSM_trtProb"]], na.rm = TRUE), max(untreated[["PSM_trtProb"]], na.rm = TRUE))
         
+        retData <- retData[!is.na(retData@data[["PSM_trtProb"]]),]
         retData <- retData[retData@data[["PSM_trtProb"]] >= min_cut,]    
         retData <- retData[retData@data[["PSM_trtProb"]] <= max_cut,] 
 
@@ -49,8 +50,8 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
     }
 
     # return original and predicted data along with model
-    retEle <- 0
-    retEle[["data"]] <- retData
-    retEle[["model"]] <- PSMfit
+    retEle <- c()
+    retEle$data <- retData
+    retEle$model <- PSMfit
     return (retEle)
 }

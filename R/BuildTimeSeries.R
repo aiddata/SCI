@@ -192,21 +192,21 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         # gsub_command <- paste("^",varList_pre[[i]],sep="")
         # meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
         
-        if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
-            meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-                # print(z)
-                z = toString(z)
-                return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
-            })
+        # if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
+        #     meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
+        #         # print(z)
+        #         z = toString(z)
+        #         return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
+        #     })
 
-        } else {
-            meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
-                # print(z)
-                z = toString(z)
-                return(substr(z, regexpr("####", varList_pre[[i]], fixed=TRUE)[1], nchar("####")))
-            })
+        # } else {
+        #     meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
+        #         # print(z)
+        #         z = toString(z)
+        #         return(substr(z, regexpr("####", varList_pre[[i]], fixed=TRUE)[1], nchar("####")))
+        #     })
 
-        }
+        # }
 
 
         print("bts3.5")

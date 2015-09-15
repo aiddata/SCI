@@ -213,26 +213,23 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
 
 
-
     print("bts4")
 
     # convert meltList to data frame
     meltListRet <- data.frame(meltList)
 
-    # # format year 
-    # meltListRet['Year'] <- lapply(meltListRet['Year'], as.character)
+    # format year
+    regex_test <-regexpr("####", year_regex_field, fixed=TRUE)[1]
+    if (regex_test > -1) {
+        meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
+            return(as.numeric(substr(z, regex_test, regex_test+nchar("####")-1)))
+        })
 
-    # if (regexpr("####", year_regex_field, fixed=TRUE)[1] == -1) {
-    #     meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
-    #         return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
-    #     })
-
-    # } else {
-    #     meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
-    #         return(substr(z, regexpr("####", year_regex_field, fixed=TRUE)[1], nchar("####")))
-    #     })
-
-    # }
+    } else {
+        meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
+            return(as.numeric(substr(z, nchar(z)-nchar("####")+1, nchar(z))))
+        })
+    }
 
     return(meltListRet)
 }

@@ -24,38 +24,38 @@ timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield, thresh=0.5) {
     analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]
     analysisDF <- analysisDF[analysisDF["Year"] <= endyr ,]
 
-    # create empty field
-    dta@data["newfieldID"] <- 0
+    # # create empty field
+    # dta@data["newfieldID"] <- 0
 
-    # iterate over original dataframe
-    for (i in 1:length(dta)) {
-        # get id for row (in original data)
-        ID <- as.character(dta@data[IDfield][i,])
+    # # iterate over original dataframe
+    # for (i in 1:length(dta)) {
+    #     # get id for row (in original data)
+    #     ID <- as.character(dta@data[IDfield][i,])
 
-        # get all data corresponding to id from analysis dataframe
-        ID_dat <- analysisDF[analysisDF[IDfield] == ID,]
+    #     # get all data corresponding to id from analysis dataframe
+    #     ID_dat <- analysisDF[analysisDF[IDfield] == ID,]
 
-        dat_length <-length(ID_dat)
-        count_na <-sum(is.na(ID_dat[['value']])) 
-        count_non_na <- dat_length - count_na
-        percent_na <- count_na / dat_length
+    #     dat_length <-length(ID_dat)
+    #     count_na <-sum(is.na(ID_dat[['value']])) 
+    #     count_non_na <- dat_length - count_na
+    #     percent_na <- count_na / dat_length
 
-        # if number of NAs is over threshold or if less than 2 points of data are not NA, return NA
-        if (percent_na > thresh || count_non_na < 2) {
+    #     # if number of NAs is over threshold or if less than 2 points of data are not NA, return NA
+    #     if (percent_na > thresh || count_non_na < 2) {
             
-            dta@data["newfieldID"][i,] <- NA
+    #         dta@data["newfieldID"][i,] <- NA
         
-        } else {
-            # fit trend model
-            trend_mod <- lm(value ~ Year, data=ID_dat, na.action = na.omit)
+    #     } else {
+    #         # fit trend model
+    #         trend_mod <- lm(value ~ Year, data=ID_dat, na.action = na.omit)
       
-            # add trend coefficients to new field
-            dta@data["newfieldID"][i,] <- summary(trend_mod)$coefficients[2]
-        }
+    #         # add trend coefficients to new field
+    #         dta@data["newfieldID"][i,] <- summary(trend_mod)$coefficients[2]
+    #     }
 
-    }
+    # }
     
-    # return new field with trend coefficients
-    return(dta[["newfieldID"]])
+    # # return new field with trend coefficients
+    # return(dta[["newfieldID"]])
     
 }

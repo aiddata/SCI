@@ -119,7 +119,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                 for (u in 1:length(years)) {
 
-                    varI <- gsub('....', years[[u]], cur_ancVi)
+                    varI <- gsub('....', years[[u]], cur_ancVi, fixed=TRUE)
                     if (!(varI %in% colnames(dta@data))) {
                         # Variable doesn't exist, so we need to interpolate.
                         tDframe[idField] <- dta@data[idField]
@@ -165,7 +165,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             if (regexpr("....", varList_pre[[i]], fixed=TRUE)[1] == -1) {
                 grepStrYrs <- paste(tempGrep,"|",paste(varList_pre[[i]],years[[j]], sep="_"), sep="")
             } else {
-                grepStrYrs <- paste(tempGrep,"|",gsub('....', years[[j]], varList_pre[[i]]), sep="")
+                grepStrYrs <- paste(tempGrep,"|",gsub('....', years[[j]], varList_pre[[i]], fixed=TRUE), sep="")
             }
         }
 
@@ -186,14 +186,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
         colnames(meltList[[i]])[3] <- varList_pre[[i]]
 
+
         print("bts3.4")
-
-        # Clean up year column
-        # gsub_command <- paste("^",varList_pre[[i]],sep="")
-        # meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
-        
-
-        print("bts3.5")
 
         if (i == 1) {
             # set field to use for regex when formatting year field later

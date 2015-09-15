@@ -15,7 +15,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 varN <- paste("TrtMnt_",colYears[j],"_",years[k], sep="")
                 print(varN)
 
-                exec <- paste("dta$",varN,"=0", sep="")
+                exec <- paste("dta$",varN," = 0", sep="")
                 eval(parse(text=exec))
                 # dta[,varN] = 0
 
@@ -28,7 +28,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
 
-    print(colnames(dta))
+    print(colnames(dta@data))
 
     print("bts2")
     timer <- proc.time()

@@ -69,7 +69,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                     # First, build a model describing the relationship between years and any data in the interp field.
 
                     # Check if data exists for the year - if not, ignore.  If so, include in the new modeling frame.
-                    varI <- gsub('....', years[[k]], cur_ancVi)
+                    varI <- gsub('....', years[[k]], cur_ancVi, fixed=TRUE)
                     if (varI %in% colnames(dta@data)) {
 
                         interpFrame[[cnt]] <- dta@data[[varI]]

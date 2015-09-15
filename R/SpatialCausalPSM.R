@@ -5,10 +5,10 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
     # generate model based on method
     if (mtd == "logit") {
         # generalized linear model
-        PSMfit <- glm(mdl, dta@data, family="binomial", na.action=na.omit)
+        PSMfit <- glm(mdl, dta@data, family="binomial")
     } else if (mtd == "lm") {
         # linear model
-        PSMfit <- lm(mdl, dta@data, na.action=na.omit)
+        PSMfit <- lm(mdl, dta@data)
     }
 
     # copy data 

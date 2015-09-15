@@ -196,14 +196,14 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         print("bts3.5")
 
         if (i > 1) {
-            # Remove ID and year after first pass to avoid duplications
+            # remove id and year after first pass to avoid duplications
             meltList[[i]] <- meltList[[i]][3]
 
-        } else {
+        } #else {
             # for first pass format year 
 
-            # format year
-            meltList[[i]][2] <- lapply(meltList[[i]][2], as.character)
+            # meltList[[i]][2] <- lapply(meltList[[i]][2], as.character)
+
             # if (regexpr("####", varList_pre[[i]], fixed=TRUE)[1] == -1) {
             #     meltList[[i]][2] <- lapply(meltList[[i]][2], function (z) {
             #         return(substr(z, nchar(z)-nchar("####")+1, nchar(z)))
@@ -215,7 +215,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             #     })
 
             # }
-        }
+        # }
 
     }
 

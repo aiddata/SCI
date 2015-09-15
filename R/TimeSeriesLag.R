@@ -1,14 +1,10 @@
 TimeSeriesLag <- function(dta,yearID,unit_ID,lagNum,inName,outName,start_yr,end_yr)
 {
-  for(i in length(dta))
+  for(i in 1:length(dta[[1]]))
   {
-    cur_id = dta[unit_ID][i,]
-    cur_year = start_yr
-    while(cur_year <= end_yr)
-    {
-      dta[outName][i,] <- dta[[inName]][which(data[yearID] == cur_year-lagNum && data[unit_ID] == cur_id)]
-      cur_year = cur_year + 1
-    }
+  cur_id = dta[unit_ID][i,]
+  cur_year = dta[yearID][i,]
+  dta[outName][i,] <- dta[dta[yearID] == (cur_year-lagNum) & dta[unit_ID] == cur_id,][inName][1,]
   }
   return(dta)
 }

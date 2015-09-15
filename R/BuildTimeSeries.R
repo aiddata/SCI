@@ -1,7 +1,7 @@
 BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colYears=NULL, interpYears=NULL) {
     
     print(varList_pre)
-    
+
     years <- startYear:endYear
 
     print("bts1")
@@ -154,7 +154,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     meltList <- list()
     for (i in 1:length(varList_pre)) {
 
-
+        print("bts4.0")
         # Limit to only relevant years
         grepStrYrs = idField
 
@@ -168,20 +168,29 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             }
         }
     
+        print("bts4.1")
 
 
         tDF <- dta@data[grepl(grepStrYrs, names(dta@data))]
         meltList[[i]] <- melt(tDF, id=idField)
         
+        print("bts4.2")
+
         # Keep only years in the year column, rename columns
         colnames(meltList[[i]])[2] <- "Year"
+
+        print("bts4.3")
+
         colnames(meltList[[i]])[3] <- varList_pre[[i]]
-        
+
+        print("bts4.4")
+
         # Clean up year column
         gsub_command <- paste("^",varList_pre[[i]],sep="")
         meltList[[i]][2] <- gsub(gsub_command, "", as.matrix(meltList[[i]][2]))
         
-    
+        print("bts4.5")
+
         # Remove ID and year if this is at least the second variable to avoid duplications.
         if (i > 1) {
             meltList[[i]] <- meltList[[i]][3]
@@ -192,6 +201,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     timer <- proc.time() - timer
     print(paste("section completed in", timer[3], "seconds."))
 
+    print("bts5")
 
     # Finish up with a cherry on top
     meltListRet <- data.frame(meltList)

@@ -12,7 +12,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         for (k in 1:length(years)) {
             for (j in 1:length(colYears)) {
 
-                varN <- paste("TrtMnt_",colYears[j],years[k], sep="")
+                varN <- paste("TrtMnt_",colYears[j],"_",years[k], sep="")
                 print(varN)
 
                 exec <- paste("dta$",varN,"=0", sep="")

@@ -52,6 +52,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     if (!is.null(interpYears)) {
         print("bts3.0")
         for (AncInt in 1:length(interpYears)) {
+            print(AncInt)
 
             print("bts3.0.0")
             cur_ancVi <- interpYears[AncInt]

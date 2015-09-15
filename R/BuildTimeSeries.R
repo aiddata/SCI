@@ -61,7 +61,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             # add data to interpolation data frame
             if (cur_ancVi %in% colnames(dta@data)) {
                     # Exception for a single-point interpolation
-                    interpFrame[cnt] <- dta@data[[cur_ancVi]]
+                    interpFrame[[cnt]] <- dta@data[[cur_ancVi]]
                     cnt = 3
                     
             } else {
@@ -72,7 +72,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                     varI <- gsub('####', years[[k]], cur_ancVi)
                     if (varI %in% colnames(dta@data)) {
 
-                        interpFrame[cnt] <- dta@data[[varI]]
+                        interpFrame[[cnt]] <- dta@data[[varI]]
                         colnames(interpFrame)[cnt] <- years[[k]]
                         cnt = cnt + 1
 

@@ -155,6 +155,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     for (i in 1:length(varList_pre)) {
 
         print("bts4.0")
+        print(varList_pre[[i]])
+
         # Limit to only relevant years
         grepStrYrs = idField
 

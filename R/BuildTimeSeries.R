@@ -39,8 +39,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         }
     }
 
-    return dta
-    
+    return(dta)
+
     print(colnames(dta@data))
 
 

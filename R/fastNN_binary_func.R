@@ -78,6 +78,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         best_m_treated = k[["nn.index"]][best_m_control]
         
         #Control PSM ID
+        print(untreated[[ids]][[best_m_control]])
         Control_ID = toString(untreated[[ids]][[best_m_control]])    
 
         #Treatment PSM ID
@@ -88,7 +89,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         pair_id = paste(curgrp,j,sep="")
         
         print("nn4.0")
-        
+
         #Add the Treatment ID to the Control Row 
         dta@data$match[which(dta@data[[ids]] == Control_ID)] = Treatment_ID
         dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID)] = k[["nn.dist"]][,1][best_m_control]

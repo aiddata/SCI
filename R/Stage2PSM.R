@@ -80,7 +80,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         # exec = paste("cluster.vcov(m_fit,cbind(dta$",opts[1],",dta$",opts[2],"))",sep="")
         # m_fit[["var"]] <- eval(parse(text=exec))
 
-        m_fit[["var"]] <- cluster.vcov(m_fit,cbind(dta[opts[1]], dta[opts[2]]))
+        m_fit[["var"]] <- cluster.vcov(m_fit,cbind(dta[opts[1]]))
 
         CMREG <- coeftest(m_fit,m_fit[["var"]])
         print("cmReg:")

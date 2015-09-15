@@ -36,7 +36,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
     # add the "TrtMnt_" + colYears[j] prefix to interpYears
     for (j in 1:length(colYears)) {
-        trt_id = paste("TrtMnt_",colYears[j], sep="")
+        trt_id = paste("TrtMnt_",colYears[j],"_####", sep="")
         interpYears <- c(interpYears, trt_id)  
     }
 

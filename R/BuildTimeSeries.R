@@ -86,14 +86,14 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
             # Only one time point, so no interpolation is done - value is simply copied to all other columns.
             if (cnt == 3) {
-
+                print("bts3.0.2a")
                 for (k in 1:length(years)) {
                     # add _year to end of non temporal data
                     dta@data[[paste(cur_ancVi,years[[k]],sep="_")]] <- interpFrame[2]
                 }
 
             } else if (cnt < length(years) + 2) {
-
+                print("bts3.0.2b")
                 tDframe <- dta@data[idField]
 
                 # Here, we model out everything. 

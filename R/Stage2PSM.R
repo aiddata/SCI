@@ -41,13 +41,17 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
     }
   
     if (type == "cmreg") {
+
+        print("c1")
         m_fit <- lm(model,dta)
         ret_var[["unstandardized"]] <- m_fit
         #mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
         #print.htmlTable(mTab)
         print(summary(m_fit))
         texreg::plotreg(m_fit,omit.coef="(match)|(Intercept)|(factor)",custom.model.names="Unstandardized Model",custom.note=model)
-        
+
+        print("c2")
+
         if (!is.null(table_out)) {
             dta_tmp <- dta
           
@@ -65,6 +69,8 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
           
         }
         
+        print("c3")
+    
         print(opts)
         exec = paste("cluster.vcov(m_fit,cbind(dta$",opts[1],",dta$",opts[2],"))",sep="")
         m_fit[["var"]] <- eval(parse(text=exec))

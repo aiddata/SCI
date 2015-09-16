@@ -24,8 +24,8 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
                 d_index <- sapply(dta_tmp, is.numeric)
                 dta_tmp[d_index] <- lapply(dta_tmp[d_index],scale)
             } else {
-              d_index <- sapply(dta_tmp@data, is.numeric)
-              dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
+                d_index <- sapply(dta_tmp@data, is.numeric)
+                dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
             }
 
             dta_fit_std <- lm(model,dta_tmp)
@@ -80,7 +80,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         # exec = paste("cluster.vcov(m_fit,cbind(dta$",opts[1],",dta$",opts[2],"))",sep="")
         # m_fit[["var"]] <- eval(parse(text=exec))
 
-        m_fit$var <- cluster.vcov(m_fit,cbind(dta[opts[1]]))
+        m_fit$var <- cluster.vcov(m_fit,cbind(dta[opts[1]], dta[opts[2]]))
 
         CMREG <- coeftest(m_fit,m_fit$var)
         print("cmReg:")

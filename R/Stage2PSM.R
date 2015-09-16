@@ -81,7 +81,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         # m_fit[["var"]] <- eval(parse(text=exec))
 
         if (length(opts) == 1) {
-            m_fit$var <- cluster.vcov(m_fit,dta[opts[1]]))
+            m_fit$var <- cluster.vcov(m_fit,dta[opts[1]])
 
         } else if (length(opts) == 2) {
             m_fit$var <- cluster.vcov(m_fit,cbind(dta[opts[1]], dta[opts[2]]))

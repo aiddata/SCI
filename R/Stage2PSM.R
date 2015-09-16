@@ -14,7 +14,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         print("==========================")
         #mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
         print(summary(m_fit))
-        ret_var[["unstandardized"]] <- lm(model, dta)
+        ret_var$unstandardized <- lm(model, dta)
         texreg::plotreg(m_fit, omit.coef="(match)|(Intercept)", custom.model.names="Unstandardized Model", custom.note=model)
         
         if (!is.null(table_out)) {
@@ -29,7 +29,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
             }
 
             dta_fit_std <- lm(model,dta_tmp)
-            ret_var[["standardized"]] <- lm(model,dta_tmp)
+            ret_var$standardized <- lm(model,dta_tmp)
             print("==========================")
             print("STANDARDIZED MODEL RESULTS")
             print("==========================")
@@ -46,7 +46,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         m_fit <- lm(model, dta)
 
         print("c1b")
-        ret_var[["unstandardized"]] <- m_fit
+        ret_var$unstandardized <- m_fit
 
         print("c1c")
         #mTab <- stargazer(m_fit,type="html",title="Unstandardized Model Results")
@@ -67,7 +67,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
                 dta_tmp@data[d_index] <- lapply(dta_tmp@data[d_index],scale)
             }
             dta_fit_std <- lm(model,dta_tmp)
-            ret_var[["standardized"]] <- dta_fit_std
+            ret_var$standardized <- dta_fit_std
             print(summary(dta_fit_std))
             texreg::plotreg(dta_fit_std,omit.coef="(match)|(Intercept)|(factor)",custom.model.names="Standardized Model", custom.note=model)
           
@@ -80,12 +80,12 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         # exec = paste("cluster.vcov(m_fit,cbind(dta$",opts[1],",dta$",opts[2],"))",sep="")
         # m_fit[["var"]] <- eval(parse(text=exec))
 
-        m_fit[["var"]] <- cluster.vcov(m_fit,cbind(dta[opts[1]]))
+        m_fit$var <- cluster.vcov(m_fit,cbind(dta[opts[1]]))
 
-        CMREG <- coeftest(m_fit,m_fit[["var"]])
+        CMREG <- coeftest(m_fit,m_fit$var)
         print("cmReg:")
         print(CMREG)
-        ret_var[["cmreg"]] <- CMREG
+        ret_var$cmreg <- CMREG
         
     }
     return(ret_var)

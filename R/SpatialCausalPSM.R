@@ -16,7 +16,7 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
     retData <- dta
 
     # predict values based on model
-    retData[["PSM_trtProb"]] <- predict(PSMfit, dta@data, type="response")
+    retData[,"PSM_trtProb"] <- predict(PSMfit, dta@data, type="response")
 
 
     if (visual == "TRUE") {
@@ -30,14 +30,14 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
     #if (drop == "support") {
         
         # Drop
-        treated <- retData@data[retData@data[["TrtBin"]] == 1,]
-        untreated <- retData@data[retData@data[["TrtBin"]] == 0,]
-        min_cut <- max(min(treated[["PSM_trtProb"]], na.rm = TRUE), min(untreated[["PSM_trtProb"]], na.rm = TRUE))
-        max_cut <- min(max(treated[["PSM_trtProb"]], na.rm = TRUE), max(untreated[["PSM_trtProb"]], na.rm = TRUE))
+        treated <- retData@data[retData@data[,"TrtBin"] == 1,]
+        untreated <- retData@data[retData@data[,"TrtBin"] == 0,]
+        min_cut <- max(min(treated[,"PSM_trtProb"], na.rm = TRUE), min(untreated[,"PSM_trtProb"], na.rm = TRUE))
+        max_cut <- min(max(treated[,"PSM_trtProb"], na.rm = TRUE), max(untreated[,"PSM_trtProb"], na.rm = TRUE))
         
-        retData <- retData[!is.na(retData@data[["PSM_trtProb"]]),]
-        retData <- retData[retData@data[["PSM_trtProb"]] >= min_cut,]    
-        retData <- retData[retData@data[["PSM_trtProb"]] <= max_cut,] 
+        retData <- retData[!is.na(retData@data[,"PSM_trtProb"]),]
+        retData <- retData[retData@data[,"PSM_trtProb"] >= min_cut,]    
+        retData <- retData[retData@data[,"PSM_trtProb"] <= max_cut,] 
         
     #}
 

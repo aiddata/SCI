@@ -16,7 +16,7 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
     retData <- dta
 
     # predict values based on model
-    retData[,"PSM_trtProb"] <- predict(PSMfit, dta@data, type="response")
+    retData@data[,"PSM_trtProb"] <- predict(PSMfit, dta@data, type="response")
 
 
     if (visual == "TRUE") {

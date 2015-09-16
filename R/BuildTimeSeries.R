@@ -216,12 +216,12 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
     regex_test <- regexpr("....", year_regex_field, fixed=TRUE)[1]
     if (regex_test > -1) {
         meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
-            return(as.numeric(substr(z, regex_test, regex_test+nchar("....")-1)))
+            return(as.integer(substr(z, regex_test, regex_test+nchar("....")-1)))
         })
 
     } else {
         meltListRet['Year'] <- lapply(meltListRet['Year'], function (z) {
-            return(as.numeric(substr(z, nchar(z)-nchar("....")+1, nchar(z))))
+            return(as.integer(substr(z, nchar(z)-nchar("....")+1, nchar(z))))
         })
     }
 

@@ -18,8 +18,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 varN = paste("TrtMnt_",colYears[j],"_",years[k], sep="")
                 print(varN)
 
-                dta@data[[varN]] <- 0
-                dta@data[[varN]][dta@data[[colYears[j]]] <= as.Date(paste(years[k],"01","01", sep="-"))] <- 1
+                dta@data[,varN] <- 0
+                dta@data[,varN][dta@data[[colYears[j]]] <= as.Date(paste(years[k],"01","01", sep="-"))] <- 1
 
             }
 
@@ -61,7 +61,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
             # add data to interpolation data frame
             if (cur_ancVi %in% colnames(dta@data)) {
                     # Exception for a single-point interpolation
-                    interpFrame[[cnt]] <- dta@data[[cur_ancVi]]
+                    interpFrame[cnt] <- dta@data[,cur_ancVi]
                     cnt = 3
                     
             } else {
@@ -72,7 +72,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                     varI <- gsub('....', years[[k]], cur_ancVi, fixed=TRUE)
                     if (varI %in% colnames(dta@data)) {
 
-                        interpFrame[[cnt]] <- dta@data[[varI]]
+                        interpFrame[cnt] <- dta@data[,varI]
                         colnames(interpFrame)[cnt] <- years[[k]]
                         cnt = cnt + 1
 
@@ -91,7 +91,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 print("bts2.0.2a")
                 for (k in 1:length(years)) {
                     # add _year to end of non temporal data
-                    dta@data[paste(cur_ancVi,years[[k]],sep="_")] <- interpFrame[2]
+                    dta@data[,paste(cur_ancVi,years[[k]],sep="_")] <- interpFrame[2]
                 }
 
             } else if (cnt < length(years) + 2) {
@@ -100,7 +100,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
 
                 # Melt the dataframe for modeling
                 melt_Model_dta <- melt(data.frame(interpFrame), id=idField)
-                melt_Model_dta["variable"] <- as.numeric(gsub("X", "", melt_Model_dta[["variable"]]))
+                melt_Model_dta["variable"] <- as.numeric(gsub("X", "", melt_Model_dta[,"variable"]))
                 
 
                 print("bts2.0.2b1")

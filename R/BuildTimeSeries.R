@@ -19,7 +19,8 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 print(varN)
 
                 dta@data[,varN] <- 0
-                dta@data[,varN][!is.na(dta@data[[colYears[j]]]) && dta@data[[colYears[j]]] <= years[k]] <- 1
+                # dta@data[,varN][!is.na(dta@data[[colYears[j]]]) && dta@data[[colYears[j]]] <= years[k]] <- 1
+                dta@data[,varN][dta@data[[colYears[j]]] <= years[k]] <- 1
 
             }
 

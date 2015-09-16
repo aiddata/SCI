@@ -35,9 +35,9 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
         min_cut <- max(min(treated[,"PSM_trtProb"], na.rm = TRUE), min(untreated[,"PSM_trtProb"], na.rm = TRUE))
         max_cut <- min(max(treated[,"PSM_trtProb"], na.rm = TRUE), max(untreated[,"PSM_trtProb"], na.rm = TRUE))
         
-        retData <- retData@data[!is.na(retData@data[,"PSM_trtProb"]),]
-        retData <- retData@data[retData@data[,"PSM_trtProb"] >= min_cut,]    
-        retData <- retData@data[retData@data[,"PSM_trtProb"] <= max_cut,] 
+        retData <- retData[!is.na(retData@data[,"PSM_trtProb"]),]
+        retData <- retData[retData@data[,"PSM_trtProb"] >= min_cut,]    
+        retData <- retData[retData@data[,"PSM_trtProb"] <= max_cut,] 
         
     #}
 

@@ -7,6 +7,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     drop_method = drop_opts["drop_method"]
     drop_thresh = as.numeric(drop_opts["drop_thresh"])
   
+
+
     print("sat1")
 
     if (!is.null(constraints)) {
@@ -15,7 +17,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
                 dta@data[,"ConstraintGroupSet_Opt"] <- dta@data[,constraints["groups"]]
 
             } else {
-                dta@data[,"ConstraintGroupSet_Opt"] <- 1
+                dta$ConstraintGroupSet_Opt <- 1
             }
             if (names(constraints)[cst] == "distance") {
                 dist_PSM = as.numeric(constraints["distance"][[1]])
@@ -24,44 +26,54 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             }
         }
     } else {
-        dta@data[,"ConstraintGroupSet_Opt"] <- 1
+        dta$ConstraintGroupSet_Opt <- 1
         #max the distance threshold by taking the diagonal of the bounding box.
         dist_PSM = NULL
     }
 
+
+
     print("sat2")
 
     #Caclulate the number of groups to constrain by, if any.
-    group_constraints <- unique(dta@data[,"ConstraintGroupSet_Opt"])
+    group_constraints <- unique(dta$ConstraintGroupSet_Opt)
   
     #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
     t_dta <- list()
     u_dta <-list()
     grp_list <- list()
     cnt = 0
+
     for (grp in 1:length(group_constraints)) {
         cur_grp <- as.matrix(group_constraints)[grp]
         grp_index = length(grp_list)+1
         t_index = length(t_dta)+1
         grp_list[[grp_index]] <- as.matrix(group_constraints)[grp]
-        t_dta[[t_index]] <- dta@data[dta@data[,"TrtBin"] == 1,]
-        u_dta[[t_index]] <- dta@data[dta@data[,"TrtBin"] == 0,]
-        treatment_count <- cur_grp %in% t_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"]
-        untreated_count <- cur_grp %in% u_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"]
+
+        t_dta[[t_index]] <- dta[dta$TrtBin == 1,]
+        u_dta[[t_index]] <- dta[dta$TrtBin == 0,]
+
+        treatment_count <- cur_grp %in% t_dta[[t_index]]$ConstraintGroupSet_Opt
+        untreated_count <- cur_grp %in% u_dta[[t_index]]$ConstraintGroupSet_Opt
+
         if ((untreated_count == FALSE) || (treatment_count == FALSE)) {
-            dta <- dta@data[!dta@data[,"ConstraintGroupSet_Opt"] == cur_grp,]
+            dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
             t_dta[[t_index]] <- NULL
             u_dta[[t_index]] <- NULL
             grp_list[[t_index]] <- NULL
             war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
             warning(war_statement)
+
         } else { 
-            t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"] == cur_grp,]
-            u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"] == cur_grp,]
+            t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
+            u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
         
             cnt = cnt + 1
         }
     }
+
+
+
     print("sat3")
 
     temp_dta <- list()

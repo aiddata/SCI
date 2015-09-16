@@ -18,9 +18,9 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
                 varN = paste("TrtMnt_",colYears[j],"_",years[k], sep="")
                 print(varN)
 
-                dta@data[,varN] <- 0
-                # dta@data[,varN][!is.na(dta@data[[colYears[j]]]) && dta@data[[colYears[j]]] <= years[k]] <- 1
-                dta@data[,varN][dta@data[[colYears[j]]] <= years[k]] <- 1
+                dta@data[varN] <- 0
+                dta@data[varN][!is.na(dta@data[colYears[j]]) && dta@data[colYears[j]] <= years[k]] <- 1
+                # dta@data[varN][dta@data[colYears[j]] <= years[k]] <- 1
 
             }
 

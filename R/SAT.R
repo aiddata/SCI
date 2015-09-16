@@ -12,10 +12,10 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     if (!is.null(constraints)) {
         for (cst in 1:length(names(constraints))) {
             if (names(constraints)[cst] == "groups") {
-                dta[["ConstraintGroupSet_Opt"]] <- dta[[constraints["groups"]]]
+                dta@data[,"ConstraintGroupSet_Opt"] <- dta@data[,constraints["groups"]]
 
             } else {
-                dta[["ConstraintGroupSet_Opt"]] <- 1
+                dta@data[,"ConstraintGroupSet_Opt"] <- 1
             }
             if (names(constraints)[cst] == "distance") {
                 dist_PSM = as.numeric(constraints["distance"][[1]])
@@ -24,7 +24,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             }
         }
     } else {
-        dta[["ConstraintGroupSet_Opt"]] <- 1
+        dta@data[,"ConstraintGroupSet_Opt"] <- 1
         #max the distance threshold by taking the diagonal of the bounding box.
         dist_PSM = NULL
     }
@@ -32,7 +32,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     print("sat2")
 
     #Caclulate the number of groups to constrain by, if any.
-    group_constraints <- unique(dta[["ConstraintGroupSet_Opt"]])
+    group_constraints <- unique(dta@data[,"ConstraintGroupSet_Opt"])
   
     #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
     t_dta <- list()
@@ -44,20 +44,20 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         grp_index = length(grp_list)+1
         t_index = length(t_dta)+1
         grp_list[[grp_index]] <- as.matrix(group_constraints)[grp]
-        t_dta[[t_index]] <- dta[dta[["TrtBin"]] == 1,]
-        u_dta[[t_index]] <- dta[dta[["TrtBin"]] == 0,]
-        treatment_count <- cur_grp %in% t_dta[[t_index]][["ConstraintGroupSet_Opt"]]
-        untreated_count <- cur_grp %in% u_dta[[t_index]][["ConstraintGroupSet_Opt"]]
+        t_dta[[t_index]] <- dta@data[dta@data[,"TrtBin"] == 1,]
+        u_dta[[t_index]] <- dta@data[dta@data[,"TrtBin"] == 0,]
+        treatment_count <- cur_grp %in% t_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"]
+        untreated_count <- cur_grp %in% u_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"]
         if ((untreated_count == FALSE) || (treatment_count == FALSE)) {
-            dta <- dta[!dta[["ConstraintGroupSet_Opt"]] == cur_grp,]
+            dta <- dta@data[!dta@data[,"ConstraintGroupSet_Opt"] == cur_grp,]
             t_dta[[t_index]] <- NULL
             u_dta[[t_index]] <- NULL
             grp_list[[t_index]] <- NULL
             war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
             warning(war_statement)
         } else { 
-            t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]][["ConstraintGroupSet_Opt"]] == cur_grp,]
-            u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]][["ConstraintGroupSet_Opt"]] == cur_grp,]
+            t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"] == cur_grp,]
+            u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]@data[,"ConstraintGroupSet_Opt"] == cur_grp,]
         
             cnt = cnt + 1
         }
@@ -99,7 +99,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     print("sat5")
 
     if (drop_unmatched == TRUE) {
-        dta <- dta[dta@data[["PSM_match_ID"]] != -999,]    
+        dta <- dta[dta@data[,"PSM_match_ID"] != -999,]    
     }
   
     anc_v_int <- strsplit(psm_eq, "~")[[1]][2]
@@ -111,11 +111,11 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     #Drop observations according to the selected method
     if (drop_method == "SD") {
         #Method to drop pairs that are greater than a set threshold apart in terms of PSM Standard Deviations.
-        psm_sd_thresh = sd(dta[["PSM_trtProb"]]) * drop_thresh
+        psm_sd_thresh = sd(dta@data[,"PSM_trtProb"]) * drop_thresh
         if (visual == "TRUE") {
             print(psm_sd_thresh)
         }
-        dta <- dta[dta@data[["PSM_distance"]] < psm_sd_thresh,]
+        dta <- dta[dta@data[,"PSM_distance"] < psm_sd_thresh,]
     }
   
     #Plot the pre and post-dropping balance for PSM model...
@@ -139,9 +139,9 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         print("sat7.1")
         if (c_type == "matrix") {
 
-            dta@data[[ed_v]] <- as.numeric(dta@data[[ed_v]])
+            dta@data[,ed_v] <- as.numeric(dta@data[,ed_v])
 
-            init_dta@data[[ed_v]] <- as.numeric(init_dta@data[[ed_v]])
+            init_dta@data[,ed_v] <- as.numeric(init_dta@data[,ed_v])
 
             c_type = "numeric"
         }

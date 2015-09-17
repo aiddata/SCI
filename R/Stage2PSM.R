@@ -43,6 +43,9 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
     if (type == "cmreg") {
 
         # make sure cluster options provided are valid
+        print(opts == NULL)
+        print(length(opts) == 0)
+        
         if (opts == NULL || length(opts) == 0) {
             print("Must have at least 1 clustering option")
             return("Invalid opts given.")
@@ -68,7 +71,7 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         print("c2")
 
         if (!is.null(table_out)) {
-            
+
             dta_tmp <- dta
           
             if( class(dta) == "data.frame") {

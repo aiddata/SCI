@@ -42,6 +42,17 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
   
     if (type == "cmreg") {
 
+        # make sure cluster options provided are valid
+        if (length(opts) == 0 || opts == NULL) {
+            print("Must have at least 1 clustering option")
+            return("Invalid opts given.")
+
+        } else if (length(opts) > 2) {
+            print("Cannot have more than 2 clustering options")
+            return("Invalid opts given.")
+        }
+
+
         print("c1a")
         m_fit <- lm(model, dta)
 
@@ -86,8 +97,6 @@ Stage2PSM <- function (model, dta, type, table_out = NULL, opts = NULL) {
         } else if (length(opts) == 2) {
             m_fit$var <- cluster.vcov(m_fit,cbind(dta[opts[1]], dta[opts[2]]))
 
-        } else {
-            return("CANNOT HAVE MORE THAN 2 OPTS")
         }
 
         CMREG <- coeftest(m_fit,m_fit$var)

@@ -1,6 +1,96 @@
+
+
+
+timeRangeType <- function (columns, prefix, startyr, endyr, field) {
+
+    if (!is.na(as.numeric(startyr) && is.na(as.integer(endyr) && !is.na(field) && field %in% column_names) {
+        type = "pre"
+        startyr = as.integer(startyr)
+    
+    } else if (is.na(as.numeric(startyr) && !is.na(as.integer(endyr) && !is.na(field) && field %in% column_names) {
+        type = "post"
+        endyr = as.integer(endyr)
+    
+    } else if (!is.na(as.numeric(startyr) && !is.na(as.integer(endyr) && as.integer(endyr) > as.integer(startyr)) {
+        type = "range"
+        startyr = as.integer(startyr)
+        endyr = as.integer(endyr)
+
+    } else {
+        type = "invalid"
+    }
+
+    return(c(type, startyr, endyr))
+
+}
+
+
+
 # run linear model on data within year range as specified
 # by field prefix and return coefficients
-timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield, thresh=0.5) {
+timeRangeTrend <- function (dta, prefix, startyr, endyr, field=NA, IDfield, thresh=0.5) {
+
+    check <- timeRangeType(colnames(dta), prefix, startyr, endyr, field)
+
+    type = check[1]
+    startyr = check[2]
+    endyr = check[3]
+    
+    
+    if (type == "range") {
+
+        output <- timeRangeTrend_calc(dta, prefix, startyr, tmp_endyr, IDfield, thresh=0.5)
+
+    } else if (type == "pre") {
+
+        output <- apply(dta, 1, function (row) {
+
+            tmp_endyr <- as.integer(row['start_actual_isodate'])
+
+            if (is.na(tmp_endyr) || start_yr >= tmp_endyr) {
+                return(as.integer("NA"))
+
+            } else {
+                return(timeRangeTrend_calc(row, prefix, startyr, tmp_endyr, IDfield, thresh=0.5, field="start_actual_isodate"))
+
+            }
+
+        })
+
+
+    } else if (type == "post") {
+
+        output <- lapply(dta, function (row) {
+
+            tmp_startyr <- as.integer(row['start_actual_isodate'])
+
+            if (is.na(tmp_startyr) || tmp_startyr >= endyr) {
+                return(as.integer("NA"))
+
+            } else {
+                return(timeRangeTrend_calc(row, prefix, tmp_startyr, endyr, IDfield, thresh=0.5, field="start_actual_isodate"))
+
+            }
+
+        })
+
+
+    } else if (type == "invalid") {
+        output <- 1
+
+    } else {
+        output <- 2
+
+    }
+
+    return(output)
+
+}
+
+
+
+timeRangeTrend_calc <- function (dta, prefix, startyr, endyr, IDfield, thresh=0.5) {
+
 
     # create new dataframe from all columns in dta dataframe that 
     # are either the ID or a year which is indicated by the prefix
@@ -18,7 +108,9 @@ timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield, thresh=0.5) {
 
     # generate new year field by removing prefix from variable (original column names)
     # analysisDF["Year"] <- lapply(analysisDF["variable"], FUN=function(x) as.numeric(gsub(new_pre, "", x)))
-    analysisDF["Year"] <- lapply(analysisDF["variable"], FUN=function(x) as.numeric(substr(x, yIndex[1], yIndex[1]+3)))
+    analysisDF["Year"] <- lapply(analysisDF["variable"], FUN=function(x) {
+        as.numeric(substr(x, yIndex[1], yIndex[1]+3))
+    })
 
     # keep years in range specified
     analysisDF <- analysisDF[analysisDF["Year"] >= startyr ,]
@@ -36,7 +128,7 @@ timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield, thresh=0.5) {
         ID_dat <- analysisDF[analysisDF[IDfield] == ID,]
 
         dat_length <-length(ID_dat)
-        count_na <-sum(is.na(ID_dat[['value']])) 
+        count_na <-sum(is.na(ID_dat[['value']]))
         count_non_na <- dat_length - count_na
         percent_na <- count_na / dat_length
 
@@ -58,4 +150,77 @@ timeRangeTrend <- function(dta, prefix, startyr, endyr, IDfield, thresh=0.5) {
     # return new field with trend coefficients
     return(dta[["newfieldID"]])
     
+}
+
+
+
+timeRangeAvg <- function (dta, prefix, startyr, endyr, field=NA) {
+
+    check <- timeRangeType(colnames(dta), prefix, startyr, endyr, field)
+
+    type = check[1]
+    startyr = check[2]
+    endyr = check[3]
+    
+    
+    if (type == "range") {
+
+        output <- timeRangeAvg_calc(dta, prefix, startyr, endyr)
+
+    } else if (type == "pre") {
+
+        output <- apply(dta, 1, function (row) {
+
+            tmp_endyr <- as.integer(row['start_actual_isodate'])
+
+            if (is.na(tmp_endyr) || start_yr >= tmp_endyr) {
+                return(as.integer("NA"))
+
+            } else {
+                return(timeRangeAvg_calc(row, prefix, startyr, tmp_endyr))
+
+            }
+
+        })
+
+
+    } else if (type == "post") {
+
+        output <- lapply(dta, function (row) {
+
+            tmp_startyr <- as.integer(row['start_actual_isodate'])
+
+            if (is.na(tmp_startyr) || tmp_startyr >= endyr) {
+                return(as.integer("NA"))
+
+            } else {
+                return(timeRangeAvg_calc(row, prefix, tmp_startyr, endyr))
+
+            }
+
+        })
+
+    } else if (type == "invalid") {
+        output <- 1
+
+    } else {
+        output <- 2
+
+    }
+
+    return(output)
+
+}
+
+
+
+timeRangeAvg_calc <- function (dta, prefix, startyr, endyr) {
+
+    range <- c(startyr:endyr)
+    search <- paste("^",prefix,"(",paste(range, collapse="|"),")", sep="")
+    matches <- grepl(search, colnames(dta))
+    rmean <- rowMeans(dta[matches], na.rm=FALSE)
+
+    return(rmean)
+
 }

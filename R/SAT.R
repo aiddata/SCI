@@ -11,7 +11,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
     print("sat1")
 
-    if (!is.null(constraints)) {
+    if (!is.null(constraints) && contraints != c()) {
         for (cst in 1:length(names(constraints))) {
             if (names(constraints)[cst] == "groups") {
                 dta@data[,"ConstraintGroupSet_Opt"] <- dta@data[,constraints["groups"]]

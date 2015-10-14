@@ -32,10 +32,14 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
         treated <- sorted_dta[sorted_dta[[trtMntVar]] == 1,]
         untreated <- sorted_dta[sorted_dta[[trtMntVar]] ==0,]
+        
+        print("nn2.1")
 
         #Run the KNN for all neighbors. 
         k <- get.knnx(treated[["PSM_trtProb"]], untreated[["PSM_trtProb"]], 1)
         
+        print("nn2.2")
+
         #Perturb the values based on the distance decay function, if selected.
         if (!is.null(dist_PSM)) {
             for (mC in 1:length(k[[1]])) {
@@ -57,9 +61,12 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
                 x_dist = abs(tCoord[1] - tCoord[2])
                 euc_dist = sqrt(y_dist^2 + x_dist^2)
                 
+                print("nn2.3")
+
                 PSM_score = k[["nn.dist"]][mC]
                 geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
 
+                print("nn2.4")
 
                 
                 k[["nn.dist"]][mC] <- ((1-geog_Weight) * PSM_score)

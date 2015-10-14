@@ -27,7 +27,7 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
 
     # Second, if a drop parameter - if set to "support", remove observations
     # that don't overlap in the PSM distribution.
-    #if (drop == "support") {
+    if (drop == "support") {
         
         # Drop
         treated <- retData@data[retData@data[,"TrtBin"] == 1,]
@@ -39,7 +39,7 @@ SpatialCausalPSM <- function(dta, mtd, mdl, drop, visual) {
         retData <- retData[retData@data[,"PSM_trtProb"] >= min_cut,]    
         retData <- retData[retData@data[,"PSM_trtProb"] <= max_cut,] 
         
-    #}
+    }
 
     if (visual == "TRUE") {
         # Post drop histograms

@@ -30,7 +30,7 @@ BuildTimeSeries <- function (dta, idField, varList_pre, startYear, endYear, colY
         }
     }
 
-    print(interpYears)
+    View(dta)
 
 
 

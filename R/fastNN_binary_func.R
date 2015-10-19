@@ -24,14 +24,18 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     dta@data[["PSM_distance"]] <- -999
     dta@data[["PSM_match_ID"]] <- -999
 
-    print("nn2.0")
+    dta@data[["nn_matched"]] <- 0
+
+    print("nn2")
 
     #Calculate a distance decay function
     #to perturb pairs based on their distances.  
     for (j in 1:it_cnt) {
 
-        treated <- sorted_dta[sorted_dta[[trtMntVar]] == 1,]
-        untreated <- sorted_dta[sorted_dta[[trtMntVar]] ==0,]
+        print("nn2.0")
+
+        treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]
+        untreated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 0 & sorted_dta[['nn_matched']] == 0),]
         
         print("nn2.1")
 
@@ -43,6 +47,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         #Perturb the values based on the distance decay function, if selected.
         if (!is.null(dist_PSM)) {
             for (mC in 1:length(k[[1]])) {
+
+                print("nn2.2.0")
                 #Calculate the Euclidean Distance between pairs
                 Control_ID = toString(untreated[[ids]][[mC]])
 
@@ -61,12 +67,12 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
                 x_dist = abs(tCoord[1] - tCoord[2])
                 euc_dist = sqrt(y_dist^2 + x_dist^2)
                 
-                print("nn2.3")
+                print("nn2.2.1")
 
                 PSM_score = k[["nn.dist"]][mC]
                 geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
 
-                print("nn2.4")
+                print("nn2.2.2")
 
                 
                 k[["nn.dist"]][mC] <- ((1-geog_Weight) * PSM_score)
@@ -75,7 +81,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
       
         }
 
-        print("nn3.0")
+        print("nn2.3")
 
         #Add the matched treatment and control values to the recording data frame
         #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.
@@ -103,7 +109,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
         pair_id = paste(curgrp,j,sep="")
         
-        print("nn4.0")
+        print("nn2.4")
 
         #Add the Treatment ID to the Control Row 
         dta@data$match[which(dta@data[[ids]] == Control_ID)] = Treatment_ID
@@ -116,10 +122,14 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         dta@data[["PSM_distance"]][which(dta@data[[ids]] == Treatment_ID)] = k[["nn.dist"]][,1][best_m_control]
         dta@data[["PSM_match_ID"]][which(dta@data[[ids]] == Treatment_ID)] = pair_id        
         
+        print("nn2.5")
+
         #Drop the paired match out of the iteration matrix 
-        sorted_dta <- sorted_dta[sorted_dta[[ids]] != Treatment_ID ,]
-        sorted_dta <- sorted_dta[sorted_dta[[ids]] != Control_ID ,]    
+        # sorted_dta <- sorted_dta[sorted_dta[[ids]] != Treatment_ID ,]
+        # sorted_dta <- sorted_dta[sorted_dta[[ids]] != Control_ID ,]    
     
+        sorted_dta[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID),]['nn_matched'] <- 1
+
     }
 
     return(dta) 

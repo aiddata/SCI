@@ -96,16 +96,17 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
         }
     }
+
     print("sat4")
 
     #Build the final datasets from subsets
     if (cnt > 1) {
-      dta <- temp_dta[[1]]
-      for(k in 2:cnt) {
-        dta  <- maptools::spRbind(dta, temp_dta[[k]])
-      } 
+        dta <- temp_dta[[1]]
+        for(k in 2:cnt) {
+            dta  <- maptools::spRbind(dta, temp_dta[[k]])
+        } 
     } else {
-      dta <- temp_dta[[1]]
+        dta <- temp_dta[[1]]
     }
 
     print("sat5")
@@ -130,6 +131,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         dta <- dta[dta@data[,"PSM_distance"] < psm_sd_thresh,]
     }
   
+
+
     #Plot the pre and post-dropping balance for PSM model...
     #Balance metrics are based on "Misunderstandings between experimentalists and
     #observationalists about causal inference", Imal, King, and Stuart.

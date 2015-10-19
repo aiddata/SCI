@@ -78,22 +78,24 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
     temp_dta <- list()
 
-    for (i in 1:cnt) {
-        cur_grp <- grp_list[[i]]
+    if (cnt > 0) {
+        for (i in 1:cnt) {
+            cur_grp <- grp_list[[i]]
 
-        print("sat3.1")
-        it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
+            print("sat3.1")
+            it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
 
-        print("sat3.2")
-        if (mtd == "fastNN") {
-            # ***
-            # this is the slow part of functions
-            temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
-        }
+            print("sat3.2")
+            if (mtd == "fastNN") {
+                # ***
+                # this is the slow part of functions
+                temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+            }
 
-        if (mtd == "NN_WithReplacement") {
-            print("NN with replacement is currently not available, please choose fastNN")
-            # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+            if (mtd == "NN_WithReplacement") {
+                print("NN with replacement is currently not available, please choose fastNN")
+                # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+            }
         }
     }
 

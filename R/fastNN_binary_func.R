@@ -14,7 +14,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
     dta@data[["nn_matched"]] <- 0
 
-    sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]), c(ids, trtMntVar, "PSM_trtProb", "nn_matched"])]
+    sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]), c(ids, trtMntVar, "PSM_trtProb", "nn_matched")]
 
 
 

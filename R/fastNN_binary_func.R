@@ -149,7 +149,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
     }
 
-    print(proc.time() - timerx)[3])
+    print((proc.time() - timerx)[3])
 
     return(dta) 
 

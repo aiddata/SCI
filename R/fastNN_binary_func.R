@@ -39,10 +39,10 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # print("nn2.0")
         # timer <- proc.time()
 
-        treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]
-        untreated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 0 & sorted_dta[['nn_matched']] == 0),]
+        # treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]
+        # untreated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 0 & sorted_dta[['nn_matched']] == 0),]
         
-        print(nrow(sorted_dta[which(sorted_dta[['nn_matched']] == 0),]))
+        # print(nrow(sorted_dta[which(sorted_dta[['nn_matched']] == 0),]))
 
         # time_list[1] <- round((proc.time() - timer)[3],5)
         # print("nn2.1")
@@ -121,7 +121,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
 
         #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
-        pair_id = paste(curgrp,j,sep="")
+        pair_id = paste(curgrp,j, sep="")
         
         # time_list[4] <- round((proc.time() - timer)[3],5)
         # print("nn2.4")
@@ -144,8 +144,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # sorted_dta <- sorted_dta[sorted_dta[[ids]] != Treatment_ID ,]
         # sorted_dta <- sorted_dta[sorted_dta[[ids]] != Control_ID ,]    
     
-        sorted_dta[which(sorted_dta[[ids]] == Control_ID | sorted_dta[[ids]] == Treatment_ID),][['nn_matched']] <- 1
+        # sorted_dta[which(sorted_dta[[ids]] == Control_ID | sorted_dta[[ids]] == Treatment_ID),][['nn_matched']] <- 1
 
+        treated <- treated[which(treated[[ids]] != Treatment_ID),]
+        untreated <- untreated[which(untreated[[ids]] != Control_ID),]
+        
         # time_list[6] <- round((proc.time() - timer)[3],5)
         # print(paste(time_list))
 

@@ -79,6 +79,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     temp_dta <- list()
 
     if (cnt > 0) {
+        print("sat3.0")
+
         for (i in 1:cnt) {
             cur_grp <- grp_list[[i]]
 
@@ -97,21 +99,22 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
                 # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
             }
         }
+
+        print("sat3.1")
+
+        #Build the final datasets from subsets
+        if (cnt > 1) {
+            dta <- temp_dta[[1]]
+            for(k in 2:cnt) {
+                dta  <- maptools::spRbind(dta, temp_dta[[k]])
+            } 
+        } else {
+            dta <- temp_dta[[1]]
+        }
+
     }
 
     print("sat4")
-
-    #Build the final datasets from subsets
-    if (cnt > 1) {
-        dta <- temp_dta[[1]]
-        for(k in 2:cnt) {
-            dta  <- maptools::spRbind(dta, temp_dta[[k]])
-        } 
-    } else {
-        dta <- temp_dta[[1]]
-    }
-
-    print("sat5")
 
     if (drop_unmatched == TRUE) {
         dta <- dta[dta@data[,"PSM_match_ID"] != -999,]    
@@ -121,7 +124,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
     anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
     
-    print("sat6")
+    print("sat5")
   
     #Drop observations according to the selected method
     if (drop_method == "SD") {
@@ -141,11 +144,11 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     #Simplest suggestion of comparing means and checking if .25 SD apart used.
     cnt = 0
 
-    print("sat7")
+    print("sat6")
     
     for (i in 1:length(anc_vars)) {
 
-        print("sat7.0")
+        print("sat6.0")
 
         #gsub to remove any factors()
         ed_v = sub("factor\\(","",anc_vars[i])
@@ -153,7 +156,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
         c_type = class(init_dta@data[[ed_v]])
 
-        print("sat7.1")
+        print("sat6.1")
         if (c_type == "matrix") {
 
             dta@data[,ed_v] <- as.numeric(dta@data[,ed_v])
@@ -163,7 +166,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             c_type = "numeric"
         }
 
-        print("sat7.2")
+        print("sat6.2")
         if ((c_type == "numeric") & (visual == "TRUE")) {
             cnt = cnt + 1
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
@@ -213,7 +216,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         }
     }
 
-    print("sat8")
+    print("sat7")
   
     if (visual=="TRUE") {
         #Output graphics

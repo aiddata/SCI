@@ -14,6 +14,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
     sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]),]
     
+    sorted_dta[["nn_matched"]] <- 0
+
 
     #Conduct the matching
     treated <- sorted_dta[sorted_dta[[trtMntVar]] == 1,]
@@ -24,7 +26,6 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     dta@data[["PSM_distance"]] <- -999
     dta@data[["PSM_match_ID"]] <- -999
 
-    dta@data[["nn_matched"]] <- 0
 
     print("nn2")
 

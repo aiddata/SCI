@@ -14,10 +14,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     #Fast nearest neighbors search - will not arrive at optimum,
     #but this may not be an issue for many analysis.
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
-    dta@data[["nn_matched"]] <- 0
 
-    sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]), c(ids, trtMntVar, "PSM_trtProb", "nn_matched")]
-
+    sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]), c(ids, trtMntVar, "PSM_trtProb")]
 
 
     #Conduct the matching
@@ -110,14 +108,17 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # #Treatment PSM ID
         # Treatment_ID = toString(treated[[ids]][[best_m_treated]])
    
-        #Control PSM ID
-        cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
-        Control_ID = toString(eval(parse(text=cid_txt)))
+        # #Control PSM ID
+        # cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
+        # Control_ID = toString(eval(parse(text=cid_txt)))
             
-        #Treatment PSM ID
-        tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
-        Treatment_ID = toString(eval(parse(text=tid_txt)))
+        # #Treatment PSM ID
+        # tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
+        # Treatment_ID = toString(eval(parse(text=tid_txt)))
 
+        #Control PSM ID and Treatment PSM ID
+        Control_ID = toString(untreated[,ids][best_m_control])
+        Treatment_ID = toString(treated[,ids][best_m_treated])
 
 
         #Create a unique pair ID for each group (will simply append a "1" if only 1 group)

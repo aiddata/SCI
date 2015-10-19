@@ -128,7 +128,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # sorted_dta <- sorted_dta[sorted_dta[[ids]] != Treatment_ID ,]
         # sorted_dta <- sorted_dta[sorted_dta[[ids]] != Control_ID ,]    
     
-        sorted_dta[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID),]['nn_matched'] <- 1
+        sorted_dta[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID),][['nn_matched']] <- 1
 
     }
 

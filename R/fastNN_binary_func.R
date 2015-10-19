@@ -29,35 +29,36 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     dta@data[["PSM_distance"]] <- -999
     dta@data[["PSM_match_ID"]] <- -999
 
-    print("nn2")
+    # print("nn2")
 
     #Calculate a distance decay function
     #to perturb pairs based on their distances.  
     for (j in 1:it_cnt) {
-        time_list <- c()
+        # time_list <- c()
 
         # print("nn2.0")
-        timer <- proc.time()
+        # timer <- proc.time()
 
         treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]
         untreated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 0 & sorted_dta[['nn_matched']] == 0),]
         
-        time_list[1] <- round((proc.time() - timer)[3],5)
+        # time_list[1] <- round((proc.time() - timer)[3],5)
         # print("nn2.1")
-        timer <- proc.time()
+        # timer <- proc.time()
 
         #Run the KNN for all neighbors. 
         k <- get.knnx(treated[["PSM_trtProb"]], untreated[["PSM_trtProb"]], 1)
         
-        time_list[2] <- round((proc.time() - timer)[3],5)
+        # time_list[2] <- round((proc.time() - timer)[3],5)
         # print("nn2.2")
-        timer <- proc.time()
+        # timer <- proc.time()
 
         #Perturb the values based on the distance decay function, if selected.
         if (!is.null(dist_PSM)) {
             for (mC in 1:length(k[[1]])) {
 
-                print("nn2.2.0")
+                # print("nn2.2.0")
+                
                 #Calculate the Euclidean Distance between pairs
                 Control_ID = toString(untreated[[ids]][[mC]])
 
@@ -76,12 +77,12 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
                 x_dist = abs(tCoord[1] - tCoord[2])
                 euc_dist = sqrt(y_dist^2 + x_dist^2)
                 
-                print("nn2.2.1")
+                # print("nn2.2.1")
 
                 PSM_score = k[["nn.dist"]][mC]
                 geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
 
-                print("nn2.2.2")
+                # print("nn2.2.2")
 
                 
                 k[["nn.dist"]][mC] <- ((1-geog_Weight) * PSM_score)
@@ -90,9 +91,9 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
       
         }
 
-        time_list[3] <- round((proc.time() - timer)[3],5)
+        # time_list[3] <- round((proc.time() - timer)[3],5)
         # print("nn2.3")
-        timer <- proc.time()
+        # timer <- proc.time()
 
         #Add the matched treatment and control values to the recording data frame
         #best_m_control is the row in the "distance" matrix with the lowest value.  This is the same row as in the index.
@@ -120,9 +121,9 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
         pair_id = paste(curgrp,j,sep="")
         
-        time_list[4] <- round((proc.time() - timer)[3],5)
+        # time_list[4] <- round((proc.time() - timer)[3],5)
         # print("nn2.4")
-        timer <- proc.time()
+        # timer <- proc.time()
 
         #Add the Treatment ID to the Control Row and Add the Control ID to the Treatment Row
         dta@data$match[which(dta@data[[ids]] == Control_ID)] <- Treatment_ID
@@ -133,9 +134,9 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
 
         
-        time_list[5] <- round((proc.time() - timer)[3],5)
+        # time_list[5] <- round((proc.time() - timer)[3],5)
         # print("nn2.5")
-        timer <- proc.time()
+        # timer <- proc.time()
 
         #Drop the paired match out of the iteration matrix 
         # sorted_dta <- sorted_dta[sorted_dta[[ids]] != Treatment_ID ,]
@@ -143,9 +144,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     
         sorted_dta[which(sorted_dta[[ids]] == Control_ID | sorted_dta[[ids]] == Treatment_ID),][['nn_matched']] <- 1
 
-        time_list[6] <- round((proc.time() - timer)[3],5)
-
-        print(paste(time_list))
+        # time_list[6] <- round((proc.time() - timer)[3],5)
+        # print(paste(time_list))
 
     }
 

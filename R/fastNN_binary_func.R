@@ -12,9 +12,10 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     #Fast nearest neighbors search - will not arrive at optimum,
     #but this may not be an issue for many analysis.
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
-    sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]), c(ids, trtMntVar, "PSM_trtProb")]
-    return(sorted_dta)
-    sorted_dta[["nn_matched"]] <- 0
+    dta@data[["nn_matched"]] <- 0
+
+    sorted_dta <- dta@data[order(dta@data[["PSM_trtProb"]]), c(ids, trtMntVar, "PSM_trtProb", "nn_matched"])]
+
 
 
     #Conduct the matching

@@ -35,21 +35,21 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     for (j in 1:it_cnt) {
         time_list <- c()
 
-        print("nn2.0")
+        # print("nn2.0")
         timer <- proc.time()
 
         treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]
         untreated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 0 & sorted_dta[['nn_matched']] == 0),]
         
         time_list[1] <- (proc.time() - timer)[3]
-        print("nn2.1")
+        # print("nn2.1")
         timer <- proc.time()
 
         #Run the KNN for all neighbors. 
         k <- get.knnx(treated[["PSM_trtProb"]], untreated[["PSM_trtProb"]], 1)
         
         time_list[2] <- (proc.time() - timer)[3]
-        print("nn2.2")
+        # print("nn2.2")
         timer <- proc.time()
 
         #Perturb the values based on the distance decay function, if selected.
@@ -90,7 +90,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         }
 
         time_list[3] <- (proc.time() - timer)[3]
-        print("nn2.3")
+        # print("nn2.3")
         timer <- proc.time()
 
         #Add the matched treatment and control values to the recording data frame
@@ -120,7 +120,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         pair_id = paste(curgrp,j,sep="")
         
         time_list[4] <- (proc.time() - timer)[3]
-        print("nn2.4")
+        # print("nn2.4")
         timer <- proc.time()
 
         #Add the Treatment ID to the Control Row 
@@ -135,7 +135,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         dta@data[["PSM_match_ID"]][which(dta@data[[ids]] == Treatment_ID)] = pair_id        
         
         time_list[5] <- (proc.time() - timer)[3]
-        print("nn2.5")
+        # print("nn2.5")
         timer <- proc.time()
 
         #Drop the paired match out of the iteration matrix 

@@ -19,14 +19,16 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             } else {
                 dta$ConstraintGroupSet_Opt <- 1
             }
+
             if (names(constraints)[cst] == "distance") {
                 dist_PSM = as.numeric(constraints["distance"][[1]])
             } else {
                 dist_PSM=NULL
             }
         }
+        
     } else {
-        dta$ConstraintGroupSet_Opt <- 1
+        dta@data[,"ConstraintGroupSet_Opt"] <- 1
         #max the distance threshold by taking the diagonal of the bounding box.
         dist_PSM = NULL
     }

@@ -73,48 +73,47 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     }
 
 
+    if (cnt == 0) {
+        return('drop')
+    }
+
 
     print("sat3")
 
     temp_dta <- list()
 
-    if (cnt > 0) {
-        print("sat3.0")
-
-        for (i in 1:cnt) {
-            cur_grp <- grp_list[[i]]
-
-            print("sat3.1")
-            it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
-
-            print("sat3.2")
-            if (mtd == "fastNN") {
-                # ***
-                # this is the slow part of functions
-                temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
-            }
-
-            if (mtd == "NN_WithReplacement") {
-                print("NN with replacement is currently not available, please choose fastNN")
-                # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
-            }
-        }
+    for (i in 1:cnt) {
+        cur_grp <- grp_list[[i]]
 
         print("sat3.1")
+        it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
 
-        #Build the final datasets from subsets
-        if (cnt > 1) {
-            dta <- temp_dta[[1]]
-            for(k in 2:cnt) {
-                dta  <- maptools::spRbind(dta, temp_dta[[k]])
-            } 
-        } else {
-            dta <- temp_dta[[1]]
+        print("sat3.2")
+        if (mtd == "fastNN") {
+            # ***
+            # this is the slow part of functions
+            temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
         }
 
+        if (mtd == "NN_WithReplacement") {
+            print("NN with replacement is currently not available, please choose fastNN")
+            # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+        }
     }
 
     print("sat4")
+
+    #Build the final datasets from subsets
+    if (cnt > 1) {
+        dta <- temp_dta[[1]]
+        for(k in 2:cnt) {
+            dta  <- maptools::spRbind(dta, temp_dta[[k]])
+        } 
+    } else {
+        dta <- temp_dta[[1]]
+    }
+
+    print("sat5")
 
     if (drop_unmatched == TRUE) {
         dta <- dta[dta@data[,"PSM_match_ID"] != -999,]    
@@ -124,7 +123,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
     anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
     
-    print("sat5")
+    print("sat6")
   
     #Drop observations according to the selected method
     if (drop_method == "SD") {
@@ -144,11 +143,11 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     #Simplest suggestion of comparing means and checking if .25 SD apart used.
     cnt = 0
 
-    print("sat6")
+    print("sat7")
     
     for (i in 1:length(anc_vars)) {
 
-        print("sat6.0")
+        print("sat7.0")
 
         #gsub to remove any factors()
         ed_v = sub("factor\\(","",anc_vars[i])
@@ -156,7 +155,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
         c_type = class(init_dta@data[[ed_v]])
 
-        print("sat6.1")
+        print("sat7.1")
         if (c_type == "matrix") {
 
             dta@data[,ed_v] <- as.numeric(dta@data[,ed_v])
@@ -166,7 +165,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             c_type = "numeric"
         }
 
-        print("sat6.2")
+        print("sat7.2")
         if ((c_type == "numeric") & (visual == "TRUE")) {
             cnt = cnt + 1
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
@@ -216,7 +215,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         }
     }
 
-    print("sat7")
+    print("sat8")
   
     if (visual=="TRUE") {
         #Output graphics

@@ -42,8 +42,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]
         untreated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 0 & sorted_dta[['nn_matched']] == 0),]
         
-        print(nrow(sorted_dta))
-        
+        print(nrow(sorted_dta[which(sorted_dta[['nn_matched']] == 0),]))
+
         # time_list[1] <- round((proc.time() - timer)[3],5)
         # print("nn2.1")
         # timer <- proc.time()

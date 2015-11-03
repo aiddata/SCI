@@ -7,7 +7,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     drop_method = drop_opts["drop_method"]
     drop_thresh = as.numeric(drop_opts["drop_thresh"])
   
-
+    
 
     print("sat1")
 

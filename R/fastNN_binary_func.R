@@ -21,8 +21,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     #Conduct the matching
     treated <- sorted_dta[sorted_dta[[trtMntVar]] == 1,]
     untreated <- sorted_dta[sorted_dta[[trtMntVar]] == 0,]
-    print(length(treated[[1]]))
-    print(length(untreated[[1]]))
+
     it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
     dta@data[["match"]] <- -999
     dta@data[["PSM_distance"]] <- -999
@@ -48,6 +47,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # timer <- proc.time()
 
         #Run the KNN for all neighbors. 
+        print(length(treated[[1]]))
+        summary(treated[["PSM_trtProb"]])
+        print(length(untreated[[1]]))
+        summary(untreated[["PSM_trtProb"]])
+
         k <- get.knnx(treated[["PSM_trtProb"]], untreated[["PSM_trtProb"]], 1)
         
         # time_list[2] <- round((proc.time() - timer)[3],5)

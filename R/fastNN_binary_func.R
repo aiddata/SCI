@@ -47,10 +47,10 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # timer <- proc.time()
 
         #Run the KNN for all neighbors. 
-        print(length(treated[[1]]))
-        summary(treated[["PSM_trtProb"]])
-        print(length(untreated[[1]]))
-        summary(untreated[["PSM_trtProb"]])
+        # print(length(treated[[1]]))
+        # summary(treated[["PSM_trtProb"]])
+        # print(length(untreated[[1]]))
+        # summary(untreated[["PSM_trtProb"]])
 
         k <- get.knnx(treated[["PSM_trtProb"]], untreated[["PSM_trtProb"]], 1)
         

@@ -23,8 +23,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     untreated <- sorted_dta[sorted_dta[[trtMntVar]] == 0,]
 
     it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
-    dta@data[["match"]] <- -999
-    dta@data[["PSM_distance"]] <- -999
+    # dta@data[["match"]] <- -999
+    # dta@data[["PSM_distance"]] <- -999
     dta@data[["PSM_match_ID"]] <- -999
 
     print("nn2")
@@ -131,11 +131,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # timer <- proc.time()
 
         #Add the Treatment ID to the Control Row and Add the Control ID to the Treatment Row
-        dta@data$match[which(dta@data[[ids]] == Control_ID)] <- Treatment_ID
-        dta@data$match[which(dta@data[[ids]] == Treatment_ID)] <- Control_ID
+        # dta@data$match[which(dta@data[[ids]] == Control_ID)] <- Treatment_ID
+        # dta@data$match[which(dta@data[[ids]] == Treatment_ID)] <- Control_ID
 
 
-        dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID)] <- k[["nn.dist"]][,1][best_m_control]
+        # dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID)] <- k[["nn.dist"]][,1][best_m_control]
         dta@data$PSM_match_ID[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID)] <- pair_id        
 
 

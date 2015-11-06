@@ -124,15 +124,16 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
         pair_id = paste(curgrp,j, sep="")
         
+
+
         # time_list[4] <- round((proc.time() - timer)[3],5)
-        print("nn2.4a")
+        print("nn2.4x")
         # timer <- proc.time()
 
         #Add the Treatment ID to the Control Row and Add the Control ID to the Treatment Row
         dta@data$match[which(dta@data[[ids]] == Control_ID)] <- Treatment_ID
         dta@data$match[which(dta@data[[ids]] == Treatment_ID)] <- Control_ID
 
-        print("nn2.4b")
 
         dta@data$PSM_distance[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID)] <- k[["nn.dist"]][,1][best_m_control]
         dta@data$PSM_match_ID[which(dta@data[[ids]] == Control_ID | dta@data[[ids]] == Treatment_ID)] <- pair_id        
@@ -140,7 +141,6 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
         
         # time_list[5] <- round((proc.time() - timer)[3],5)
-        print("nn2.5")
         # timer <- proc.time()
 
         #Drop the paired match out of the iteration matrix 

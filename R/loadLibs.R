@@ -19,4 +19,6 @@ loadLibs <- function (x=1) {
   library(stargazer)
   library(lmtest)
   library(multiwayvcov)
+  
+  library(data.table)
 }

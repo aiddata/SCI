@@ -96,8 +96,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
 
         # Control PSM ID and Treatment PSM ID
-        Control_ID = toString(untreated[best_m_control, get(ids), with=FALSE])
-        Treatment_ID = toString(treated[best_m_control, get(ids), with=FALSE])
+        Control_ID = toString(untreated[best_m_control, (ids), with=FALSE])
+        Treatment_ID = toString(treated[best_m_control, (ids), with=FALSE])
 
 
         # Create a unique pair ID for each group (will simply append a "1" if only 1 group)

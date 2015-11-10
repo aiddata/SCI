@@ -96,6 +96,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
         print(class(untreated))
         print(colnames(untreated))
+
         # Control PSM ID and Treatment PSM ID
         Control_ID = toString(untreated[best_m_control, (ids), with=FALSE])
         Treatment_ID = toString(treated[best_m_control, (ids), with=FALSE])
@@ -124,8 +125,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     
         # sorted_dta[which(sorted_dta[[ids]] == Control_ID | sorted_dta[[ids]] == Treatment_ID),][['nn_matched']] <- 1
 
-        treated <- treated[get(ids) != (Treatment_ID)]
-        untreated <- untreated[get(ids) != (Control_ID)]
+        treated <- treated[get(ids) != (Treatment_ID), with=FALSE]
+        untreated <- untreated[get(ids) != (Control_ID), with=FALSE]
         
 
 

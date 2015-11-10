@@ -9,7 +9,6 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
     print("nn1.0")
 
-    library(data.table)
     #Fast nearest neighbors search - will not arrive at optimum,
     #but this may not be an issue for many analysis.
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
@@ -47,11 +46,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
                 print("nn2.2.0")
 
                 # Calculate the Euclidean Distance between pairs
-                Control_ID = toString(untreated[mC, get(ids)])
+                Control_ID = toString(untreated[mC, get(ids), with=FALSE])
 
                 mT = k[["nn.index"]][mC]
                 
-                Treatment_ID = toString(treated[mT, get(ids)])
+                Treatment_ID = toString(treated[mT, get(ids), with=FALSE])
 
                 #Find the control x,y location
                 cCoord = coordinates(dta[which(dta@data[[ids]] == Control_ID),])

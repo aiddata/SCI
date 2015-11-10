@@ -19,7 +19,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
     #Conduct the matching
     treated <- as.data.table(sorted_dta[sorted_dta[[trtMntVar]] == 1, c(ids, "PSM_trtProb")])
-    untreated <- as.data.tablesorted_dta[sorted_dta[[trtMntVar]] == 0, c(ids, "PSM_trtProb")])
+    untreated <- as.data.table(sorted_dta[sorted_dta[[trtMntVar]] == 0, c(ids, "PSM_trtProb")])
 
 
 

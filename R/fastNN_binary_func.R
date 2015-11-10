@@ -181,6 +181,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     untreated <- sorted_dta[sorted_dta[[trtMntVar]] == 0, c(ids, "PSM_trtProb")]
 
     it_cnt = min(length(treated[[1]]), length(untreated[[1]]))
+
+    if (it_cnt < 30) {
+        return('drop')
+    }
+    
     # dta@data[["match"]] <- -999
     # dta@data[["PSM_distance"]] <- -999
     dta@data[["PSM_match_ID"]] <- -999

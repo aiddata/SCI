@@ -371,6 +371,10 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             # ***
             # this is the slow part of functions
             dta <- fastNN_binary_func(dta, TrtBinColName, ids, NULL, NULL) 
+
+            if (class(dta) == class('drop')) {
+                return('drop')
+            }
         }
 
 

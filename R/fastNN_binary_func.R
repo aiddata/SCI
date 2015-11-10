@@ -103,10 +103,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
 
         # Create a unique pair ID for each group (will simply append a "1" if only 1 group)
-        if (curgrp != NULL) {
-            pair_id <- paste(curgrp,j, sep="")
-        } else {
+        if (curgrp == NULL) {
             pair_id <- paste('pair',j, sep="")
+        } else {
+            pair_id <- paste(curgrp,j, sep="")
+
         }
 
 

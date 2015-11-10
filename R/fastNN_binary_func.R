@@ -17,9 +17,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
     sorted_dta <- as.data.table(dta@data)
 
-    vvv <<- sorted_dta
 
-    sorted_dta <- sorted_dta[order(PSM_trtProb)]
+    sorted_dta <- sorted_dta[order(get("PSM_trtProb"))]
     print(colnames(sorted_dta))
 
 

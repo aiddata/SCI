@@ -10,13 +10,14 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     print("nn1.0")
     # timerx <- proc.time()
 
-    vvv <<- sorted_dta
 
     #Fast nearest neighbors search - will not arrive at optimum,
     #but this may not be an issue for many analysis.
     #Effectively loops through all observations in the treatment group, ordered by PSM score - higher scores go first.
 
     sorted_dta <- as.data.table(dta@data)
+
+    vvv <<- sorted_dta
 
     sorted_dta <- sorted_dta[order(PSM_trtProb)]
     print(colnames(sorted_dta))

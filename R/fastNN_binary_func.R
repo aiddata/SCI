@@ -185,7 +185,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     if (it_cnt < 30) {
         return('drop')
     }
-    
+
     # dta@data[["match"]] <- -999
     # dta@data[["PSM_distance"]] <- -999
     dta@data[["PSM_match_ID"]] <- -999
@@ -271,17 +271,17 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         best_m_treated = k[["nn.index"]][best_m_control]
         
 
-        #Control PSM ID
-        cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
-        Control_ID = toString(eval(parse(text=cid_txt)))
+        # #Control PSM ID
+        # cid_txt = paste("untreated$",ids,"[",best_m_control,"]",sep="")
+        # Control_ID = toString(eval(parse(text=cid_txt)))
             
-        #Treatment PSM ID
-        tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
-        Treatment_ID = toString(eval(parse(text=tid_txt)))
+        # #Treatment PSM ID
+        # tid_txt = paste("treated$",ids,"[",best_m_treated,"]",sep="")
+        # Treatment_ID = toString(eval(parse(text=tid_txt)))
 
         #Control PSM ID and Treatment PSM ID
-        # Control_ID = toString(untreated[,ids][best_m_control])
-        # Treatment_ID = toString(treated[,ids][best_m_treated])
+        Control_ID = toString(untreated[[ids][best_m_control])
+        Treatment_ID = toString(treated[[ids]][best_m_treated])
 
 
         #Create a unique pair ID for each group (will simply append a "1" if only 1 group)

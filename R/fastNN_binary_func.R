@@ -192,7 +192,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     for (j in 1:it_cnt) {
         # time_list <- c()
 
-        print("nn2.0")
+        print(paste("nn cnt:",i))
         # timer <- proc.time()
 
         # treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]
@@ -213,7 +213,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         k <- get.knnx(treated[["PSM_trtProb"]], untreated[["PSM_trtProb"]], 1)
         
         # time_list[2] <- round((proc.time() - timer)[3],5)
-        print("nn2.2")
+        # print("nn2.2")
         # timer <- proc.time()
 
         # #Perturb the values based on the distance decay function, if selected.

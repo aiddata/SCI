@@ -125,8 +125,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     
         # sorted_dta[which(sorted_dta[[ids]] == Control_ID | sorted_dta[[ids]] == Treatment_ID),][['nn_matched']] <- 1
 
-        treated <- treated[get(ids) != (Treatment_ID), with=FALSE]
-        untreated <- untreated[get(ids) != (Control_ID), with=FALSE]
+        qt = quote(ids != Treatment_ID)
+        qu = quote(ids != Treatment_ID)
+
+        treated <- treated[eval(qt)]
+        untreated <- untreated[eval(qu)]
         
 
 

@@ -289,7 +289,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         t_dta <- list()
         u_dta <-list()
         grp_list <- list()
-        cnt = 0
+        cnt <- 0
 
         for (grp in 1:length(group_constraints)) {
             cur_grp <- as.matrix(group_constraints)[grp]
@@ -315,7 +315,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
                 t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
                 u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
 
-                cnt = cnt + 1
+                cnt <- cnt + 1
             }
         }
 
@@ -331,10 +331,10 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         for (i in 1:cnt) {
             cur_grp <- grp_list[[i]]
 
-            print("sat3.1")
+            print("sat1a.3.1")
             it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
 
-            print("sat3.2")
+            print("sat1a.3.2")
             if (mtd == "fastNN") {
                 # ***
                 # this is the slow part of functions
@@ -347,18 +347,32 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             # }
         }
 
+        print("sat1a.4")
+
+        #Build the final datasets from subsets
+        if (cnt > 1) {
+            dta <- temp_dta[[1]]
+            for(k in 2:cnt) {
+                dta  <- maptools::spRbind(dta, temp_dta[[k]])
+            } 
+        } else {
+            dta <- temp_dta[[1]]
+        }
+
         
     } else {
 
         print("sat1b.1")
 
+        cnt <- 1
         temp_dta <- list()
 
         if (mtd == "fastNN") {
             # ***
             # this is the slow part of functions
-            temp_dta[[i]] <- fastNN_binary_func(dta, TrtBinColName, ids, NULL, NULL) 
+            dta <- fastNN_binary_func(dta, TrtBinColName, ids, NULL, NULL) 
         }
+
 
         # if (mtd == "NN_WithReplacement") {
         #     print("NN with replacement is currently not available, please choose fastNN")
@@ -369,19 +383,6 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     }
 
 
-
-
-    print("sat4")
-
-    #Build the final datasets from subsets
-    if (cnt > 1) {
-        dta <- temp_dta[[1]]
-        for(k in 2:cnt) {
-            dta  <- maptools::spRbind(dta, temp_dta[[k]])
-        } 
-    } else {
-        dta <- temp_dta[[1]]
-    }
 
 
     print("sat5")

@@ -17,12 +17,15 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
     sorted_dta <- as.data.table(dta@data)
 
+    print("x")
+    print(colnames(sorted_dta))
+    sorted_dta <- sorted_dta[, c(ids, trtMntVar, "PSM_trtProb"), with=FALSE]
+    print(colnames(sorted_dta))
 
     sorted_dta <- sorted_dta[order(get("PSM_trtProb"))]
     print(colnames(sorted_dta))
 
 
-    sorted_dta <- sorted_dta[, c(ids, trtMntVar, "PSM_trtProb"), with=FALSE]
 
 
     #Conduct the matching

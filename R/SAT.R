@@ -261,6 +261,9 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     print("sat1")
 
     if (!is.null(constraints) && contraints != c()) {
+
+        print("sat1a.1")
+
         for (cst in 1:length(names(constraints))) {
             if (names(constraints)[cst] == "groups") {
                 dta@data[,"ConstraintGroupSet_Opt"] <- dta@data[,constraints["groups"]]
@@ -275,82 +278,98 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
                 dist_PSM=NULL
             }
         }
+
+
+        print("sat1a.2")
+
+        # Caclulate the number of groups to constrain by, if any.
+        group_constraints <- unique(dta$ConstraintGroupSet_Opt)
+      
+        # Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
+        t_dta <- list()
+        u_dta <-list()
+        grp_list <- list()
+        cnt = 0
+
+        for (grp in 1:length(group_constraints)) {
+            cur_grp <- as.matrix(group_constraints)[grp]
+            grp_index = length(grp_list)+1
+            t_index = length(t_dta)+1
+            grp_list[[grp_index]] <- as.matrix(group_constraints)[grp]
+
+            t_dta[[t_index]] <- dta[dta$TrtBin == 1,]
+            u_dta[[t_index]] <- dta[dta$TrtBin == 0,]
+
+            treatment_count <- cur_grp %in% t_dta[[t_index]]$ConstraintGroupSet_Opt
+            untreated_count <- cur_grp %in% u_dta[[t_index]]$ConstraintGroupSet_Opt
+
+            if ((untreated_count == FALSE) || (treatment_count == FALSE)) {
+                dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
+                t_dta[[t_index]] <- NULL
+                u_dta[[t_index]] <- NULL
+                grp_list[[t_index]] <- NULL
+                war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
+                warning(war_statement)
+
+            } else { 
+                t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
+                u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
+
+                cnt = cnt + 1
+            }
+        }
+
+
+        if (cnt == 0) {
+            return('drop')
+        }
+
+
+        print("sat1a.3")
+
+
+        for (i in 1:cnt) {
+            cur_grp <- grp_list[[i]]
+
+            print("sat3.1")
+            it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
+
+            print("sat3.2")
+            if (mtd == "fastNN") {
+                # ***
+                # this is the slow part of functions
+                temp_dta[[i]] <- fastNN_binary_func(it_dta, TrtBinColName, ids, cur_grp, dist_PSM) 
+            }
+
+            # if (mtd == "NN_WithReplacement") {
+            #     print("NN with replacement is currently not available, please choose fastNN")
+            #     # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+            # }
+        }
+
         
     } else {
-        dta@data[,"ConstraintGroupSet_Opt"] <- 1
-        #max the distance threshold by taking the diagonal of the bounding box.
-        dist_PSM = NULL
-    }
 
+        print("sat1b.1")
 
+        temp_dta <- list()
 
-    print("sat2")
-
-    #Caclulate the number of groups to constrain by, if any.
-    group_constraints <- unique(dta$ConstraintGroupSet_Opt)
-  
-    #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
-    t_dta <- list()
-    u_dta <-list()
-    grp_list <- list()
-    cnt = 0
-
-    for (grp in 1:length(group_constraints)) {
-        cur_grp <- as.matrix(group_constraints)[grp]
-        grp_index = length(grp_list)+1
-        t_index = length(t_dta)+1
-        grp_list[[grp_index]] <- as.matrix(group_constraints)[grp]
-
-        t_dta[[t_index]] <- dta[dta$TrtBin == 1,]
-        u_dta[[t_index]] <- dta[dta$TrtBin == 0,]
-
-        treatment_count <- cur_grp %in% t_dta[[t_index]]$ConstraintGroupSet_Opt
-        untreated_count <- cur_grp %in% u_dta[[t_index]]$ConstraintGroupSet_Opt
-
-        if ((untreated_count == FALSE) || (treatment_count == FALSE)) {
-            dta <- dta[!dta$ConstraintGroupSet_Opt == cur_grp,]
-            t_dta[[t_index]] <- NULL
-            u_dta[[t_index]] <- NULL
-            grp_list[[t_index]] <- NULL
-            war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
-            warning(war_statement)
-
-        } else { 
-            t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
-            u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
-
-            cnt = cnt + 1
-        }
-    }
-
-
-    if (cnt == 0) {
-        return('drop')
-    }
-
-
-    print("sat3")
-
-    temp_dta <- list()
-
-    for (i in 1:cnt) {
-        cur_grp <- grp_list[[i]]
-
-        print("sat3.1")
-        it_dta <- maptools::spRbind(t_dta[[i]],u_dta[[i]])
-
-        print("sat3.2")
         if (mtd == "fastNN") {
             # ***
             # this is the slow part of functions
-            temp_dta[[i]] <- fastNN_binary_func(it_dta, TrtBinColName, ids, cur_grp, dist_PSM) 
+            temp_dta[[i]] <- fastNN_binary_func(dta, TrtBinColName, ids, NULL, NULL) 
         }
 
-        if (mtd == "NN_WithReplacement") {
-            print("NN with replacement is currently not available, please choose fastNN")
-            # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
-        }
+        # if (mtd == "NN_WithReplacement") {
+        #     print("NN with replacement is currently not available, please choose fastNN")
+        #     # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+        # }
+
+
     }
+
+
+
 
     print("sat4")
 
@@ -363,6 +382,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     } else {
         dta <- temp_dta[[1]]
     }
+
 
     print("sat5")
 

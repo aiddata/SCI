@@ -37,45 +37,45 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
       
         k <- get.knnx(treated[, 'PSM_trtProb'], untreated[, 'PSM_trtProb'], 1)
         
-        print("nn2.2")
+        # print("nn2.2")
 
-        # Perturb the values based on the distance decay function, if selected.
-        if (!is.null(dist_PSM)) {
-            for (mC in 1:length(k[[1]])) {
+        # # Perturb the values based on the distance decay function, if selected.
+        # if (!is.null(dist_PSM)) {
+        #     for (mC in 1:length(k[[1]])) {
 
-                print("nn2.2.0")
+        #         print("nn2.2.0")
 
-                # Calculate the Euclidean Distance between pairs
-                Control_ID = toString(untreated[mC, get(ids), with=FALSE])
+        #         # Calculate the Euclidean Distance between pairs
+        #         Control_ID = toString(untreated[mC, get(ids), with=FALSE])
 
-                mT = k[["nn.index"]][mC]
+        #         mT = k[["nn.index"]][mC]
                 
-                Treatment_ID = toString(treated[mT, get(ids), with=FALSE])
+        #         Treatment_ID = toString(treated[mT, get(ids), with=FALSE])
 
-                #Find the control x,y location
-                cCoord = coordinates(dta[which(dta@data[[ids]] == Control_ID),])
+        #         #Find the control x,y location
+        #         cCoord = coordinates(dta[which(dta@data[[ids]] == Control_ID),])
                 
 
-                #Find the treatment x,y location
-                tCoord = coordinates(dta[which(dta@data[[ids]] == Treatment_ID),])
+        #         #Find the treatment x,y location
+        #         tCoord = coordinates(dta[which(dta@data[[ids]] == Treatment_ID),])
 
-                y_dist = abs(cCoord[1] - cCoord[2])
-                x_dist = abs(tCoord[1] - tCoord[2])
-                euc_dist = sqrt(y_dist^2 + x_dist^2)
+        #         y_dist = abs(cCoord[1] - cCoord[2])
+        #         x_dist = abs(tCoord[1] - tCoord[2])
+        #         euc_dist = sqrt(y_dist^2 + x_dist^2)
                 
-                print("nn2.2.1")
+        #         print("nn2.2.1")
 
-                PSM_score = k[["nn.dist"]][mC]
-                geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
+        #         PSM_score = k[["nn.dist"]][mC]
+        #         geog_Weight = pairDistWeight(dist=euc_dist,threshold=dist_PSM,type="Spherical")
 
-                print("nn2.2.2")
+        #         print("nn2.2.2")
 
                 
-                k[["nn.dist"]][mC] <- ((1-geog_Weight) * PSM_score)
+        #         k[["nn.dist"]][mC] <- ((1-geog_Weight) * PSM_score)
 
-            }
+        #     }
       
-        }
+        # }
 
         print("nn2.3")
 
@@ -103,8 +103,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
 
         # Create a unique pair ID for each group (will simply append a "1" if only 1 group)
-        pair_id = paste(curgrp,j, sep="")
-        
+        if (curgrp != NULL) {
+            pair_id <- paste(curgrp,j, sep="")
+        else {
+            pair_id <- paste('pair',j, sep="")
+        }
 
 
         print("nn2.4x")

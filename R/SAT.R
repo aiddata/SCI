@@ -343,7 +343,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         if (mtd == "fastNN") {
             # ***
             # this is the slow part of functions
-            temp_dta[[i]] <- fastNN_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+            temp_dta[[i]] <- fastNN_binary_func(it_dta, TrtBinColName, ids, cur_grp, dist_PSM) 
         }
 
         if (mtd == "NN_WithReplacement") {

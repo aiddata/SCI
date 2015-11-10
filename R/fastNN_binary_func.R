@@ -280,7 +280,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         # Treatment_ID = toString(eval(parse(text=tid_txt)))
 
         #Control PSM ID and Treatment PSM ID
-        Control_ID = toString(untreated[[ids][best_m_control])
+        Control_ID = toString(untreated[[ids]][best_m_control])
         Treatment_ID = toString(treated[[ids]][best_m_treated])
 
 

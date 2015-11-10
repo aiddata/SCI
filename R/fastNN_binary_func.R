@@ -36,7 +36,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
         print("nn2.1")
       
-        k <- get.knnx(treated[, PSM_trtProb], untreated[, PSM_trtProb], 1)
+        k <- get.knnx(treated[, 'PSM_trtProb'], untreated[, 'PSM_trtProb'], 1)
         
         print("nn2.2")
 

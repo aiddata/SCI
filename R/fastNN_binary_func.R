@@ -192,7 +192,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
     for (j in 1:it_cnt) {
         # time_list <- c()
 
-        print(paste("nn cnt:",i))
+        print(paste("nn cnt:",j))
         # timer <- proc.time()
 
         # treated <- sorted_dta[which(sorted_dta[[trtMntVar]] == 1 & sorted_dta[['nn_matched']] == 0),]

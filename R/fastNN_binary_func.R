@@ -182,7 +182,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
     zzz <<- match_data
 
-    m <- matchit(TrtBin ~ PSM_trtProb, data=match_data, method="optimal", ratio=1)
+    m <- matchit(TrtBin ~ PSM_trtProb, data=match_data, method="nearest", ratio=1)
 
     for ( i in rownames(m$match.matrix) ) {
         trt_id <- i

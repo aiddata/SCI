@@ -176,12 +176,12 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
 
 
-    match_data <- dta@data[,c('PSM_trtProb', ids)]
+    match_data <- dta@data[,c('PSM_trtProb', ids, 'TrtBin')]
 
     rownames(match_data) <- match_data[[ids]]
 
     zzz <<- match_data
-    
+
     m <- matchit(TrtBin ~ PSM_trtProb, data=match_data, method="optimal", ratio=1)
 
     for ( i in rownames(m$match.matrix) ) {

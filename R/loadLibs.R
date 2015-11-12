@@ -20,5 +20,7 @@ loadLibs <- function (x=1) {
   library(lmtest)
   library(multiwayvcov)
   
-  library(data.table)
+  # library(data.table)
+  library(MatchIt)
+  library(optmatch)
 }

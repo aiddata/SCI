@@ -190,7 +190,7 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         trt_id <- i
         cnt_id <- m$match.matrix[i,]
         
-        if ( !is.na(cnt_id)) ) {
+        if ( !is.na(cnt_id) ) {
             pair_id <- paste(trt_id,cnt_id, sep='__')
             dta@data$PSM_match_ID[which(dta@data[[ids]] == cnt_id | dta@data[[ids]] == trt_id)] <- pair_id        
         }

@@ -22,5 +22,5 @@ loadLibs <- function (x=1) {
   
   # library(data.table)
   library(MatchIt)
-  library(optmatch)
+  # library(optmatch)
 }

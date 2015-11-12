@@ -184,6 +184,8 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
 
     m <- matchit(TrtBin ~ PSM_trtProb, data=match_data, method="nearest", ratio=1)
 
+    dta@data[["PSM_match_ID"]] <- -999
+
     for ( i in rownames(m$match.matrix) ) {
         trt_id <- i
         cnt_id <- m$match.matrix[i,]

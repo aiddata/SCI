@@ -174,9 +174,15 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         return('drop')
     }
 
-    rownames(dta@data) <- dta$sector_split_id
 
-    m <- matchit(TrtBin ~ PSM_trtProb, data=dta@data, method="optimal", ratio=1)
+
+    match_data <- dta@data[,c('PSM_trtProb', ids)]
+
+    rownames(match_data) <- match_data[[ids]]
+
+    zzz <<- match_data
+    
+    m <- matchit(TrtBin ~ PSM_trtProb, data=match_data, method="optimal", ratio=1)
 
     for ( i in rownames(m$match.matrix) ) {
         trt_id <- i

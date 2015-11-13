@@ -386,7 +386,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
     }
 
-
+    vvv <<- dta
 
 
     print("sat5")

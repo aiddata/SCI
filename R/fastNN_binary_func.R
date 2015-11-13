@@ -318,10 +318,11 @@ fastNN_binary_func <- function(dta, trtMntVar, ids, curgrp, dist_PSM) {
         Treatment_ID = toString(treated[[ids]][best_m_treated])
 
 
-        #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
-        pair_id = paste(curgrp,j, sep="")
-        
 
+        #Create a unique pair ID for each group (will simply append a "1" if only 1 group)
+        # pair_id = paste(curgrp,j, sep="")
+        pair_id <- paste(Treatment_ID,Control_ID, sep='__')
+        print(pair_id)
 
         # time_list[4] <- round((proc.time() - timer)[3],5)
         print("nn2.4x")

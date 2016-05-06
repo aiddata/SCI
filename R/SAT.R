@@ -5,16 +5,16 @@
 #     #Initialization
 #     pltObjs <- list()
 #     init_dta <- dta
-  
+
 #     drop_unmatched = drop_opts["drop_unmatched"]
 #     drop_method = drop_opts["drop_method"]
 #     drop_thresh = as.numeric(drop_opts["drop_thresh"])
-  
-    
+
+
 
 #     print("sat1")
 
-#     if (!is.null(constraints) && contraints != c()) {
+#     if (!is.null(constraints) && constraints != c()) {
 #         for (cst in 1:length(names(constraints))) {
 #             if (names(constraints)[cst] == "groups") {
 #                 dta[,"ConstraintGroupSet_Opt"] <- dta[,get(constraints["groups"])]
@@ -29,7 +29,7 @@
 #                 dist_PSM=NULL
 #             }
 #         }
-        
+
 #     } else {
 #         dta[,"ConstraintGroupSet_Opt"] <- 1
 #         #max the distance threshold by taking the diagonal of the bounding box.
@@ -42,7 +42,7 @@
 
 #     #Caclulate the number of groups to constrain by, if any.
 #     group_constraints <- unique(dta[,'ConstraintGroupSet_Opt']
-  
+
 #     #Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
 #     t_dta <- list()
 #     u_dta <-list()
@@ -69,7 +69,7 @@
 #             war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
 #             warning(war_statement)
 
-#         } else { 
+#         } else {
 #             t_dta[[t_index]] <- t_dta[[t_index]][ConstraintGroupSet_Opt == (cur_grp)]
 #             u_dta[[t_index]] <- u_dta[[t_index]][ConstraintGroupSet_Opt == (cur_grp)]
 
@@ -97,12 +97,12 @@
 #         if (mtd == "fastNN") {
 #             # ***
 #             # this is the slow part of functions
-#             temp_dta[[i]] <- fastNN_binary_func(it_dta, TrtBinColName, ids, cur_grp, dist_PSM) 
+#             temp_dta[[i]] <- fastNN_binary_func(it_dta, TrtBinColName, ids, cur_grp, dist_PSM)
 #         }
 
 #         if (mtd == "NN_WithReplacement") {
 #             print("NN with replacement is currently not available, please choose fastNN")
-#             # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+#             # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM)
 #         }
 #     }
 
@@ -113,7 +113,7 @@
 #         dta <- temp_dta[[1]]
 #         for(k in 2:cnt) {
 #             dta  <- maptools::spRbind(dta, temp_dta[[k]])
-#         } 
+#         }
 #     } else {
 #         dta <- temp_dta[[1]]
 #     }
@@ -121,15 +121,15 @@
 #     print("sat5")
 
 #     if (drop_unmatched == TRUE) {
-#         dta <- dta["PSM_match_ID" != -999]    
+#         dta <- dta["PSM_match_ID" != -999]
 #     }
-  
+
 #     anc_v_int <- strsplit(psm_eq, "~")[[1]][2]
 #     anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
 #     anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
-    
+
 #     print("sat6")
-  
+
 #     #Drop observations according to the selected method
 #     if (drop_method == "SD") {
 #         #Method to drop pairs that are greater than a set threshold apart in terms of PSM Standard Deviations.
@@ -139,7 +139,7 @@
 #         }
 #         dta <- dta["PSM_distance" < psm_sd_thresh]
 #     }
-  
+
 
 
 #     #Plot the pre and post-dropping balance for PSM model...
@@ -149,7 +149,7 @@
 #     cnt = 0
 
 #     print("sat7")
-    
+
 #     for (i in 1:length(anc_vars)) {
 
 #         print("sat7.0")
@@ -174,7 +174,7 @@
 #         if ((c_type == "numeric") & (visual == "TRUE")) {
 #             cnt = cnt + 1
 #             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
-#             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
+#             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)
 
 
 #             treat_mean_pre <- round(describeBy(init_dta[[ed_v]], group=init_dta[[TrtBinColName]])[[2]][[3]], 5)
@@ -215,13 +215,13 @@
 #                               treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
 #                               it_diff_Mean_pre,it_diff_Mean_post))
 #             }
-      
+
 #             rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]", "", ed_v)
 #         }
 #     }
 
 #     print("sat8")
-  
+
 #     if (visual=="TRUE") {
 #         #Output graphics
 #         #Remove the factor rows
@@ -238,7 +238,7 @@
 #         #bTab <- stargazer(bRes,summary=FALSE,type="html")
 #         #print.htmlTable(bTab)
 #     }
-  
+
 
 #     return (as.data.frame(dta))
 # }
@@ -251,16 +251,16 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     #Initialization
     pltObjs <- list()
     init_dta <- dta
-  
+
     drop_unmatched = drop_opts["drop_unmatched"]
     drop_method = drop_opts["drop_method"]
     drop_thresh = as.numeric(drop_opts["drop_thresh"])
-  
-    
+
+
 
     print("sat1")
 
-    if (!is.null(constraints) && contraints != c()) {
+    if (!is.null(constraints) && constraints != c()) {
 
         print("sat1a.1")
 
@@ -284,7 +284,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
         # Caclulate the number of groups to constrain by, if any.
         group_constraints <- unique(dta$ConstraintGroupSet_Opt)
-      
+
         # Make sure there are both treatment and control groups of an adequate size (>= 1 of each)
         t_dta <- list()
         u_dta <-list()
@@ -311,7 +311,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
                 war_statement = paste("Dropped group due to a lack of both treatment and control observation: '",cur_grp,"'",sep="")
                 warning(war_statement)
 
-            } else { 
+            } else {
                 t_dta[[t_index]] <- t_dta[[t_index]][t_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
                 u_dta[[t_index]] <- u_dta[[t_index]][u_dta[[t_index]]$ConstraintGroupSet_Opt == cur_grp,]
 
@@ -338,12 +338,12 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             if (mtd == "fastNN") {
                 # ***
                 # this is the slow part of functions
-                temp_dta[[i]] <- fastNN_binary_func(it_dta, TrtBinColName, ids, cur_grp, dist_PSM) 
+                temp_dta[[i]] <- fastNN_binary_func(it_dta, TrtBinColName, ids, cur_grp, dist_PSM)
             }
 
             # if (mtd == "NN_WithReplacement") {
             #     print("NN with replacement is currently not available, please choose fastNN")
-            #     # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+            #     # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM)
             # }
         }
 
@@ -354,12 +354,12 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
             dta <- temp_dta[[1]]
             for(k in 2:cnt) {
                 dta  <- maptools::spRbind(dta, temp_dta[[k]])
-            } 
+            }
         } else {
             dta <- temp_dta[[1]]
         }
 
-        
+
     } else {
 
         print("sat1b.1")
@@ -370,7 +370,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         if (mtd == "fastNN") {
             # ***
             # this is the slow part of functions
-            dta <- fastNN_binary_func(dta, TrtBinColName, ids, NULL, NULL) 
+            dta <- fastNN_binary_func(dta, TrtBinColName, ids, NULL, NULL)
 
             if (class(dta) == class('drop')) {
                 return('drop')
@@ -380,7 +380,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
         # if (mtd == "NN_WithReplacement") {
         #     print("NN with replacement is currently not available, please choose fastNN")
-        #     # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM) 
+        #     # temp_dta[[i]] <- NN_WithReplacement_binary_func(it_dta,TrtBinColName,ids,cur_grp,dist_PSM)
         # }
 
 
@@ -392,15 +392,15 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     print("sat5")
 
     if (drop_unmatched == TRUE) {
-        dta <- dta[dta@data[,"PSM_match_ID"] != -999,]    
+        dta <- dta[dta@data[,"PSM_match_ID"] != -999,]
     }
-  
+
     anc_v_int <- strsplit(psm_eq, "~")[[1]][2]
     anc_vars <- strsplit(gsub(" ","",anc_v_int), "+", fixed=TRUE)
     anc_vars <- c(anc_vars[[1]], "PSM_trtProb")
-    
+
     print("sat6")
-  
+
     #Drop observations according to the selected method
     if (drop_method == "SD") {
         #Method to drop pairs that are greater than a set threshold apart in terms of PSM Standard Deviations.
@@ -410,7 +410,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         }
         dta <- dta[dta@data[,"PSM_distance"] < psm_sd_thresh,]
     }
-  
+
 
 
     #Plot the pre and post-dropping balance for PSM model...
@@ -420,7 +420,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
     cnt = 0
 
     print("sat7")
-    
+
     for (i in 1:length(anc_vars)) {
 
         print("sat7.0")
@@ -445,7 +445,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         if ((c_type == "numeric") & (visual == "TRUE")) {
             cnt = cnt + 1
             pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(init_dta, anc_vars[i],"Pre-Balancing: ",simple_out = FALSE)
-            pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)  
+            pltObjs[[length(pltObjs) + 1]] <- GroupCompHist(dta, anc_vars[i],"Post-Balancing: ",simple_out = FALSE)
 
 
             treat_mean_pre <- round(describeBy(init_dta@data[[ed_v]], group=init_dta@data[[TrtBinColName]])[[2]][[3]], 5)
@@ -486,13 +486,13 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
                               treat_mean_post,treat_SD_post,control_mean_post,control_SD_post,
                               it_diff_Mean_pre,it_diff_Mean_post))
             }
-      
+
             rownames(bRes)[i-(i-cnt)] <- gsub("[^a-zA-Z0-9]", "", ed_v)
         }
     }
 
     print("sat8")
-  
+
     if (visual=="TRUE") {
         #Output graphics
         #Remove the factor rows
@@ -509,7 +509,7 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
         #bTab <- stargazer(bRes,summary=FALSE,type="html")
         #print.htmlTable(bTab)
     }
-  
+
 
     return (dta)
 }

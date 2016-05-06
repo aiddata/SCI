@@ -260,7 +260,8 @@ SAT <- function (dta, mtd, constraints, psm_eq, ids, drop_opts, visual, TrtBinCo
 
     print("sat1")
 
-    if (!is.null(constraints) && constraints != c()) {
+    # if (!is.null(constraints) && constraints != c()) {
+    if (!is.null(constraints) ) {
 
         print("sat1a.1")
 
